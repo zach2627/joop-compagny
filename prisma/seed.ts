@@ -6,7 +6,15 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding JOOP COMPAGNY...");
 
-  const adminPassword = await bcrypt.hash("Admin@Joop2026!", 12);
+  const { SEED_ADMIN_PASSWORD, SEED_STAFF_PASSWORD, SEED_CUSTOMER_PASSWORD } =
+    process.env;
+  if (!SEED_ADMIN_PASSWORD || !SEED_STAFF_PASSWORD || !SEED_CUSTOMER_PASSWORD) {
+    throw new Error(
+      "Missing seed env vars. Set SEED_ADMIN_PASSWORD, SEED_STAFF_PASSWORD and SEED_CUSTOMER_PASSWORD in .env"
+    );
+  }
+
+  const adminPassword = await bcrypt.hash(SEED_ADMIN_PASSWORD, 12);
   const admin = await prisma.user.upsert({
     where: { email: "admin@joop-compagny.com" },
     update: {},
@@ -21,7 +29,7 @@ async function main() {
   });
   console.log("Admin ready:", admin.email);
 
-  const staffPassword = await bcrypt.hash("Staff@Joop2026!", 12);
+  const staffPassword = await bcrypt.hash(SEED_STAFF_PASSWORD, 12);
   await prisma.user.upsert({
     where: { email: "atelier@joop-compagny.com" },
     update: {},
@@ -35,7 +43,7 @@ async function main() {
     },
   });
 
-  const customerPassword = await bcrypt.hash("Customer@Joop2026!", 12);
+  const customerPassword = await bcrypt.hash(SEED_CUSTOMER_PASSWORD, 12);
   const customer = await prisma.user.upsert({
     where: { email: "cliente@example.sn" },
     update: {},
