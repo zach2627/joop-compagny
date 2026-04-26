@@ -16,6 +16,32 @@ function redactToken(token: unknown) {
   return `${token.slice(0, 4)}...${token.slice(-4)}`;
 }
 
+function getStockStatus(stock: number) {
+  if (stock <= 0) return "OUT_OF_STOCK" as const;
+  if (stock <= 5) return "LOW_STOCK" as const;
+  return "IN_STOCK" as const;
+}
+
+async function restoreOrderStock(
+  tx: Prisma.TransactionClient,
+  items: Array<{ variantId: string; quantity: number }>
+) {
+  for (const item of items) {
+    const variant = await tx.productVariant.update({
+      where: { id: item.variantId },
+      data: {
+        stock: { increment: item.quantity },
+      },
+      select: { id: true, stock: true },
+    });
+
+    await tx.productVariant.update({
+      where: { id: variant.id },
+      data: { stockStatus: getStockStatus(variant.stock) },
+    });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const parsedBody = await request.json();
@@ -42,7 +68,15 @@ export async function POST(request: NextRequest) {
 
     const order = await prisma.order.findUnique({
       where: { orderNumber },
-      include: { payment: true },
+      include: {
+        payment: true,
+        items: {
+          select: {
+            variantId: true,
+            quantity: true,
+          },
+        },
+      },
     });
 
     if (!order) {
@@ -51,6 +85,15 @@ export async function POST(request: NextRequest) {
     }
 
     if (status === "completed") {
+      if (order.paymentStatus === "COMPLETED" || order.payment?.status === "COMPLETED") {
+        return NextResponse.json({ success: true });
+      }
+
+      if (order.paymentStatus === "FAILED" || order.status === "CANCELLED") {
+        logger.warn("webhook.paydunya.completed-ignored", { orderNumber });
+        return NextResponse.json({ success: true });
+      }
+
       await prisma.$transaction([
         // Update payment
         prisma.payment.updateMany({
@@ -86,20 +129,52 @@ export async function POST(request: NextRequest) {
         token: redactToken(token),
       });
     } else if (status === "cancelled" || status === "failed") {
-      await prisma.$transaction([
-        prisma.payment.updateMany({
+      if (order.paymentStatus === "COMPLETED" || order.payment?.status === "COMPLETED") {
+        logger.warn("webhook.paydunya.failure-ignored", { orderNumber, status });
+        return NextResponse.json({ success: true });
+      }
+
+      if (
+        order.paymentStatus === "FAILED" ||
+        order.status === "CANCELLED" ||
+        order.payment?.status === "FAILED"
+      ) {
+        return NextResponse.json({ success: true });
+      }
+
+      await prisma.$transaction(async (tx) => {
+        await tx.payment.updateMany({
           where: { orderId: order.id },
           data: {
             status: "FAILED",
             failedAt: new Date(),
             callbackData,
           },
-        }),
-        prisma.order.update({
+        });
+
+        await tx.order.update({
           where: { id: order.id },
-          data: { paymentStatus: "FAILED" },
-        }),
-      ]);
+          data: {
+            paymentStatus: "FAILED",
+            status: "CANCELLED",
+            cancelledAt: new Date(),
+          },
+        });
+
+        await tx.orderHistory.create({
+          data: {
+            orderId: order.id,
+            status: "CANCELLED",
+            comment:
+              status === "failed"
+                ? "Paiement echoue via PayDunya - stock restitue"
+                : "Paiement annule via PayDunya - stock restitue",
+            createdBy: "system",
+          },
+        });
+
+        await restoreOrderStock(tx, order.items);
+      });
 
       logger.warn("webhook.paydunya.payment-failed", { orderNumber, status });
     }

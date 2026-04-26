@@ -3,68 +3,125 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+function isEnabled(value: string | undefined) {
+  return ["1", "true", "yes", "on"].includes((value ?? "").trim().toLowerCase());
+}
+
+async function upsertSeedUser({
+  email,
+  password,
+  name,
+  phone,
+  role,
+}: {
+  email: string;
+  password: string;
+  name: string;
+  phone: string;
+  role: UserRole;
+}) {
+  const normalizedEmail = email.trim().toLowerCase();
+  const passwordHash = await bcrypt.hash(password, 12);
+
+  return prisma.user.upsert({
+    where: { email: normalizedEmail },
+    update: {
+      email: normalizedEmail,
+      name,
+      phone,
+      passwordHash,
+      role,
+      emailVerified: new Date(),
+      isActive: true,
+    },
+    create: {
+      email: normalizedEmail,
+      name,
+      phone,
+      passwordHash,
+      role,
+      emailVerified: new Date(),
+    },
+  });
+}
+
 async function main() {
   console.log("Seeding JOOP COMPAGNY...");
 
-  const adminPassword = await bcrypt.hash("Admin@Joop2026!", 12);
-  const admin = await prisma.user.upsert({
-    where: { email: "admin@joop-compagny.com" },
-    update: {},
-    create: {
-      email: "admin@joop-compagny.com",
+  const adminEmail =
+    process.env.SEED_ADMIN_EMAIL?.trim() || "admin@joop-compagny.com";
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD?.trim();
+  const shouldSeedDemoUsers = isEnabled(process.env.SEED_DEMO_USERS);
+  let customer: { id: string } | null = null;
+
+  if (adminPassword) {
+    const admin = await upsertSeedUser({
+      email: adminEmail,
+      password: adminPassword,
       name: "Admin JOOP",
       phone: "+221770000001",
-      passwordHash: adminPassword,
       role: UserRole.ADMIN,
-      emailVerified: new Date(),
-    },
-  });
-  console.log("Admin ready:", admin.email);
+    });
+    console.log("Admin ready:", admin.email);
+  } else {
+    console.log("Admin bootstrap skipped (set SEED_ADMIN_PASSWORD to enable)");
+  }
 
-  const staffPassword = await bcrypt.hash("Staff@Joop2026!", 12);
-  await prisma.user.upsert({
-    where: { email: "atelier@joop-compagny.com" },
-    update: {},
-    create: {
-      email: "atelier@joop-compagny.com",
-      name: "Atelier JOOP",
-      phone: "+221770000002",
-      passwordHash: staffPassword,
-      role: UserRole.STAFF,
-      emailVerified: new Date(),
-    },
-  });
+  if (shouldSeedDemoUsers) {
+    const staffPassword = process.env.SEED_STAFF_PASSWORD?.trim();
+    const customerPassword = process.env.SEED_CUSTOMER_PASSWORD?.trim();
+    const staffEmail =
+      process.env.SEED_STAFF_EMAIL?.trim() || "atelier@joop-compagny.com";
+    const customerEmail =
+      process.env.SEED_CUSTOMER_EMAIL?.trim() || "cliente@example.sn";
 
-  const customerPassword = await bcrypt.hash("Customer@Joop2026!", 12);
-  const customer = await prisma.user.upsert({
-    where: { email: "cliente@example.sn" },
-    update: {},
-    create: {
-      email: "cliente@example.sn",
-      name: "Awa Ndiaye",
-      phone: "+221770000003",
-      passwordHash: customerPassword,
-      role: UserRole.CUSTOMER,
-      emailVerified: new Date(),
-    },
-  });
+    if (staffPassword) {
+      await upsertSeedUser({
+        email: staffEmail,
+        password: staffPassword,
+        name: "Atelier JOOP",
+        phone: "+221770000002",
+        role: UserRole.STAFF,
+      });
+      console.log("Staff demo ready:", staffEmail);
+    } else {
+      console.log("Staff demo skipped (set SEED_STAFF_PASSWORD to enable)");
+    }
 
-  await prisma.address.upsert({
-    where: { id: "addr-joop-demo-1" },
-    update: {},
-    create: {
-      id: "addr-joop-demo-1",
-      userId: customer.id,
-      label: "Maison",
-      firstName: "Awa",
-      lastName: "Ndiaye",
-      phone: "+221770000003",
-      streetLine1: "Mermoz, rue 15",
-      city: "Dakar",
-      region: "Dakar",
-      isDefault: true,
-    },
-  });
+    if (customerPassword) {
+      customer = await upsertSeedUser({
+        email: customerEmail,
+        password: customerPassword,
+        name: "Awa Ndiaye",
+        phone: "+221770000003",
+        role: UserRole.CUSTOMER,
+      });
+      console.log("Customer demo ready:", customerEmail);
+    } else {
+      console.log("Customer demo skipped (set SEED_CUSTOMER_PASSWORD to enable)");
+    }
+  } else {
+    console.log("Demo users skipped (set SEED_DEMO_USERS=true to enable)");
+  }
+
+  if (customer) {
+    await prisma.address.upsert({
+      where: { id: "addr-joop-demo-1" },
+      update: {},
+      create: {
+        id: "addr-joop-demo-1",
+        userId: customer.id,
+        label: "Maison",
+        firstName: "Awa",
+        lastName: "Ndiaye",
+        phone: "+221770000003",
+        streetLine1: "Mermoz, rue 15",
+        city: "Dakar",
+        region: "Dakar",
+        isDefault: true,
+      },
+    });
+  }
 
   const categories = {
     bijoux: await prisma.category.upsert({

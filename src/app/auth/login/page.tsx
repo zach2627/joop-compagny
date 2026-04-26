@@ -9,6 +9,7 @@ import { loginAction } from "@/features/auth/actions";
 import { mergeGuestCartAction } from "@/features/cart/actions";
 import { siteConfig } from "@/config/site";
 import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
+import { sanitizeRedirectPath } from "@/lib/auth/redirect";
 import { dictionaries } from "@/lib/i18n/translations";
 
 function LoginForm() {
@@ -17,7 +18,10 @@ function LoginForm() {
   const locale = getPathLocale(pathname) ?? DEFAULT_LOCALE;
   const dict = dictionaries[locale].auth;
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? localizedPath("/", locale);
+  const redirect = sanitizeRedirectPath(
+    searchParams.get("redirect"),
+    localizedPath("/", locale)
+  );
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 

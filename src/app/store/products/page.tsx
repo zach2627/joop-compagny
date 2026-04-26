@@ -86,10 +86,17 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     q: getSingleValue(searchParams.q),
   };
 
-  const filters = productFilterSchema.parse({
+  const parsedFilters = productFilterSchema.safeParse({
     ...rawFilters,
     sort: rawFilters.sort && ALLOWED_SORTS.has(rawFilters.sort) ? rawFilters.sort : undefined,
   });
+  const filters = parsedFilters.success
+    ? parsedFilters.data
+    : productFilterSchema.parse({
+        category: rawFilters.category,
+        sort: rawFilters.sort && ALLOWED_SORTS.has(rawFilters.sort) ? rawFilters.sort : undefined,
+        q: rawFilters.q,
+      });
 
   const [{ products, total, pages }, categories] = await Promise.all([
     getProducts(filters),

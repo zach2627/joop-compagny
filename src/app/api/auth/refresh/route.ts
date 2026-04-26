@@ -2,13 +2,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyRefreshToken, signAccessToken, signRefreshToken } from "@/lib/auth/jwt";
 import prisma from "@/lib/db/prisma";
+import { sanitizeRedirectPath } from "@/lib/auth/redirect";
 import { logger } from "@/lib/middleware/logger";
 
 const REFRESH_COOKIE = "st_refresh";
 const SESSION_COOKIE = "st_session";
 
 export async function GET(request: NextRequest) {
-  const redirectTo = request.nextUrl.searchParams.get("redirect") ?? "/";
+  const redirectTo = sanitizeRedirectPath(
+    request.nextUrl.searchParams.get("redirect"),
+    "/"
+  );
   const refreshToken = request.cookies.get(REFRESH_COOKIE)?.value;
 
   if (!refreshToken) {
@@ -16,7 +20,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const payload = await verifyRefreshToken(refreshToken);
+    await verifyRefreshToken(refreshToken);
 
     // Check if token exists in DB and is not revoked
     const storedToken = await prisma.refreshToken.findUnique({
