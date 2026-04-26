@@ -209,10 +209,10 @@ model ProductVariant {
   id          String      @id @default(cuid())
   productId   String
   sku         String      @unique
-  name        String      // e.g. "iPhone 15 Pro - 256GB - Black Titanium"
-  storage     String?     // e.g. "128GB", "256GB", "512GB", "1TB"
-  color       String?     // e.g. "Natural Titanium", "Black Titanium"
-  colorHex    String?     // e.g. "#8E8E8E"
+  name        String      // e.g. "Collier Naya Aura - Or soleil"
+  storage     String?     // e.g. "50 ml", "100 ml", "Taille unique", "20 batons"
+  color       String?     // e.g. "Or soleil", "Rose cuivre", "Ambre rubis"
+  colorHex    String?     // e.g. "#E7B75E", "#D88D7A"
   price       Decimal     @db.Decimal(10, 2)
   compareAt   Decimal?    @db.Decimal(10, 2)
   stock       Int         @default(0)
@@ -240,7 +240,7 @@ model ProductImage {
   productId  String
   url        String
   alt        String?
-  // Couleur de la variante associée (ex: "Titane Noir")
+  // Couleur de la variante associée (ex: "Or soleil", "Rose cuivre")
   color      String?
   sortOrder  Int      @default(0)
   isPrimary  Boolean  @default(false)
@@ -324,7 +324,7 @@ model CartItem {
 
 model Order {
   id              String        @id @default(cuid())
-  orderNumber     String        @unique // e.g. ST-2024-0001
+  orderNumber     String        @unique // e.g. JCP-20260425-A1B2C3D4
   userId          String?
   guestEmail      String?
   guestPhone      String?
@@ -444,18 +444,18 @@ model ActivityLog {
 }
 
 model Banner {
-  id         String   @id @default(cuid())
-  imageUrl   String
-  eyebrow    String   @default("")
-  showEyebrow Boolean @default(true)
-  title      String
-  subtitle   String   @default("")
-  ctaLabel   String   @default("Découvrir")
-  ctaHref    String   @default("/store/products")
-  sortOrder  Int      @default(0)
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @default(cuid())
+  imageUrl    String
+  eyebrow     String   @default("")
+  showEyebrow Boolean  @default(true)
+  title       String
+  subtitle    String   @default("")
+  ctaLabel    String   @default("Découvrir")
+  ctaHref     String   @default("/store/products")
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("banners")
 }
