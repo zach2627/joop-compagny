@@ -212,7 +212,7 @@ export function ProductEditForm({ product }: { product: ProductData }) {
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               required
-              placeholder="iphone-15-pro"
+              placeholder="coffret-lumiere-dakar"
               pattern="[a-z0-9-]+"
               title="Minuscules, chiffres et tirets uniquement"
             />
@@ -349,7 +349,7 @@ export function ProductEditForm({ product }: { product: ProductData }) {
                     value={v.sku}
                     onChange={(e) => updateVariant(v._key, "sku", e.target.value)}
                     required
-                    placeholder="IP15P-256-BT"
+                    placeholder="JC-LUM-3P-OR"
                   />
                 </div>
                 <div className="sm:col-span-2 lg:col-span-2">
@@ -368,7 +368,7 @@ export function ProductEditForm({ product }: { product: ProductData }) {
                     className={fieldCls}
                     value={v.storage}
                     onChange={(e) => updateVariant(v._key, "storage", e.target.value)}
-                    placeholder="256GB"
+                    placeholder="100 ml / 4 pieces / Taille unique"
                   />
                 </div>
                 <div>
@@ -377,7 +377,7 @@ export function ProductEditForm({ product }: { product: ProductData }) {
                     className={fieldCls}
                     value={v.color}
                     onChange={(e) => updateVariant(v._key, "color", e.target.value)}
-                    placeholder="Titane Noir"
+                    placeholder="Or sable"
                   />
                 </div>
                 <div>

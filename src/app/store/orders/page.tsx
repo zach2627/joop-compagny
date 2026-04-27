@@ -14,6 +14,7 @@ import {
   translateProductContent,
   translateVariantName,
 } from "@/lib/i18n/product-content";
+import { getProductImageUrl } from "@/lib/images/product-gallery";
 import { productThumbnailImage } from "@/lib/images/cloudinary";
 
 export function generateMetadata(): Metadata {
@@ -240,6 +241,10 @@ export default async function OrdersPage({ searchParams }: PageProps) {
                       item.product.slug,
                       item.variant.name
                     );
+                    const imageUrl = getProductImageUrl(item.product.slug, {
+                      color: item.variant.color,
+                      fallbackUrl: item.product.images[0]?.url,
+                    });
 
                     return (
                     <div key={item.id} className="flex items-center gap-4">
@@ -247,9 +252,9 @@ export default async function OrdersPage({ searchParams }: PageProps) {
                         className="w-14 h-14 rounded-apple-md overflow-hidden shrink-0 flex items-center justify-center"
                         style={{ background: "#242424" }}
                       >
-                        {item.product.images[0] ? (
+                        {imageUrl ? (
                           <Image
-                            src={productThumbnailImage(item.product.images[0].url)}
+                            src={productThumbnailImage(imageUrl)}
                             alt={productText.name}
                             width={56}
                             height={56}

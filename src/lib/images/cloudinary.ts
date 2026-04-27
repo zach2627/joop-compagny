@@ -7,6 +7,10 @@ type CloudinaryTransformOptions = {
   quality?: "auto" | "auto:good" | "auto:eco";
 };
 
+const DEFAULT_CLOUDINARY_CLOUD_NAME = "dlfytqzpw";
+const CLOUDINARY_CLOUD_NAME =
+  process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? DEFAULT_CLOUDINARY_CLOUD_NAME;
+
 function buildTransformation({
   width,
   height,
@@ -54,6 +58,11 @@ export function getCloudinaryImageUrl(
   } catch {
     return url;
   }
+}
+
+export function buildCloudinaryUploadUrl(sourcePath: string) {
+  const normalizedPath = sourcePath.replace(/^\/+/, "");
+  return `https://res.cloudinary.com/${CLOUDINARY_CLOUD_NAME}/image/upload/${normalizedPath}`;
 }
 
 export const productCardImage = (url: string | null | undefined) =>

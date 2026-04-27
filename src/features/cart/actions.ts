@@ -9,6 +9,7 @@ import { getServerSession } from "@/lib/auth/jwt";
 import { addToCartSchema, updateCartItemSchema } from "@/lib/validation/schemas";
 import type { ActionResult } from "@/features/auth/actions";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
+import { resolveProductImages } from "@/lib/images/product-gallery";
 
 const CART_SESSION_COOKIE = "st_cart";
 
@@ -183,7 +184,15 @@ export async function getCartData() {
   const total = subtotal;    // total = subtotal sans TVA
   const itemCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
 
-  return { cartId, items: cart.items, subtotal, taxAmount, total, itemCount };
+  const items = cart.items.map((item) => ({
+    ...item,
+    product: {
+      ...item.product,
+      images: resolveProductImages(item.product.slug, item.product.images),
+    },
+  }));
+
+  return { cartId, items, subtotal, taxAmount, total, itemCount };
 }
 
 export async function mergeGuestCartAction(): Promise<void> {

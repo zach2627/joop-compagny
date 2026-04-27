@@ -9,6 +9,7 @@ import { logoutAction } from "@/features/auth/actions";
 import { ORDER_STATUS_STYLE } from "@/lib/constants/orderStatus";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
+import { getProductImageUrl } from "@/lib/images/product-gallery";
 import { productThumbnailImage } from "@/lib/images/cloudinary";
 
 export default async function AccountPage() {
@@ -169,16 +170,27 @@ export default async function AccountPage() {
                   style={{ background: "#242424", border: "1px solid #2E2E2E" }}
                 >
                   <div className="flex items-center gap-3">
-                    {order.items[0]?.product.images[0] && (
-                      <Image
-                        src={productThumbnailImage(order.items[0].product.images[0].url)}
-                        alt=""
-                        width={48}
-                        height={48}
-                        className="w-12 h-12 object-cover rounded-apple-sm"
-                        style={{ background: "#1A1A1A" }}
-                      />
-                    )}
+                    {(() => {
+                      const firstItem = order.items[0];
+                      if (!firstItem) return null;
+
+                      const imageUrl = getProductImageUrl(firstItem.product.slug, {
+                        fallbackUrl: firstItem.product.images[0]?.url,
+                      });
+
+                      if (!imageUrl) return null;
+
+                      return (
+                        <Image
+                          src={productThumbnailImage(imageUrl)}
+                          alt=""
+                          width={48}
+                          height={48}
+                          className="w-12 h-12 object-cover rounded-apple-sm"
+                          style={{ background: "#1A1A1A" }}
+                        />
+                      );
+                    })()}
                     <div>
                       <p className="text-sm font-medium" style={{ color: "#FFFFFF" }}>
                         {order.orderNumber}

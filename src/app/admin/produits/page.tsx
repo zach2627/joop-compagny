@@ -7,8 +7,10 @@ import { ProductImagesManager } from "@/components/admin/ProductImagesManager";
 import { formatXOF } from "@/features/payment/paydunya";
 import { getServerSession } from "@/lib/auth/jwt";
 import prisma from "@/lib/db/prisma";
+import { siteConfig } from "@/config/site";
 
 export const metadata = { title: "Produits - Admin" };
+const STORE_CATEGORY_SLUGS = [...siteConfig.navCategories] as string[];
 
 export default async function AdminProduitsPage() {
   const session = await getServerSession();
@@ -16,10 +18,12 @@ export default async function AdminProduitsPage() {
 
   const [categories, products] = await Promise.all([
     prisma.category.findMany({
+      where: { slug: { in: STORE_CATEGORY_SLUGS } },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       select: { id: true, name: true, slug: true, isActive: true },
     }),
     prisma.product.findMany({
+      where: { category: { slug: { in: STORE_CATEGORY_SLUGS } } },
       orderBy: { createdAt: "desc" },
       include: {
         category: true,

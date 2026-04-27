@@ -1,6 +1,6 @@
 "use client";
 // src/components/ui/ScrollReveal.tsx
-// Apple-style fade-in + translateY on scroll using IntersectionObserver.
+// Soft fade-in + translateY on scroll using IntersectionObserver.
 
 import { useEffect, useRef, CSSProperties, ReactNode } from "react";
 

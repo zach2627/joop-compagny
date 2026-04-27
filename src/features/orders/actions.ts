@@ -10,10 +10,13 @@ import { clearCartAction, getCartData } from "@/features/cart/actions";
 import { logger } from "@/lib/middleware/logger";
 import type { ActionResult } from "@/features/auth/actions";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
+import { siteConfig } from "@/config/site";
 import {
   translateProductContent,
   translateVariantName,
 } from "@/lib/i18n/product-content";
+
+const STORE_CATEGORY_SLUGS = [...siteConfig.navCategories] as string[];
 
 class StockConflictError extends Error {
   constructor(message: string) {
@@ -401,11 +404,26 @@ export async function getAnalyticsData() {
     prisma.order.count({ where: { createdAt: { gte: startOfMonth } } }),
     prisma.user.count({ where: { role: "CUSTOMER" } }),
     prisma.user.count({ where: { role: "CUSTOMER", createdAt: { gte: startOfMonth } } }),
-    prisma.product.count(),
-    prisma.product.count({ where: { isActive: true } }),
-    prisma.product.count({ where: { isFeatured: true } }),
+    prisma.product.count({
+      where: { category: { slug: { in: STORE_CATEGORY_SLUGS } } },
+    }),
+    prisma.product.count({
+      where: {
+        isActive: true,
+        category: { slug: { in: STORE_CATEGORY_SLUGS } },
+      },
+    }),
+    prisma.product.count({
+      where: {
+        isFeatured: true,
+        category: { slug: { in: STORE_CATEGORY_SLUGS } },
+      },
+    }),
     prisma.productVariant.count({
-      where: { stockStatus: { in: ["LOW_STOCK", "OUT_OF_STOCK"] } },
+      where: {
+        stockStatus: { in: ["LOW_STOCK", "OUT_OF_STOCK"] },
+        product: { category: { slug: { in: STORE_CATEGORY_SLUGS } } },
+      },
     }),
     prisma.order.groupBy({ by: ["status"], _count: true }),
     prisma.orderItem.groupBy({

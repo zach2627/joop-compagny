@@ -2,9 +2,71 @@ import { PrismaClient, UserRole, StockStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
+const LEGACY_TECH_CATEGORY_SLUGS = [
+  "iphone",
+  "ipad",
+  "mac",
+  "apple-watch",
+  "accessories",
+] as const;
 
 function isEnabled(value: string | undefined) {
   return ["1", "true", "yes", "on"].includes((value ?? "").trim().toLowerCase());
+}
+
+async function cleanupLegacyTechCatalog() {
+  const legacyProducts = await prisma.product.findMany({
+    where: {
+      OR: [
+        { brand: "Apple" },
+        { category: { slug: { in: [...LEGACY_TECH_CATEGORY_SLUGS] } } },
+      ],
+    },
+    select: {
+      id: true,
+      slug: true,
+      _count: { select: { orderItems: true } },
+    },
+  });
+
+  if (legacyProducts.length === 0) {
+    return;
+  }
+
+  const deletableIds = legacyProducts
+    .filter((product) => product._count.orderItems === 0)
+    .map((product) => product.id);
+
+  const protectedIds = legacyProducts
+    .filter((product) => product._count.orderItems > 0)
+    .map((product) => product.id);
+
+  if (deletableIds.length > 0) {
+    await prisma.cartItem.deleteMany({
+      where: { productId: { in: deletableIds } },
+    });
+
+    await prisma.product.deleteMany({
+      where: { id: { in: deletableIds } },
+    });
+  }
+
+  if (protectedIds.length > 0) {
+    await prisma.product.updateMany({
+      where: { id: { in: protectedIds } },
+      data: {
+        isActive: false,
+        isFeatured: false,
+      },
+    });
+  }
+
+  await prisma.category.deleteMany({
+    where: {
+      slug: { in: [...LEGACY_TECH_CATEGORY_SLUGS] },
+      products: { none: {} },
+    },
+  });
 }
 
 async function upsertSeedUser({
@@ -47,6 +109,7 @@ async function upsertSeedUser({
 
 async function main() {
   console.log("Seeding JOOP COMPAGNY...");
+  await cleanupLegacyTechCatalog();
 
   const adminEmail =
     process.env.SEED_ADMIN_EMAIL?.trim() || "admin@joop-compagny.com";
