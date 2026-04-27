@@ -2,12 +2,13 @@
 "use server";
 
 import { revalidatePath, revalidateTag } from "next/cache";
+import { headers } from "next/headers";
 import prisma from "@/lib/db/prisma";
 import { getServerSession } from "@/lib/auth/jwt";
 import { checkoutSchema, updateOrderStatusSchema } from "@/lib/validation/schemas";
 import { createInvoice } from "@/features/payment/paydunya";
 import { clearCartAction, getCartData } from "@/features/cart/actions";
-import { logger } from "@/lib/middleware/logger";
+import { logger, checkoutLimiter } from "@/lib/middleware/logger";
 import type { ActionResult } from "@/features/auth/actions";
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
 import {
@@ -79,6 +80,16 @@ export async function createOrderAction(
     redirectPath: string;
   }>
 > {
+  const headersList = headers();
+  const ip =
+    headersList.get("x-forwarded-for")?.split(",")[0] ??
+    headersList.get("x-real-ip") ??
+    "unknown";
+  const rl = checkoutLimiter(ip);
+  if (!rl.success) {
+    return { success: false, error: "Trop de tentatives. Réessayez plus tard." };
+  }
+
   const locale = getActionLocale(formData);
   const messages = orderMessages[locale];
   const session = await getServerSession();

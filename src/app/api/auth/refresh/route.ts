@@ -7,8 +7,15 @@ import { logger } from "@/lib/middleware/logger";
 const REFRESH_COOKIE = "st_refresh";
 const SESSION_COOKIE = "st_session";
 
+function sanitizeRedirect(redirect: string | null): string {
+  if (!redirect) return "/";
+  // Allow only relative paths — reject absolute URLs and protocol-relative URLs
+  if (/^\/[^/\\]/.test(redirect) || redirect === "/") return redirect;
+  return "/";
+}
+
 export async function GET(request: NextRequest) {
-  const redirectTo = request.nextUrl.searchParams.get("redirect") ?? "/";
+  const redirectTo = sanitizeRedirect(request.nextUrl.searchParams.get("redirect"));
   const refreshToken = request.cookies.get(REFRESH_COOKIE)?.value;
 
   if (!refreshToken) {
