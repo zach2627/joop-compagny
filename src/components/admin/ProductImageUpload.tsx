@@ -23,7 +23,7 @@ export function ProductImageUpload({ productId }: Props) {
       // 1. Upload vers Cloudinary
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_PRESET ?? "ml_default");
+      formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_PRESET ?? "joop_compagny");
       formData.append("folder", `products/${productId}`);
 
       const cloudRes = await fetch(
