@@ -12,6 +12,7 @@ import {
   BarChart3,
   Settings,
   ImageIcon,
+  Camera,
 } from "lucide-react";
 
 export default async function AdminLayout({
@@ -31,6 +32,7 @@ export default async function AdminLayout({
     { href: "/admin/customers", icon: Users, label: "Clients" },
     { href: "/admin/analytics", icon: BarChart3, label: "Analytiques" },
     { href: "/admin/banners", icon: ImageIcon, label: "Bannieres" },
+    { href: "/admin/images", icon: Camera, label: "Photos" },
     ...(session.role === "ADMIN"
       ? [{ href: "/admin/settings", icon: Settings, label: "Parametres" }]
       : []),
