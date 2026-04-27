@@ -9,7 +9,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─── Enums ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Enums â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 enum UserRole {
   CUSTOMER
@@ -49,7 +49,7 @@ enum StockStatus {
   DISCONTINUED
 }
 
-// ─── User & Auth ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ User & Auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 model User {
   id            String   @id @default(cuid())
@@ -134,7 +134,7 @@ model Address {
   streetLine1  String
   streetLine2  String?
   city         String
-  region       String  // Dakar, Thiès, etc.
+  region       String  // Dakar, ThiÃ¨s, etc.
   country      String  @default("SN")
   isDefault    Boolean @default(false)
   createdAt    DateTime @default(now())
@@ -146,7 +146,7 @@ model Address {
   @@map("addresses")
 }
 
-// ─── Catalog ─────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Catalog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 model Category {
   id          String   @id @default(cuid())
@@ -209,9 +209,9 @@ model ProductVariant {
   id          String      @id @default(cuid())
   productId   String
   sku         String      @unique
-  name        String      // e.g. "iPhone 15 Pro - 256GB - Black Titanium"
-  storage     String?     // e.g. "128GB", "256GB", "512GB", "1TB"
-  color       String?     // e.g. "Natural Titanium", "Black Titanium"
+  name        String      // e.g. "Coffret Lumiere - 3 pieces - Or sable"
+  storage     String?     // e.g. "50 ml", "100 ml", "Taille unique"
+  color       String?     // e.g. "Or sable", "Prune royale"
   colorHex    String?     // e.g. "#8E8E8E"
   price       Decimal     @db.Decimal(10, 2)
   compareAt   Decimal?    @db.Decimal(10, 2)
@@ -240,7 +240,7 @@ model ProductImage {
   productId  String
   url        String
   alt        String?
-  // Couleur de la variante associée (ex: "Titane Noir")
+  // Couleur de la variante associée (ex: "Or sable")
   color      String?
   sortOrder  Int      @default(0)
   isPrimary  Boolean  @default(false)
@@ -284,7 +284,7 @@ model WishlistItem {
   @@map("wishlist_items")
 }
 
-// ─── Cart ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Cart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 model Cart {
   id          String   @id @default(cuid())
@@ -320,7 +320,7 @@ model CartItem {
   @@map("cart_items")
 }
 
-// ─── Orders ───────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Orders â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 model Order {
   id              String        @id @default(cuid())
@@ -399,7 +399,7 @@ model OrderHistory {
   @@map("order_history")
 }
 
-// ─── Payment ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Payment â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 model Payment {
   id            String        @id @default(cuid())
@@ -424,7 +424,7 @@ model Payment {
   @@map("payments")
 }
 
-// ─── Analytics / Logging ──────────────────────────────────────────────────────
+// â”€â”€â”€ Analytics / Logging â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 model ActivityLog {
   id        String   @id @default(cuid())
@@ -450,7 +450,7 @@ model Banner {
   showEyebrow Boolean @default(true)
   title      String
   subtitle   String   @default("")
-  ctaLabel   String   @default("Découvrir")
+  ctaLabel   String   @default("DÃ©couvrir")
   ctaHref    String   @default("/store/products")
   sortOrder  Int      @default(0)
   isActive   Boolean  @default(true)
@@ -459,3 +459,4 @@ model Banner {
 
   @@map("banners")
 }
+

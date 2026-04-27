@@ -5,13 +5,18 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { nanoid } from "nanoid";
+import { cookies, headers } from "next/headers";
 import prisma from "@/lib/db/prisma";
-import { signAccessToken, signRefreshToken } from "@/lib/auth/jwt";
-import { setAuthCookies, clearAuthCookies } from "@/lib/auth/jwt";
+import {
+  signAccessToken,
+  signRefreshToken,
+  setAuthCookies,
+  clearAuthCookies,
+  REFRESH_COOKIE,
+} from "@/lib/auth/jwt";
 import { loginSchema, registerSchema } from "@/lib/validation/schemas";
 import { authLimiter } from "@/lib/middleware/logger";
 import { logger } from "@/lib/middleware/logger";
-import { headers } from "next/headers";
 
 function getClientIP(): string {
   const headersList = headers();
@@ -144,6 +149,19 @@ export async function loginAction(
 // ─── Logout ───────────────────────────────────────────────────────────────────
 
 export async function logoutAction(): Promise<void> {
+  const refreshToken = cookies().get(REFRESH_COOKIE)?.value;
+
+  if (refreshToken) {
+    try {
+      await prisma.refreshToken.updateMany({
+        where: { token: refreshToken, isRevoked: false },
+        data: { isRevoked: true },
+      });
+    } catch (error) {
+      logger.warn("auth.logout.refresh-revoke-failed", { error: String(error) });
+    }
+  }
+
   clearAuthCookies();
   redirect("/");
 }

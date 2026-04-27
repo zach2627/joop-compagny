@@ -35,10 +35,10 @@
 
   body {
     background:
-      radial-gradient(circle at top left, rgba(243, 111, 69, 0.14), transparent 22%),
-      radial-gradient(circle at top right, rgba(106, 47, 156, 0.16), transparent 28%),
-      linear-gradient(180deg, #110915 0%, #180c1e 38%, #120817 100%);
-    color: #ffffff;
+      radial-gradient(circle at top left, rgba(214, 179, 93, 0.12), transparent 18%),
+      radial-gradient(circle at top right, rgba(255, 255, 255, 0.05), transparent 16%),
+      linear-gradient(180deg, #070605 0%, #0b0907 42%, #120e0a 100%);
+    color: #f6f1e8;
     font-family: "Avenir Next", "Segoe UI", Tahoma, sans-serif;
   }
 
@@ -85,13 +85,13 @@
            font-semibold text-sm rounded-full
            transition-all duration-200
            active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
-    background: linear-gradient(135deg, #f6c668, #ff8b5d);
-    color: #180c1f;
-    box-shadow: 0 12px 28px rgba(243, 111, 69, 0.22);
+    background: linear-gradient(135deg, #d6b35d, #f0d79b);
+    color: #090806;
+    box-shadow: 0 16px 34px rgba(214, 179, 93, 0.22);
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #f0b84d, #ff7b59);
-    box-shadow: 0 18px 34px rgba(243, 111, 69, 0.28);
+    background: linear-gradient(135deg, #ddbe74, #f5e2af);
+    box-shadow: 0 20px 42px rgba(214, 179, 93, 0.28);
   }
 
   .btn-secondary {
@@ -99,16 +99,16 @@
            font-medium text-sm rounded-full
            transition-all duration-200
            active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff6fb;
-    border: 1px solid rgba(246, 198, 104, 0.16);
+    background: rgba(255, 255, 255, 0.04);
+    color: #f4ead9;
+    border: 1px solid rgba(214, 179, 93, 0.18);
   }
 
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2
            font-medium text-sm rounded-full
            transition-all duration-200 active:scale-95;
-    color: #f6c668;
+    color: #d6b35d;
   }
 
   .card {

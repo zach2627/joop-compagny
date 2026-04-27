@@ -1,21 +1,17 @@
-// src/app/api/auth/refresh/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { verifyRefreshToken, signAccessToken, signRefreshToken } from "@/lib/auth/jwt";
+import { sanitizeRedirectPath } from "@/lib/auth/redirect";
 import prisma from "@/lib/db/prisma";
 import { logger } from "@/lib/middleware/logger";
 
 const REFRESH_COOKIE = "st_refresh";
 const SESSION_COOKIE = "st_session";
 
-function sanitizeRedirect(redirect: string | null): string {
-  if (!redirect) return "/";
-  // Allow only relative paths — reject absolute URLs and protocol-relative URLs
-  if (/^\/[^/\\]/.test(redirect) || redirect === "/") return redirect;
-  return "/";
-}
-
 export async function GET(request: NextRequest) {
-  const redirectTo = sanitizeRedirect(request.nextUrl.searchParams.get("redirect"));
+  const redirectTo = sanitizeRedirectPath(
+    request.nextUrl.searchParams.get("redirect"),
+    "/"
+  );
   const refreshToken = request.cookies.get(REFRESH_COOKIE)?.value;
 
   if (!refreshToken) {
@@ -23,12 +19,13 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const payload = await verifyRefreshToken(refreshToken);
+    await verifyRefreshToken(refreshToken);
 
-    // Check if token exists in DB and is not revoked
     const storedToken = await prisma.refreshToken.findUnique({
       where: { token: refreshToken, isRevoked: false },
-      include: { user: { select: { id: true, email: true, role: true, isActive: true } } },
+      include: {
+        user: { select: { id: true, email: true, role: true, isActive: true } },
+      },
     });
 
     if (!storedToken || !storedToken.user.isActive) {
@@ -37,13 +34,11 @@ export async function GET(request: NextRequest) {
 
     const user = storedToken.user;
 
-    // Rotate tokens
     const [newAccessToken, newRefreshToken] = await Promise.all([
       signAccessToken({ userId: user.id, email: user.email, role: user.role }),
       signRefreshToken({ userId: user.id, email: user.email, role: user.role }),
     ]);
 
-    // Revoke old, create new
     await prisma.$transaction([
       prisma.refreshToken.update({
         where: { token: refreshToken },

@@ -203,7 +203,7 @@ export function ProductImagesManager({ productId, images, variantColors = [] }: 
                       autoFocus
                       value={editingColorVal}
                       onChange={(e) => setEditingColorVal(e.target.value)}
-                      placeholder="ex: Titane Noir"
+                      placeholder="ex: Or sable"
                       className="text-[10px] px-1.5 py-0.5 border border-apple-gray-300 rounded w-24 focus:outline-none"
                       onKeyDown={(e) => {
                         if (e.key === "Enter") handleSaveColor(img.id);

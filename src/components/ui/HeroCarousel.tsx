@@ -2,12 +2,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { heroBackgroundImage } from "@/lib/images/cloudinary";
+import { buildCloudinaryUploadUrl, heroBackgroundImage } from "@/lib/images/cloudinary";
 
 const FALLBACK_IMAGES = [
-  "/api/img?url=" + encodeURIComponent("https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-naturaltitanium?wid=1920&hei=1080&fmt=jpeg&qlt=90"),
-  "/api/img?url=" + encodeURIComponent("https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-blacktitanium?wid=1920&hei=1080&fmt=jpeg&qlt=90"),
-  "/api/img?url=" + encodeURIComponent("https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-whitetitanium?wid=1920&hei=1080&fmt=jpeg&qlt=90"),
+  buildCloudinaryUploadUrl("v1777245305/IMG_8504_yfdqba.jpg"),
+  buildCloudinaryUploadUrl("v1777245304/IMG_8501_ughssj.jpg"),
+  buildCloudinaryUploadUrl("v1777245308/IMG_8511_c8vowo.jpg"),
 ];
 
 interface HeroCarouselProps {
@@ -15,9 +15,9 @@ interface HeroCarouselProps {
 }
 
 export function HeroCarousel({ imageUrls = [] }: HeroCarouselProps) {
-  const images = imageUrls.length
-    ? imageUrls.map((url) => heroBackgroundImage(url))
-    : FALLBACK_IMAGES;
+  const images = (imageUrls.length ? imageUrls : FALLBACK_IMAGES).map((url) =>
+    heroBackgroundImage(url)
+  );
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {

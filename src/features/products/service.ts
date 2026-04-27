@@ -2,6 +2,10 @@
 import prisma from "@/lib/db/prisma";
 import type { ProductFilter } from "@/lib/validation/schemas";
 import { unstable_cache } from "next/cache";
+import { resolveProductImages } from "@/lib/images/product-gallery";
+import { siteConfig } from "@/config/site";
+
+const STORE_CATEGORY_SLUGS = [...siteConfig.navCategories] as string[];
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
@@ -22,18 +26,25 @@ export const getProducts = (filters: ProductFilter) =>
       } = filters;
 
       const skip = (page - 1) * limit;
+      const requestedCategory = category && STORE_CATEGORY_SLUGS.includes(category)
+        ? category
+        : null;
 
       const where = {
         isActive: true,
+        category: {
+          slug: requestedCategory
+            ? requestedCategory
+            : {
+                in: STORE_CATEGORY_SLUGS,
+              },
+        },
         ...(q && {
           OR: [
             { name: { contains: q, mode: "insensitive" as const } },
             { description: { contains: q, mode: "insensitive" as const } },
             { tags: { hasSome: [q.toLowerCase()] } },
           ],
-        }),
-        ...(category && {
-          category: { slug: category },
         }),
         variants: {
           some: {
@@ -74,7 +85,14 @@ export const getProducts = (filters: ProductFilter) =>
       ]);
 
       return {
-        products,
+        products: products.map((product) => ({
+          ...product,
+          images: resolveProductImages(
+            product.slug,
+            product.images,
+            product.category.slug
+          ),
+        })),
         total,
         pages: Math.ceil(total / limit),
         page,
@@ -86,8 +104,16 @@ export const getProducts = (filters: ProductFilter) =>
 
 export const getProductBySlug = unstable_cache(
   async (slug: string) => {
-    return prisma.product.findFirst({
-      where: { slug, isActive: true },
+    const product = await prisma.product.findFirst({
+      where: {
+        slug,
+        isActive: true,
+        category: {
+          slug: {
+            in: STORE_CATEGORY_SLUGS,
+          },
+        },
+      },
       include: {
         category: true,
         images: { orderBy: { sortOrder: "asc" } },
@@ -103,6 +129,15 @@ export const getProductBySlug = unstable_cache(
         _count: { select: { reviews: true } },
       },
     });
+
+    if (!product) {
+      return null;
+    }
+
+    return {
+      ...product,
+      images: resolveProductImages(product.slug, product.images, product.category.slug),
+    };
   },
   ["product-detail"],
   { revalidate: 300, tags: ["products"] }
@@ -110,8 +145,16 @@ export const getProductBySlug = unstable_cache(
 
 export const getFeaturedProducts = unstable_cache(
   async () => {
-    return prisma.product.findMany({
-      where: { isFeatured: true, isActive: true },
+    const products = await prisma.product.findMany({
+      where: {
+        isFeatured: true,
+        isActive: true,
+        category: {
+          slug: {
+            in: STORE_CATEGORY_SLUGS,
+          },
+        },
+      },
       include: {
         images: { where: { isPrimary: true }, take: 1 },
         variants: {
@@ -123,6 +166,15 @@ export const getFeaturedProducts = unstable_cache(
       take: 8,
       orderBy: { updatedAt: "desc" },
     });
+
+    return products.map((product) => ({
+      ...product,
+      images: resolveProductImages(
+        product.slug,
+        product.images,
+        product.category.slug
+      ),
+    }));
   },
   ["featured-products"],
   { revalidate: 600, tags: ["products"] }
@@ -131,7 +183,11 @@ export const getFeaturedProducts = unstable_cache(
 export const getCategories = unstable_cache(
   async () => {
     return prisma.category.findMany({
-      where: { isActive: true, parentId: null },
+      where: {
+        isActive: true,
+        parentId: null,
+        slug: { in: STORE_CATEGORY_SLUGS },
+      },
       include: {
         _count: { select: { products: true } },
         children: {
