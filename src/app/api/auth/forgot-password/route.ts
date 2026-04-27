@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import prisma from "@/lib/db/prisma";
 import { sendPasswordResetEmail } from "@/lib/email/mailer";
-import { logger } from "@/lib/middleware/logger";
+import { logger, authLimiter } from "@/lib/middleware/logger";
 
 const GENERIC_ERROR = "Impossible de traiter la demande pour le moment.";
 
@@ -15,6 +15,18 @@ function genericServerError() {
 }
 
 export async function POST(req: NextRequest) {
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0] ??
+    req.headers.get("x-real-ip") ??
+    "unknown";
+  const rl = authLimiter(ip);
+  if (!rl.success) {
+    return NextResponse.json(
+      { error: "Trop de tentatives. Réessayez plus tard." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await req.json();
     const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : null;

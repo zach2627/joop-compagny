@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
@@ -17,21 +16,48 @@ export function StoreFooter() {
     <footer
       style={{
         background:
-          "radial-gradient(circle at top left, rgba(243,111,69,0.16), transparent 22%), linear-gradient(180deg, #120816 0%, #1b0f22 100%)",
-        borderTop: "1px solid rgba(246,198,104,0.15)",
+          "radial-gradient(circle at top left, rgba(214,179,93,0.1), transparent 18%), linear-gradient(180deg, #080706 0%, #0d0b09 100%)",
+        borderTop: "1px solid rgba(214,179,93,0.15)",
       }}
     >
       <div className="container-xl py-14">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+        <div className="mb-10 grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="flex flex-col items-start">
-            <Image src="/icon.svg" alt={siteConfig.name} width={74} height={74} className="mb-4" />
-            <p className="text-sm leading-relaxed max-w-sm" style={{ color: "#f0d3e4" }}>
+            <div className="mb-5">
+              <p
+                className="text-[1.1rem] uppercase"
+                style={{
+                  color: "#d6b35d",
+                  letterSpacing: "0.36em",
+                  fontFamily: 'Georgia, "Times New Roman", serif',
+                }}
+              >
+                JOOP
+              </p>
+              <p
+                className="mt-2 text-[0.98rem] uppercase"
+                style={{
+                  color: "#d6b35d",
+                  letterSpacing: "0.22em",
+                  fontFamily: 'Georgia, "Times New Roman", serif',
+                }}
+              >
+                COMPAGNY
+              </p>
+            </div>
+            <p
+              className="max-w-sm text-sm leading-relaxed"
+              style={{ color: "#f0d3e4" }}
+            >
               {dict.footer.description}
             </p>
           </div>
 
           <div>
-            <h3 className="text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "#f6c668" }}>
+            <h3
+              className="mb-4 text-xs font-semibold uppercase tracking-widest"
+              style={{ color: "#f6c668" }}
+            >
               {dict.footer.products}
             </h3>
             <div className="space-y-2">
@@ -49,15 +75,24 @@ export function StoreFooter() {
           </div>
 
           <div>
-            <h3 className="text-xs font-semibold tracking-widest uppercase mb-4" style={{ color: "#f6c668" }}>
+            <h3
+              className="mb-4 text-xs font-semibold uppercase tracking-widest"
+              style={{ color: "#f6c668" }}
+            >
               {dict.footer.contact}
             </h3>
             <div className="space-y-3 text-sm" style={{ color: "#f7eef5" }}>
               <p>{dict.footer.location}</p>
-              <a href={`mailto:${siteConfig.email}`} className="block transition-colors hover:underline">
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="block transition-colors hover:underline"
+              >
                 {siteConfig.email}
               </a>
-              <a href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`} className="block transition-colors hover:underline">
+              <a
+                href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
+                className="block transition-colors hover:underline"
+              >
                 {siteConfig.phone}
               </a>
               <p>{dict.footer.delivery}</p>
@@ -66,11 +101,11 @@ export function StoreFooter() {
         </div>
 
         <div
-          className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4"
-          style={{ borderTop: "1px solid rgba(246,198,104,0.12)" }}
+          className="flex flex-col items-center justify-between gap-4 pt-6 md:flex-row"
+          style={{ borderTop: "1px solid rgba(214,179,93,0.12)" }}
         >
           <p className="text-xs" style={{ color: "#a67a9b" }}>
-            © {new Date().getFullYear()} {siteConfig.name}. {dict.footer.rights}
+            {new Date().getFullYear()} {siteConfig.name}. {dict.footer.rights}
           </p>
           <p className="text-xs" style={{ color: "#a67a9b" }}>
             {siteConfig.tagline}

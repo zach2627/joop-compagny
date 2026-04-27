@@ -1,8 +1,7 @@
-// src/app/api/auth/refresh/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { verifyRefreshToken, signAccessToken, signRefreshToken } from "@/lib/auth/jwt";
-import prisma from "@/lib/db/prisma";
 import { sanitizeRedirectPath } from "@/lib/auth/redirect";
+import prisma from "@/lib/db/prisma";
 import { logger } from "@/lib/middleware/logger";
 
 const REFRESH_COOKIE = "st_refresh";
@@ -22,10 +21,11 @@ export async function GET(request: NextRequest) {
   try {
     await verifyRefreshToken(refreshToken);
 
-    // Check if token exists in DB and is not revoked
     const storedToken = await prisma.refreshToken.findUnique({
       where: { token: refreshToken, isRevoked: false },
-      include: { user: { select: { id: true, email: true, role: true, isActive: true } } },
+      include: {
+        user: { select: { id: true, email: true, role: true, isActive: true } },
+      },
     });
 
     if (!storedToken || !storedToken.user.isActive) {
@@ -34,13 +34,11 @@ export async function GET(request: NextRequest) {
 
     const user = storedToken.user;
 
-    // Rotate tokens
     const [newAccessToken, newRefreshToken] = await Promise.all([
       signAccessToken({ userId: user.id, email: user.email, role: user.role }),
       signRefreshToken({ userId: user.id, email: user.email, role: user.role }),
     ]);
 
-    // Revoke old, create new
     await prisma.$transaction([
       prisma.refreshToken.update({
         where: { token: refreshToken },

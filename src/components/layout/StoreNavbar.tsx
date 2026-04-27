@@ -1,8 +1,7 @@
 import Link from "next/link";
-import Image from "next/image";
+import { MobileNav } from "./MobileNav";
 import { NavActions } from "./NavActions";
 import { NavSearch } from "./NavSearch";
-import { MobileNav } from "./MobileNav";
 import { siteConfig } from "@/config/site";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
@@ -20,36 +19,47 @@ export function StoreNavbar() {
     <nav
       className="fixed top-[var(--banner-height)] left-0 right-0 z-50 h-[var(--nav-height)] border-b"
       style={{
-        background: "rgba(18, 8, 22, 0.84)",
-        backdropFilter: "blur(18px)",
-        borderColor: "rgba(246, 198, 104, 0.18)",
+        background: "rgba(7, 6, 5, 0.78)",
+        backdropFilter: "blur(20px)",
+        borderColor: "rgba(214, 179, 93, 0.18)",
       }}
       aria-label={dict.nav.aria}
     >
-      <div className="container-xl h-full flex items-center justify-between gap-4">
+      <div className="container-xl flex h-full items-center justify-between gap-4">
         <Link
           href={localizedPath("/", locale)}
-          className="flex items-center gap-3 shrink-0"
+          className="flex shrink-0 flex-col justify-center leading-none"
           aria-label={dict.nav.home}
         >
-          <Image src="/icon.svg" alt={siteConfig.name} width={40} height={40} />
-          <div className="flex flex-col leading-none">
-            <span className="text-sm font-semibold tracking-[0.22em]" style={{ color: "#f6c668" }}>
-              JOOP
-            </span>
-            <span className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#f0d3e4" }}>
-              Compagny
-            </span>
-          </div>
+          <span
+            className="text-[1.02rem] uppercase"
+            style={{
+              color: "#d6b35d",
+              letterSpacing: "0.38em",
+              fontFamily: 'Georgia, "Times New Roman", serif',
+            }}
+          >
+            JOOP
+          </span>
+          <span
+            className="mt-1 text-[0.92rem] uppercase"
+            style={{
+              color: "#d6b35d",
+              letterSpacing: "0.24em",
+              fontFamily: 'Georgia, "Times New Roman", serif',
+            }}
+          >
+            COMPAGNY
+          </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden items-center gap-2 md:flex">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="px-3 py-1.5 text-sm rounded-full transition-all duration-200"
-              style={{ color: "#f7eef5" }}
+              className="rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] transition-all duration-200"
+              style={{ color: "rgba(244,234,217,0.78)" }}
             >
               {label}
             </Link>

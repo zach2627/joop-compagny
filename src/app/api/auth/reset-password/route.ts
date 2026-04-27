@@ -1,8 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/db/prisma";
+import { logger, authLimiter } from "@/lib/middleware/logger";
 
 export async function POST(req: NextRequest) {
+  const ip =
+    req.headers.get("x-forwarded-for")?.split(",")[0] ??
+    req.headers.get("x-real-ip") ??
+    "unknown";
+  const rl = authLimiter(ip);
+  if (!rl.success) {
+    return NextResponse.json(
+      { error: "Trop de tentatives. Réessayez plus tard." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await req.json();
     const { token, password, confirmPassword } = body ?? {};
@@ -57,7 +70,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("[reset-password]", err);
+    logger.error("auth.reset-password.failed", { error: String(err) });
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

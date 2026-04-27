@@ -3,15 +3,15 @@ import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
 export function StoreBanner() {
   const locale = getRequestLocale();
   const dict = getDictionary(locale);
-  const ticker = dict.banner.items.join("  ·  ") + "  ·  ";
+  const ticker = dict.banner.items.join("  /  ") + "  /  ";
 
   return (
     <div
       className="fixed top-0 left-0 right-0 z-50 flex items-center h-[var(--banner-height)]"
       style={{
         background:
-          "linear-gradient(90deg, rgba(243,111,69,0.95) 0%, rgba(106,47,156,0.95) 45%, rgba(18,8,22,0.98) 100%)",
-        borderBottom: "1px solid rgba(246,198,104,0.16)",
+          "linear-gradient(90deg, rgba(7,6,5,0.98) 0%, rgba(10,9,7,0.98) 100%)",
+        borderBottom: "1px solid rgba(214,179,93,0.16)",
         overflow: "hidden",
       }}
       aria-label={dict.banner.aria}
@@ -25,7 +25,7 @@ export function StoreBanner() {
           display: flex;
           white-space: nowrap;
           will-change: transform;
-          animation: joop-marquee 20s linear infinite;
+          animation: joop-marquee 28s linear infinite;
         }
         .joop-marquee-track:hover {
           animation-play-state: paused;
@@ -35,24 +35,24 @@ export function StoreBanner() {
       <div className="joop-marquee-track" aria-hidden="true">
         <span
           style={{
-            color: "#fff6fb",
-            fontSize: "11px",
+            color: "#d6b35d",
+            fontSize: "10px",
             fontWeight: 600,
-            letterSpacing: "0.14em",
+            letterSpacing: "0.28em",
             textTransform: "uppercase",
-            paddingRight: "3rem",
+            paddingRight: "4rem",
           }}
         >
           {ticker}
         </span>
         <span
           style={{
-            color: "#fff6fb",
-            fontSize: "11px",
+            color: "#d6b35d",
+            fontSize: "10px",
             fontWeight: 600,
-            letterSpacing: "0.14em",
+            letterSpacing: "0.28em",
             textTransform: "uppercase",
-            paddingRight: "3rem",
+            paddingRight: "4rem",
           }}
         >
           {ticker}

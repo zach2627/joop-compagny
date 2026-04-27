@@ -1,8 +1,7 @@
-// src/components/admin/ProductImageUpload.tsx
 "use client";
 
-import { useState, useRef } from "react";
-import { Upload, Loader2, CheckCircle } from "lucide-react";
+import { useRef, useState } from "react";
+import { CheckCircle, Loader2, Upload } from "lucide-react";
 
 interface Props {
   productId: string;
@@ -20,7 +19,6 @@ export function ProductImageUpload({ productId }: Props) {
     setError("");
 
     try {
-      // 1. Upload vers Cloudinary
       const formData = new FormData();
       formData.append("file", file);
       formData.append(
@@ -34,10 +32,9 @@ export function ProductImageUpload({ productId }: Props) {
         { method: "POST", body: formData }
       );
 
-      if (!cloudRes.ok) throw new Error("Échec upload Cloudinary");
+      if (!cloudRes.ok) throw new Error("Echec upload Cloudinary");
       const cloudData = await cloudRes.json();
 
-      // 2. Sauvegarder l'URL en base
       const dbRes = await fetch("/api/products/images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -49,7 +46,7 @@ export function ProductImageUpload({ productId }: Props) {
         }),
       });
 
-      if (!dbRes.ok) throw new Error("Échec sauvegarde en base");
+      if (!dbRes.ok) throw new Error("Echec sauvegarde en base");
 
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
@@ -75,21 +72,32 @@ export function ProductImageUpload({ productId }: Props) {
       <button
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
-        className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-all border"
+        className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-all"
         style={{
           color: uploading ? "#86868b" : "#C9A84C",
           borderColor: uploading ? "#d2d2d7" : "rgba(201,168,76,0.4)",
         }}
       >
         {uploading ? (
-          <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Upload...</>
+          <>
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            Upload...
+          </>
         ) : success ? (
-          <><CheckCircle className="w-3.5 h-3.5 text-green-500" /> Ajoutée !</>
+          <>
+            <CheckCircle className="h-3.5 w-3.5 text-green-500" />
+            Ajoutee !
+          </>
         ) : (
-          <><Upload className="w-3.5 h-3.5" /> Image</>
+          <>
+            <Upload className="h-3.5 w-3.5" />
+            Image
+          </>
         )}
       </button>
-      {error && <p className="text-xs text-red-500 mt-1 max-w-[150px]">{error}</p>}
+      {error ? (
+        <p className="mt-1 max-w-[150px] text-xs text-red-500">{error}</p>
+      ) : null}
     </div>
   );
 }
