@@ -36,7 +36,7 @@ export function StoreNavbar() {
             style={{
               color: "#C9A84C",
               letterSpacing: "0.38em",
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: 'var(--font-cormorant), "Cormorant Garamond", Georgia, serif',
             }}
           >
             JOOP
@@ -46,7 +46,7 @@ export function StoreNavbar() {
             style={{
               color: "#C9A84C",
               letterSpacing: "0.24em",
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: 'var(--font-cormorant), "Cormorant Garamond", Georgia, serif',
             }}
           >
             COMPAGNY
