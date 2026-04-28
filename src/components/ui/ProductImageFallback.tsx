@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Gem } from "lucide-react";
 import { useState } from "react";
 
 type ProductImageFallbackProps = {
@@ -38,29 +37,56 @@ export function ProductImageFallback({
         style={{
           background: "#1A1A14",
           color: "#FFFFFF",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          padding: "1.25rem",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <div className="flex max-w-[16rem] flex-col items-center gap-3">
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          aria-hidden="true"
+        >
           <div
-            className="flex h-12 w-12 items-center justify-center rounded-full"
+            className="flex h-14 w-14 items-center justify-center rounded-full"
             style={{
               border: "1px solid rgba(201,168,76,0.28)",
               background: "rgba(201,168,76,0.08)",
               color: "#C9A84C",
             }}
           >
-            <Gem className="h-5 w-5" />
+            <svg
+              viewBox="0 0 24 24"
+              className="h-6 w-6"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 3.5L19.5 12L12 20.5L4.5 12L12 3.5Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M8.5 8.5L12 12L15.5 8.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
+        </div>
+        <div
+          className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-10 text-center"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(26,26,20,0) 0%, rgba(26,26,20,0.84) 48%, rgba(26,26,20,0.98) 100%)",
+          }}
+        >
           <span
+            className="block"
             style={{
               fontFamily: "var(--font-cormorant), serif",
               fontStyle: "italic",
-              fontSize: "1rem",
+              fontSize: "1.05rem",
               lineHeight: 1.2,
             }}
           >

@@ -226,8 +226,8 @@
   }
 
   .prod-card-inner {
-    background: linear-gradient(180deg, #111109 0%, #1a1a14 100%);
-    border: 1px solid rgba(201, 168, 76, 0.14);
+    background: #111109;
+    border: 0.5px solid rgba(201, 168, 76, 0.15);
     border-radius: 22px;
     overflow: hidden;
     transition:

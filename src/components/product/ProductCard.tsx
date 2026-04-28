@@ -57,8 +57,14 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
             {isOnSale && (
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold"
-                style={{ background: "rgba(220,38,38,0.15)", color: "#f87171", border: "1px solid rgba(220,38,38,0.25)" }}>
+              <span
+                className="rounded-full px-2.5 py-1 text-[10px] font-bold"
+                style={{
+                  background: "#C9A84C",
+                  color: "#0A0A08",
+                  border: "1px solid rgba(201,168,76,0.22)",
+                }}
+              >
                 {labels.sale}
               </span>
             )}
@@ -93,7 +99,7 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
             </p>
           )}
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold tabular-nums" style={{ color: isOnSale ? "#C9A84C" : "#FFFFFF" }}>
+            <span className="text-sm font-bold tabular-nums" style={{ color: "#C9A84C" }}>
               {formatXOF(product.price)}
             </span>
             {isOnSale && product.compareAtPrice && (
