@@ -23,8 +23,9 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 30, // Cache images 30 jours
   },
 
+  serverExternalPackages: ["nodemailer"],
+
   experimental: {
-    serverComponentsExternalPackages: ["nodemailer"],
     serverActions: {
       allowedOrigins: [
         "localhost:3000",
