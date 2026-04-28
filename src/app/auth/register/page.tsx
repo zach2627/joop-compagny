@@ -1,13 +1,24 @@
 // src/app/auth/register/page.tsx
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useTransition, useState } from "react";
+import Link from "next/link";
+import { useState, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { registerAction } from "@/features/auth/actions";
 import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
 import { dictionaries } from "@/lib/i18n/translations";
+
+const authShellStyle = { background: "#0A0A08" };
+const authPanelStyle = {
+  background: "#111109",
+  border: "1px solid rgba(201,168,76,0.2)",
+};
+const authInputStyle = {
+  background: "#111109",
+  border: "1px solid rgba(255,255,255,0.08)",
+  color: "#FFFFFF",
+};
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -21,6 +32,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setError(null);
     const formData = new FormData(e.currentTarget);
+
     startTransition(async () => {
       const result = await registerAction(formData);
       if (result.success) {
@@ -31,105 +43,123 @@ export default function RegisterPage() {
     });
   };
 
-  const inputStyle = { background: "#242424", border: "1px solid #2E2E2E", color: "#FFFFFF" };
-
   return (
-    <div className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: "linear-gradient(135deg, #0D0D0D 0%, #1A1A1A 100%)" }}>
+    <div className="flex min-h-screen items-center justify-center p-4" style={authShellStyle}>
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <Link href={localizedPath("/", locale)} className="inline-block mb-4">
-            <Image
-              src="/icon.svg"
-              alt="JOOP COMPAGNY"
-              width={48}
-              height={48}
-              style={{ objectFit: "contain" }}
-            />
+        <div className="mb-8 text-center">
+          <Link href={localizedPath("/", locale)} className="mb-4 inline-block">
+            <Image src="/icon.svg" alt="JOOP COMPAGNY" width={48} height={48} />
           </Link>
-          <h1 className="text-2xl font-semibold" style={{ color: "#FFFFFF" }}>{dict.registerTitle}</h1>
-          <p className="text-sm mt-1" style={{ color: "#6e6e73" }}>{dict.registerSubtitle}</p>
+          <h1 className="text-2xl font-semibold text-white">{dict.registerTitle}</h1>
+          <p className="mt-1 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+            {dict.registerSubtitle}
+          </p>
         </div>
 
-        <div className="rounded-apple-xl p-8"
-          style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.2)" }}>
+        <div className="rounded-apple-xl p-8" style={authPanelStyle}>
           <form onSubmit={handleSubmit} className="space-y-4" aria-label={dict.registerFormAria}>
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: "#d2d2d7" }} htmlFor="name">
+              <label
+                className="mb-1.5 block text-sm font-medium"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+                htmlFor="name"
+              >
                 {dict.fullName}
               </label>
               <input
-                id="name" name="name" type="text"
-                className="w-full px-4 py-3 rounded-apple-md text-sm"
-                style={inputStyle}
+                id="name"
+                name="name"
+                type="text"
+                className="w-full rounded-apple-md px-4 py-3 text-sm"
+                style={authInputStyle}
                 placeholder={dict.namePlaceholder}
                 autoComplete="name"
                 required
                 disabled={isPending}
-                aria-required="true"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: "#d2d2d7" }} htmlFor="email">
+              <label
+                className="mb-1.5 block text-sm font-medium"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+                htmlFor="email"
+              >
                 Email
               </label>
               <input
-                id="email" name="email" type="email"
-                className="w-full px-4 py-3 rounded-apple-md text-sm"
-                style={inputStyle}
+                id="email"
+                name="email"
+                type="email"
+                className="w-full rounded-apple-md px-4 py-3 text-sm"
+                style={authInputStyle}
                 placeholder="vous@exemple.sn"
                 autoComplete="email"
                 required
                 disabled={isPending}
-                aria-required="true"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: "#d2d2d7" }} htmlFor="password">
+              <label
+                className="mb-1.5 block text-sm font-medium"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+                htmlFor="password"
+              >
                 {dict.password}
               </label>
               <input
-                id="password" name="password" type="password"
-                className="w-full px-4 py-3 rounded-apple-md text-sm"
-                style={inputStyle}
-                placeholder="••••••••"
+                id="password"
+                name="password"
+                type="password"
+                className="w-full rounded-apple-md px-4 py-3 text-sm"
+                style={authInputStyle}
+                placeholder="********"
                 autoComplete="new-password"
                 required
                 minLength={8}
                 disabled={isPending}
-                aria-required="true"
                 aria-describedby="password-hint"
               />
-              <p id="password-hint" className="text-xs mt-1" style={{ color: "#3a3a3f" }}>
+              <p
+                id="password-hint"
+                className="mt-1 text-xs"
+                style={{ color: "rgba(255,255,255,0.4)" }}
+              >
                 {dict.passwordHint}
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: "#d2d2d7" }} htmlFor="confirmPassword">
+              <label
+                className="mb-1.5 block text-sm font-medium"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+                htmlFor="confirmPassword"
+              >
                 {dict.confirmPassword}
               </label>
               <input
-                id="confirmPassword" name="confirmPassword" type="password"
-                className="w-full px-4 py-3 rounded-apple-md text-sm"
-                style={inputStyle}
-                placeholder="••••••••"
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                className="w-full rounded-apple-md px-4 py-3 text-sm"
+                style={authInputStyle}
+                placeholder="********"
                 autoComplete="new-password"
                 required
                 minLength={8}
                 disabled={isPending}
-                aria-required="true"
               />
             </div>
 
             {error && (
               <div
-                className="px-4 py-3 rounded-apple-md text-sm"
-                style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", color: "#F87171" }}
-                role="alert"
-                aria-live="polite"
+                className="rounded-apple-md px-4 py-3 text-sm"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(201,168,76,0.2)",
+                  color: "#FFFFFF",
+                }}
               >
                 {error}
               </div>
@@ -140,9 +170,13 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm" style={{ color: "#6e6e73" }}>
+          <div className="mt-6 text-center text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
             {dict.alreadyAccount}{" "}
-            <Link href={localizedPath("/auth/login", locale)} className="font-medium hover:underline" style={{ color: "#C9A84C" }}>
+            <Link
+              href={localizedPath("/auth/login", locale)}
+              className="font-medium hover:underline"
+              style={{ color: "#C9A84C" }}
+            >
               {dict.signIn}
             </Link>
           </div>

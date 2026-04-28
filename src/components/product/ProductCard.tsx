@@ -1,9 +1,9 @@
 // src/components/product/ProductCard.tsx
 import Link from "next/link";
-import Image from "next/image";
 import { formatXOF } from "@/features/payment/paydunya";
 import { localizedPath, type Locale } from "@/lib/i18n/config";
 import { productCardImage } from "@/lib/images/cloudinary";
+import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 
 interface ProductCardProps {
   product: {
@@ -42,24 +42,17 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
         {/* Image */}
         <div
           className="relative aspect-square overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.03)" }}
+          style={{ background: "#1A1A14" }}
         >
-          {product.imageUrl ? (
-            <Image
-              src={productCardImage(product.imageUrl)}
-              alt={product.imageAlt ?? product.name}
-              fill
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className="object-contain p-8 transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-          ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg viewBox="0 0 24 24" className="w-16 h-16" style={{ fill: "#2E2E2E" }}>
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-              </svg>
-            </div>
-          )}
+          <ProductImageFallback
+            src={productCardImage(product.imageUrl)}
+            alt={product.imageAlt ?? product.name}
+            label={product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            imageClassName="object-contain p-8 transition-transform duration-500 group-hover:scale-105"
+            fallbackClassName="absolute inset-0"
+          />
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1.5">
@@ -71,13 +64,13 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
             )}
             {isLowStock && (
               <span className="px-2.5 py-1 rounded-full text-[10px] font-bold"
-                style={{ background: "rgba(234,179,8,0.15)", color: "#EAB308", border: "1px solid rgba(234,179,8,0.25)" }}>
+                style={{ background: "rgba(201,168,76,0.12)", color: "#C9A84C", border: "1px solid rgba(201,168,76,0.28)" }}>
                 {labels.lowStock}
               </span>
             )}
             {isOutOfStock && (
               <span className="px-2.5 py-1 rounded-full text-[10px] font-bold"
-                style={{ background: "rgba(107,114,128,0.15)", color: "#9CA3AF", border: "1px solid rgba(107,114,128,0.25)" }}>
+                style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.12)" }}>
                 {labels.outOfStock}
               </span>
             )}
@@ -88,23 +81,23 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
 
         {/* Info */}
         <div className="p-5">
-          <p className="text-xs mb-1 font-medium" style={{ color: "#f6c668", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+          <p className="text-xs mb-1 font-medium" style={{ color: "#C9A84C", letterSpacing: "0.08em", textTransform: "uppercase" }}>
             {product.category}
           </p>
           <h3 className="prod-name text-sm font-bold mb-1.5 line-clamp-2">
             {product.name}
           </h3>
           {product.shortDescription && (
-            <p className="text-xs mb-3 line-clamp-2 leading-relaxed" style={{ color: "#e3c5d7" }}>
+            <p className="text-xs mb-3 line-clamp-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
               {product.shortDescription}
             </p>
           )}
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold tabular-nums" style={{ color: isOnSale ? "#ff8b5d" : "#fff7fb" }}>
+            <span className="text-sm font-bold tabular-nums" style={{ color: isOnSale ? "#C9A84C" : "#FFFFFF" }}>
               {formatXOF(product.price)}
             </span>
             {isOnSale && product.compareAtPrice && (
-              <span className="text-xs tabular-nums line-through" style={{ color: "#a67a9b" }}>
+              <span className="text-xs tabular-nums line-through" style={{ color: "rgba(255,255,255,0.4)" }}>
                 {formatXOF(product.compareAtPrice)}
               </span>
             )}

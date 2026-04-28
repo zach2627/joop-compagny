@@ -120,7 +120,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     : null;
 
   return (
-    <div style={{ background: "#0D0D0D", minHeight: "100vh" }}>
+    <div style={{ background: "#0A0A08", minHeight: "100vh" }}>
       <div className="container-xl py-8">
         <div className="mb-8">
           <p
@@ -132,7 +132,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
           <h1 className="text-display-md" style={{ color: "#FFFFFF" }}>
             {currentCategoryName ?? dict.products.allProducts}
           </h1>
-          <p className="mt-1" style={{ color: "#6e6e73" }}>
+          <p className="mt-1" style={{ color: "rgba(255,255,255,0.6)" }}>
             {dict.products.count(total)}
           </p>
         </div>
@@ -162,7 +162,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
 
           <div className="flex-1">
             <div className="flex items-center justify-between mb-6">
-              <p className="text-sm" style={{ color: "#6e6e73" }}>
+              <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
                 {dict.products.page(filters.page, pages)}
               </p>
               <ProductSort labels={dict.products.sort} />
@@ -170,10 +170,10 @@ export default async function ProductsPage({ searchParams }: PageProps) {
 
             {products.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-lg" style={{ color: "#6e6e73" }}>
+                <p className="text-lg" style={{ color: "rgba(255,255,255,0.6)" }}>
                   {dict.products.none}
                 </p>
-                <p className="text-sm mt-2" style={{ color: "#515154" }}>
+                <p className="text-sm mt-2" style={{ color: "rgba(255,255,255,0.4)" }}>
                   {dict.products.adjustFilters}
                 </p>
               </div>
@@ -239,8 +239,12 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                       className="w-9 h-9 rounded-full text-sm font-medium flex items-center justify-center transition-all duration-200"
                       style={
                         page === filters.page
-                          ? { background: "linear-gradient(135deg, #C9A84C, #E8C97A)", color: "#1A1A1A" }
-                          : { color: "#86868b", border: "1px solid #2E2E2E" }
+                          ? { background: "#C9A84C", color: "#0A0A08" }
+                          : {
+                              background: "#111109",
+                              color: "rgba(255,255,255,0.6)",
+                              border: "1px solid rgba(255,255,255,0.08)",
+                            }
                       }
                     >
                       {page}

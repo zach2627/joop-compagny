@@ -74,8 +74,8 @@ export function ProductImageUpload({ productId }: Props) {
         disabled={uploading}
         className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-all"
         style={{
-          color: uploading ? "#86868b" : "#C9A84C",
-          borderColor: uploading ? "#d2d2d7" : "rgba(201,168,76,0.4)",
+          color: uploading ? "rgba(255,255,255,0.6)" : "#C9A84C",
+          borderColor: uploading ? "rgba(255,255,255,0.16)" : "rgba(201,168,76,0.4)",
         }}
       >
         {uploading ? (
@@ -85,7 +85,7 @@ export function ProductImageUpload({ productId }: Props) {
           </>
         ) : success ? (
           <>
-            <CheckCircle className="h-3.5 w-3.5 text-green-500" />
+            <CheckCircle className="h-3.5 w-3.5 text-apple-blue" />
             Ajoutee !
           </>
         ) : (

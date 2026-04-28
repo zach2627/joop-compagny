@@ -25,7 +25,7 @@ export default async function AdminDashboard() {
       sub: `Total: ${formatXOF(data.revenue.total)}`,
       change: revenueGrowth,
       icon: DollarSign,
-      color: "blue",
+      color: "gold",
     },
     {
       title: "Commandes (mois)",
@@ -33,7 +33,7 @@ export default async function AdminDashboard() {
       sub: `Total: ${data.orders.total}`,
       change: null,
       icon: ShoppingBag,
-      color: "green",
+      color: "surface",
     },
     {
       title: "Produits actifs",
@@ -41,7 +41,7 @@ export default async function AdminDashboard() {
       sub: `Total: ${data.products.total} - A la une: ${data.products.featured}`,
       change: null,
       icon: Package,
-      color: "amber",
+      color: "gold",
     },
     {
       title: "Clients",
@@ -49,7 +49,7 @@ export default async function AdminDashboard() {
       sub: `+${data.customers.new} ce mois`,
       change: null,
       icon: Users,
-      color: "purple",
+      color: "surface",
     },
   ];
 
@@ -71,31 +71,19 @@ export default async function AdminDashboard() {
             <div className="mb-4 flex items-start justify-between">
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-apple-md ${
-                  color === "blue"
-                    ? "bg-blue-50"
-                    : color === "green"
-                    ? "bg-green-50"
-                    : color === "amber"
-                    ? "bg-amber-50"
-                    : "bg-purple-50"
+                  color === "gold" ? "bg-blue-50" : "bg-white"
                 }`}
               >
                 <Icon
                   className={`h-5 w-5 ${
-                    color === "blue"
-                      ? "text-blue-600"
-                      : color === "green"
-                      ? "text-green-600"
-                      : color === "amber"
-                      ? "text-amber-600"
-                      : "text-purple-600"
+                    color === "gold" ? "text-blue-600" : "text-apple-gray-500"
                   }`}
                 />
               </div>
               {change !== null && (
                 <div
                   className={`flex items-center gap-1 text-xs font-medium ${
-                    change >= 0 ? "text-green-600" : "text-red-600"
+                    change >= 0 ? "text-apple-blue" : "text-apple-gray-500"
                   }`}
                 >
                   {change >= 0 ? (

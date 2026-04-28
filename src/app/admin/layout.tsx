@@ -39,10 +39,14 @@ export default async function AdminLayout({
   ];
 
   return (
-    <div className="flex min-h-screen bg-apple-gray-50">
+    <div className="flex min-h-screen bg-[#0A0A08]">
       <aside
-        className="fixed top-0 left-0 bottom-0 w-[240px] bg-apple-gray-900 text-white
+        className="fixed top-0 left-0 bottom-0 w-[240px] text-white
                    flex flex-col z-40"
+        style={{
+          background: "#111109",
+          borderRight: "1px solid rgba(201,168,76,0.12)",
+        }}
       >
         <div className="p-6 border-b border-white/10">
           <p className="text-xs font-semibold text-white/50 uppercase tracking-widest mb-1">
@@ -82,7 +86,7 @@ export default async function AdminLayout({
         </div>
       </aside>
 
-      <main className="ml-[240px] flex-1 min-h-screen">{children}</main>
+      <main className="ml-[240px] flex-1 min-h-screen bg-[#0A0A08]">{children}</main>
     </div>
   );
 }

@@ -9,9 +9,8 @@ export function StoreBanner() {
     <div
       className="fixed top-0 left-0 right-0 z-50 flex items-center h-[var(--banner-height)]"
       style={{
-        background:
-          "linear-gradient(90deg, rgba(7,6,5,0.98) 0%, rgba(10,9,7,0.98) 100%)",
-        borderBottom: "1px solid rgba(214,179,93,0.16)",
+        background: "#0A0A08",
+        borderBottom: "1px solid rgba(201,168,76,0.16)",
         overflow: "hidden",
       }}
       aria-label={dict.banner.aria}
@@ -35,7 +34,7 @@ export function StoreBanner() {
       <div className="joop-marquee-track" aria-hidden="true">
         <span
           style={{
-            color: "#d6b35d",
+            color: "#C9A84C",
             fontSize: "10px",
             fontWeight: 600,
             letterSpacing: "0.28em",
@@ -47,7 +46,7 @@ export function StoreBanner() {
         </span>
         <span
           style={{
-            color: "#d6b35d",
+            color: "#C9A84C",
             fontSize: "10px",
             fontWeight: 600,
             letterSpacing: "0.28em",

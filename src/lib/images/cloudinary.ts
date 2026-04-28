@@ -70,7 +70,7 @@ export const productCardImage = (url: string | null | undefined) =>
     width: 900,
     height: 900,
     crop: "pad",
-    background: "rgb:f5f5f7",
+    background: "rgb:1a1a14",
   });
 
 export const productDetailImage = (url: string | null | undefined) =>
@@ -78,7 +78,7 @@ export const productDetailImage = (url: string | null | undefined) =>
     width: 1400,
     height: 1400,
     crop: "pad",
-    background: "rgb:1a1a1a",
+    background: "rgb:1a1a14",
   });
 
 export const productThumbnailImage = (url: string | null | undefined) =>
@@ -86,7 +86,7 @@ export const productThumbnailImage = (url: string | null | undefined) =>
     width: 240,
     height: 240,
     crop: "pad",
-    background: "rgb:1a1a1a",
+    background: "rgb:1a1a14",
   });
 
 export const heroBackgroundImage = (url: string | null | undefined) =>

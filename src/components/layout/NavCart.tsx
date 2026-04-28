@@ -14,11 +14,11 @@ export function NavCart({ itemCount, href, label }: NavCartProps) {
       className="relative p-2 rounded-full hover:bg-white/10 transition-colors"
       aria-label={label}
     >
-      <ShoppingBag className="w-5 h-5 text-[#d2d2d7]" />
+      <ShoppingBag className="w-5 h-5 text-white" />
       {itemCount > 0 && (
         <span
           className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1
-                     bg-apple-blue text-white text-[10px] font-bold rounded-full
+                     bg-apple-blue text-[#0A0A08] text-[10px] font-bold rounded-full
                      flex items-center justify-center"
         >
           {itemCount > 99 ? "99+" : itemCount}

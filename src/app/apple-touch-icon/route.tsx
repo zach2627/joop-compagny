@@ -10,12 +10,11 @@ export async function GET() {
           display: "flex",
           width: "100%",
           height: "100%",
-          background:
-            "radial-gradient(circle at top left, rgba(243,111,69,0.3), transparent 32%), linear-gradient(135deg, #120816, #25112c)",
+          background: "#0A0A08",
           alignItems: "center",
           justifyContent: "center",
-          color: "#f6c668",
-          fontFamily: "sans-serif",
+          color: "#C9A84C",
+          fontFamily: "Cormorant Garamond, serif",
         }}
       >
         <div
@@ -24,12 +23,13 @@ export async function GET() {
             width: 132,
             height: 132,
             borderRadius: 40,
-            border: "10px solid rgba(246,198,104,0.28)",
+            border: "10px solid rgba(201,168,76,0.28)",
             alignItems: "center",
             justifyContent: "center",
             fontSize: 56,
-            fontWeight: 800,
-            background: "rgba(255,255,255,0.06)",
+            fontWeight: 700,
+            background: "#111109",
+            color: "#C9A84C",
           }}
         >
           JO

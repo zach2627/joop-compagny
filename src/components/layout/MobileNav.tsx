@@ -24,17 +24,17 @@ export function MobileNav({ navLinks, labels }: MobileNavProps) {
         aria-controls="mobile-nav-menu"
       >
         <span
-          className={`block h-0.5 w-5 bg-[#d2d2d7] transition-transform duration-300 origin-center ${
+          className={`block h-0.5 w-5 bg-white transition-transform duration-300 origin-center ${
             open ? "rotate-45 translate-y-2" : ""
           }`}
         />
         <span
-          className={`block h-0.5 w-5 bg-[#d2d2d7] transition-opacity duration-200 ${
+          className={`block h-0.5 w-5 bg-white transition-opacity duration-200 ${
             open ? "opacity-0" : ""
           }`}
         />
         <span
-          className={`block h-0.5 w-5 bg-[#d2d2d7] transition-transform duration-300 origin-center ${
+          className={`block h-0.5 w-5 bg-white transition-transform duration-300 origin-center ${
             open ? "-rotate-45 -translate-y-2" : ""
           }`}
         />
@@ -46,7 +46,7 @@ export function MobileNav({ navLinks, labels }: MobileNavProps) {
           open ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0 pointer-events-none"
         }`}
         style={{
-          background: "rgba(18,18,18,0.98)",
+          background: "rgba(10,10,8,0.98)",
           backdropFilter: "blur(20px)",
           borderBottom: open ? "1px solid rgba(201,168,76,0.15)" : "none",
         }}
@@ -59,7 +59,7 @@ export function MobileNav({ navLinks, labels }: MobileNavProps) {
               onClick={() => setOpen(false)}
               className="py-4 text-sm font-medium transition-colors duration-200 hover:text-[#C9A84C]"
               style={{
-                color: "#d2d2d7",
+                color: "rgba(255,255,255,0.6)",
                 borderBottom: "1px solid rgba(255,255,255,0.05)",
               }}
             >

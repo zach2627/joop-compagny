@@ -1,7 +1,7 @@
 // src/components/product/ProductVariantSelector.tsx
 "use client";
 
-import { useState, useTransition, useEffect } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { formatXOF } from "@/features/payment/paydunya";
 import { addToCartAction } from "@/features/cart/actions";
 import type { Locale } from "@/lib/i18n/config";
@@ -23,7 +23,6 @@ export interface ProductImage {
   id: string;
   url: string;
   alt: string | null;
-  /** Couleur correspondante (même valeur que Variant.color) */
   color: string | null;
 }
 
@@ -32,11 +31,8 @@ interface ProductVariantSelectorProps {
   variants: Variant[];
   storageOptions: string[];
   colorOptions: { color: string; hex: string | null }[];
-  /** Images du produit avec leur couleur associée */
   productImages?: ProductImage[];
   locale: Locale;
-  /** Appelé chaque fois que la variante active change — permet au parent de
-   *  mettre à jour l'image affichée */
   onImageChange?: (imageUrl: string | null) => void;
   labels: {
     storage: string;
@@ -71,7 +67,6 @@ export function ProductVariantSelector({
   const [selectedStorage, setSelectedStorage] = useState(defaultVariant?.storage);
   const [selectedColor, setSelectedColor] = useState(defaultVariant?.color);
 
-  // Variante correspondant à la sélection courante
   const selectedVariant =
     variants.find(
       (v) =>
@@ -82,8 +77,6 @@ export function ProductVariantSelector({
   const isOutOfStock = selectedVariant?.stockStatus === "OUT_OF_STOCK";
   const isLowStock = selectedVariant?.stockStatus === "LOW_STOCK";
 
-  // Trouver l'image qui correspond à la couleur sélectionnée.
-  // Stratégie : correspondance exacte sur color, sinon image principale (null color).
   function findImageForColor(color: string | undefined): string | null {
     if (!productImages.length) return null;
     if (color) {
@@ -92,11 +85,10 @@ export function ProductVariantSelector({
       );
       if (exact) return exact.url;
     }
-    // Fallback : première image sans association de couleur, ou première image
+
     return productImages.find((img) => !img.color)?.url ?? productImages[0]?.url ?? null;
   }
 
-  // Notifier le parent chaque fois que la couleur sélectionnée change
   useEffect(() => {
     if (onImageChange) {
       onImageChange(findImageForColor(selectedColor));
@@ -104,7 +96,6 @@ export function ProductVariantSelector({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedColor]);
 
-  // Notifier au montage avec la couleur de la variante par défaut
   useEffect(() => {
     if (onImageChange) {
       onImageChange(findImageForColor(defaultVariant?.color));
@@ -112,23 +103,15 @@ export function ProductVariantSelector({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSetStorage = (s: string) => {
-    setSelectedStorage(s);
-    // Quand on change le stockage, garder la couleur si possible
-    const matched = variants.find(
-      (v) => v.storage === s && v.color === selectedColor
-    );
+  const handleSetStorage = (storage: string) => {
+    setSelectedStorage(storage);
+    const matched = variants.find((v) => v.storage === storage && v.color === selectedColor);
     if (!matched) {
-      // Choisir la première variante disponible pour ce stockage
-      const first = variants.find((v) => v.storage === s);
+      const first = variants.find((v) => v.storage === storage);
       if (first?.color !== selectedColor) {
         setSelectedColor(first?.color);
       }
     }
-  };
-
-  const handleSetColor = (color: string) => {
-    setSelectedColor(color);
   };
 
   const handleAddToCart = () => {
@@ -155,76 +138,58 @@ export function ProductVariantSelector({
 
   return (
     <div className="space-y-5">
-      {/* Prix variante sélectionnée */}
       {selectedVariant && (
         <div className="flex items-baseline gap-3">
-          <span className="price-xl text-apple-gray-900">
-            {formatXOF(selectedVariant.price)}
-          </span>
-          {selectedVariant.compareAt &&
-            selectedVariant.compareAt > selectedVariant.price && (
-              <span className="price-lg price-strike">
-                {formatXOF(selectedVariant.compareAt)}
-              </span>
-            )}
+          <span className="price-xl text-white">{formatXOF(selectedVariant.price)}</span>
+          {selectedVariant.compareAt && selectedVariant.compareAt > selectedVariant.price && (
+            <span className="price-lg price-strike">{formatXOF(selectedVariant.compareAt)}</span>
+          )}
         </div>
       )}
 
-      {/* Sélecteur stockage */}
       {storageOptions.length > 0 && (
         <div>
-          <p className="text-xs font-semibold text-apple-gray-500 uppercase tracking-widest mb-2">
-            {labels.storage} :{" "}
-            <span className="normal-case text-apple-gray-900 font-medium">
-              {selectedStorage}
-            </span>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-apple-gray-500">
+            {labels.storage} : <span className="normal-case font-medium text-white">{selectedStorage}</span>
           </p>
           <div className="flex flex-wrap gap-2">
-            {storageOptions.map((s) => (
+            {storageOptions.map((storage) => (
               <button
-                key={s}
-                onClick={() => handleSetStorage(s)}
-                className={`px-4 py-2 text-sm rounded-full border-2 transition-colors font-medium
-                  ${
-                    selectedStorage === s
-                      ? "border-apple-gray-900 bg-apple-gray-900 text-white"
-                      : "border-apple-gray-200 text-apple-gray-700 hover:border-apple-gray-400"
-                  }`}
+                key={storage}
+                onClick={() => handleSetStorage(storage)}
+                className={`rounded-full border-2 px-4 py-2 text-sm font-medium transition-colors ${
+                  selectedStorage === storage
+                    ? "border-apple-blue bg-[rgba(201,168,76,0.12)] text-white"
+                    : "border-apple-gray-200 text-apple-gray-700 hover:border-apple-blue"
+                }`}
               >
-                {s}
+                {storage}
               </button>
             ))}
           </div>
         </div>
       )}
 
-      {/* Sélecteur couleur */}
       {colorOptions.length > 0 && (
         <div>
-          <p className="text-xs font-semibold text-apple-gray-500 uppercase tracking-widest mb-2">
-            {labels.color} :{" "}
-            <span className="normal-case text-apple-gray-900 font-medium">
-              {selectedColor}
-            </span>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-apple-gray-500">
+            {labels.color} : <span className="normal-case font-medium text-white">{selectedColor}</span>
           </p>
           <div className="flex flex-wrap gap-2">
             {colorOptions.map(({ color, hex }) => (
               <button
                 key={color}
-                onClick={() => handleSetColor(color)}
+                onClick={() => setSelectedColor(color)}
                 title={color}
-                className={`relative w-8 h-8 rounded-full border-2 transition-all
-                  ${
-                    selectedColor === color
-                      ? "border-apple-gray-900 scale-110"
-                      : "border-apple-gray-200"
-                  }`}
-                style={{ backgroundColor: hex ?? "#ccc" }}
+                className={`relative h-8 w-8 rounded-full border-2 transition-all ${
+                  selectedColor === color ? "scale-110 border-apple-blue" : "border-apple-gray-200"
+                }`}
+                style={{ backgroundColor: hex ?? "#C9A84C" }}
                 aria-label={color}
                 aria-pressed={selectedColor === color}
               >
                 {selectedColor === color && (
-                  <span className="absolute inset-0.5 rounded-full border-2 border-white" />
+                  <span className="absolute inset-0.5 rounded-full border-2 border-[#0A0A08]" />
                 )}
               </button>
             ))}
@@ -232,36 +197,35 @@ export function ProductVariantSelector({
         </div>
       )}
 
-      {/* État du stock */}
       {isLowStock && (
-        <p className="text-sm text-amber-600 font-medium">
-          ⚠️ {labels.lowStock.replace("{stock}", String(selectedVariant?.stock ?? 0))}
+        <p className="text-sm font-medium" style={{ color: "#C9A84C" }}>
+          {labels.lowStock.replace("{stock}", String(selectedVariant?.stock ?? 0))}
         </p>
       )}
+
       {isOutOfStock && (
-        <p className="text-sm text-red-600 font-medium">❌ {labels.outOfStock}</p>
+        <p className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>
+          {labels.outOfStock}
+        </p>
       )}
 
-      {/* Quantité */}
       {!isOutOfStock && (
         <div className="flex items-center gap-3">
-          <p className="text-xs font-semibold text-apple-gray-500 uppercase tracking-widest">
+          <p className="text-xs font-semibold uppercase tracking-widest text-apple-gray-500">
             {labels.quantity} :
           </p>
-          <div className="flex items-center border border-apple-gray-200 rounded-full overflow-hidden">
+          <div className="flex items-center overflow-hidden rounded-full border border-apple-gray-200">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-9 h-9 flex items-center justify-center text-lg hover:bg-apple-gray-100 transition-colors"
+              className="flex h-9 w-9 items-center justify-center text-lg transition-colors hover:bg-[rgba(201,168,76,0.08)]"
               aria-label={labels.decrease}
             >
-              −
+              -
             </button>
-            <span className="w-10 text-center text-sm font-medium">{quantity}</span>
+            <span className="w-10 text-center text-sm font-medium text-white">{quantity}</span>
             <button
-              onClick={() =>
-                setQuantity(Math.min(selectedVariant?.stock ?? 10, quantity + 1))
-              }
-              className="w-9 h-9 flex items-center justify-center text-lg hover:bg-apple-gray-100 transition-colors"
+              onClick={() => setQuantity(Math.min(selectedVariant?.stock ?? 10, quantity + 1))}
+              className="flex h-9 w-9 items-center justify-center text-lg transition-colors hover:bg-[rgba(201,168,76,0.08)]"
               aria-label={labels.increase}
             >
               +
@@ -270,13 +234,11 @@ export function ProductVariantSelector({
         </div>
       )}
 
-      {/* Ajouter au panier */}
       <div className="flex flex-col gap-3">
         <button
           onClick={handleAddToCart}
           disabled={isPending || isOutOfStock || !selectedVariant}
-          className={`btn-primary w-full py-4 text-base transition-all
-            ${success ? "bg-green-600 hover:bg-green-700" : ""}`}
+          className="btn-primary w-full py-4 text-base transition-all"
         >
           {isPending
             ? labels.adding
@@ -287,7 +249,11 @@ export function ProductVariantSelector({
             : labels.add}
         </button>
 
-        {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+        {error && (
+          <p className="text-center text-sm" style={{ color: "#FFFFFF" }}>
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

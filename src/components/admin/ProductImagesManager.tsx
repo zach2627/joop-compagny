@@ -259,8 +259,8 @@ export function ProductImagesManager({ productId, images, variantColors = [] }: 
           disabled={uploading || isPending}
           className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-all"
           style={{
-            color: uploading ? "#86868b" : "#C9A84C",
-            borderColor: uploading ? "#d2d2d7" : "rgba(201,168,76,0.4)",
+            color: uploading ? "rgba(255,255,255,0.6)" : "#C9A84C",
+            borderColor: uploading ? "rgba(255,255,255,0.16)" : "rgba(201,168,76,0.4)",
           }}
         >
           {uploading

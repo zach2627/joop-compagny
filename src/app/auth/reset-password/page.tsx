@@ -1,11 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useState, Suspense } from "react";
+import Link from "next/link";
+import { Suspense, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
 import { dictionaries } from "@/lib/i18n/translations";
+
+const authShellStyle = { background: "#0A0A08" };
+const authPanelStyle = {
+  background: "#111109",
+  border: "1px solid rgba(201,168,76,0.2)",
+};
+const authInputStyle = {
+  background: "#111109",
+  border: "1px solid rgba(255,255,255,0.08)",
+  color: "#FFFFFF",
+};
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -22,10 +33,8 @@ function ResetPasswordForm() {
 
   if (!token) {
     return (
-      <div className="text-center py-4 space-y-3">
-        <p className="text-sm" style={{ color: "#F87171" }}>
-          {dict.invalidLink}
-        </p>
+      <div className="space-y-3 py-4 text-center">
+        <p className="text-sm text-white">{dict.invalidLink}</p>
         <Link
           href={localizedPath("/auth/forgot-password", locale)}
           className="text-sm font-medium hover:underline"
@@ -43,6 +52,7 @@ function ResetPasswordForm() {
       setError(dict.passwordMismatch);
       return;
     }
+
     setStatus("loading");
     setError(null);
 
@@ -70,15 +80,15 @@ function ResetPasswordForm() {
 
   if (status === "success") {
     return (
-      <div className="text-center py-4">
+      <div className="py-4 text-center">
         <div
-          className="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center"
+          className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
           style={{
-            background: "rgba(201,168,76,0.1)",
+            background: "rgba(201,168,76,0.08)",
             border: "1px solid rgba(201,168,76,0.3)",
           }}
         >
-          <svg className="w-7 h-7" fill="none" stroke="#C9A84C" viewBox="0 0 24 24">
+          <svg className="h-7 w-7" fill="none" stroke="#C9A84C" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -87,8 +97,8 @@ function ResetPasswordForm() {
             />
           </svg>
         </div>
-        <p className="font-semibold text-white mb-2">{dict.passwordUpdated}</p>
-        <p className="text-sm" style={{ color: "#6e6e73" }}>
+        <p className="mb-2 font-semibold text-white">{dict.passwordUpdated}</p>
+        <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
           {dict.redirectingLogin}
         </p>
       </div>
@@ -99,8 +109,8 @@ function ResetPasswordForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label
-          className="block text-sm font-medium mb-1.5"
-          style={{ color: "#d2d2d7" }}
+          className="mb-1.5 block text-sm font-medium"
+          style={{ color: "rgba(255,255,255,0.6)" }}
           htmlFor="password"
         >
           {dict.newPassword}
@@ -110,23 +120,23 @@ function ResetPasswordForm() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-3 rounded-apple-md text-sm transition-all duration-200"
-          style={{ background: "#242424", border: "1px solid #2E2E2E", color: "#FFFFFF" }}
-          placeholder="••••••••"
+          className="w-full rounded-apple-md px-4 py-3 text-sm transition-all duration-200"
+          style={authInputStyle}
+          placeholder="********"
           autoComplete="new-password"
           required
           minLength={8}
           disabled={status === "loading"}
         />
-        <p className="text-xs mt-1.5" style={{ color: "#3a3a3f" }}>
+        <p className="mt-1.5 text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
           {dict.minPassword}
         </p>
       </div>
 
       <div>
         <label
-          className="block text-sm font-medium mb-1.5"
-          style={{ color: "#d2d2d7" }}
+          className="mb-1.5 block text-sm font-medium"
+          style={{ color: "rgba(255,255,255,0.6)" }}
           htmlFor="confirmPassword"
         >
           {dict.confirmPassword}
@@ -136,9 +146,9 @@ function ResetPasswordForm() {
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full px-4 py-3 rounded-apple-md text-sm transition-all duration-200"
-          style={{ background: "#242424", border: "1px solid #2E2E2E", color: "#FFFFFF" }}
-          placeholder="••••••••"
+          className="w-full rounded-apple-md px-4 py-3 text-sm transition-all duration-200"
+          style={authInputStyle}
+          placeholder="********"
           autoComplete="new-password"
           required
           minLength={8}
@@ -148,22 +158,18 @@ function ResetPasswordForm() {
 
       {error && (
         <div
-          className="px-4 py-3 rounded-apple-md text-sm"
+          className="rounded-apple-md px-4 py-3 text-sm"
           style={{
-            background: "rgba(239,68,68,0.1)",
-            border: "1px solid rgba(239,68,68,0.3)",
-            color: "#F87171",
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(201,168,76,0.2)",
+            color: "#FFFFFF",
           }}
         >
           {error}
         </div>
       )}
 
-      <button
-        type="submit"
-        disabled={status === "loading"}
-        className="btn-primary w-full py-3.5"
-      >
+      <button type="submit" disabled={status === "loading"} className="btn-primary w-full py-3.5">
         {status === "loading" ? dict.updating : dict.resetPassword}
       </button>
     </form>
@@ -176,45 +182,28 @@ export default function ResetPasswordPage() {
   const dict = dictionaries[locale].auth;
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: "linear-gradient(135deg, #0D0D0D 0%, #1A1A1A 100%)" }}
-    >
+    <div className="flex min-h-screen items-center justify-center p-4" style={authShellStyle}>
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <Link href={localizedPath("/", locale)} className="inline-block mb-4">
-            <Image
-              src="/icon.svg"
-              alt="JOOP COMPAGNY"
-              width={48}
-              height={48}
-              style={{ objectFit: "contain" }}
-            />
+        <div className="mb-8 text-center">
+          <Link href={localizedPath("/", locale)} className="mb-4 inline-block">
+            <Image src="/icon.svg" alt="JOOP COMPAGNY" width={48} height={48} />
           </Link>
-          <h1 className="text-2xl font-semibold" style={{ color: "#FFFFFF" }}>
-            {dict.resetTitle}
-          </h1>
-          <p className="text-sm mt-1" style={{ color: "#6e6e73" }}>
+          <h1 className="text-2xl font-semibold text-white">{dict.resetTitle}</h1>
+          <p className="mt-1 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
             {dict.resetSubtitle}
           </p>
         </div>
 
-        <div
-          className="rounded-apple-xl p-8"
-          style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.2)" }}
-        >
+        <div className="rounded-apple-xl p-8" style={authPanelStyle}>
           <Suspense
             fallback={
-              <div
-                className="h-48 animate-pulse rounded-apple-md"
-                style={{ background: "#242424" }}
-              />
+              <div className="h-48 animate-pulse rounded-apple-md" style={{ background: "#1A1A14" }} />
             }
           >
             <ResetPasswordForm />
           </Suspense>
 
-          <div className="mt-6 text-center text-sm" style={{ color: "#6e6e73" }}>
+          <div className="mt-6 text-center text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
             <Link
               href={localizedPath("/auth/login", locale)}
               className="font-medium hover:underline"

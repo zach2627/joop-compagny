@@ -27,7 +27,7 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   return (
     <div
       className="flex items-center rounded-full p-0.5"
-      style={{ border: "1px solid rgba(255,255,255,0.2)", background: "rgba(0,0,0,0.45)", backdropFilter: "blur(8px)" }}
+      style={{ border: "1px solid rgba(201,168,76,0.2)", background: "rgba(10,10,8,0.88)", backdropFilter: "blur(8px)" }}
       aria-label={locale === "fr" ? "Choisir la langue" : "Choose language"}
     >
       {(["fr", "en"] as const).map((item) => {
@@ -39,7 +39,7 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
             className="px-3 py-1.5 text-[11px] font-bold rounded-full transition-all cursor-pointer"
             style={{
               background: active ? "#C9A84C" : "transparent",
-              color: active ? "#000" : "#d2d2d7",
+              color: active ? "#0A0A08" : "rgba(255,255,255,0.6)",
             }}
             aria-current={active ? "true" : undefined}
           >

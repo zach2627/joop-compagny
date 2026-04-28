@@ -19,9 +19,9 @@ export function StoreNavbar() {
     <nav
       className="fixed top-[var(--banner-height)] left-0 right-0 z-50 h-[var(--nav-height)] border-b"
       style={{
-        background: "rgba(7, 6, 5, 0.78)",
+        background: "rgba(10, 10, 8, 0.92)",
         backdropFilter: "blur(20px)",
-        borderColor: "rgba(214, 179, 93, 0.18)",
+        borderColor: "rgba(201, 168, 76, 0.18)",
       }}
       aria-label={dict.nav.aria}
     >
@@ -34,7 +34,7 @@ export function StoreNavbar() {
           <span
             className="text-[1.02rem] uppercase"
             style={{
-              color: "#d6b35d",
+              color: "#C9A84C",
               letterSpacing: "0.38em",
               fontFamily: 'Georgia, "Times New Roman", serif',
             }}
@@ -44,7 +44,7 @@ export function StoreNavbar() {
           <span
             className="mt-1 text-[0.92rem] uppercase"
             style={{
-              color: "#d6b35d",
+              color: "#C9A84C",
               letterSpacing: "0.24em",
               fontFamily: 'Georgia, "Times New Roman", serif',
             }}
@@ -59,7 +59,7 @@ export function StoreNavbar() {
               key={href}
               href={href}
               className="rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] transition-all duration-200"
-              style={{ color: "rgba(244,234,217,0.78)" }}
+              style={{ color: "rgba(255,255,255,0.6)" }}
             >
               {label}
             </Link>

@@ -31,7 +31,7 @@ export function NavUser({ session, locale, labels }: NavUserProps) {
               className="p-2 rounded-full hover:bg-white/10 transition-colors"
               aria-label={labels.admin}
             >
-              <LayoutDashboard className="w-5 h-5 text-[#d2d2d7]" />
+              <LayoutDashboard className="w-5 h-5 text-white" />
             </Link>
           )}
           <Link
@@ -39,13 +39,13 @@ export function NavUser({ session, locale, labels }: NavUserProps) {
             className="p-2 rounded-full hover:bg-white/10 transition-colors"
             aria-label={labels.account}
           >
-            <User className="w-5 h-5 text-[#d2d2d7]" />
+            <User className="w-5 h-5 text-white" />
           </Link>
         </>
       ) : (
         <Link
           href={loginUrl}
-          className="text-sm text-[#d2d2d7] hover:text-white px-3 py-1.5
+          className="text-sm text-[rgba(255,255,255,0.6)] hover:text-white px-3 py-1.5
                      rounded-full hover:bg-white/10 transition-colors"
         >
           {labels.login}

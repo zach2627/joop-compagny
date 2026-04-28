@@ -1,10 +1,25 @@
 import type { Metadata } from "next";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import Script from "next/script";
 import { siteConfig } from "@/config/site";
 import { seoConfig } from "@/config/seo";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
 import "@/styles/globals.css";
+
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  display: "swap",
+  weight: ["500", "600", "700"],
+});
+
+const jost = Jost({
+  subsets: ["latin"],
+  variable: "--font-jost",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
@@ -153,7 +168,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
+      <body className={`${jost.variable} ${cormorantGaramond.variable}`}>
         {children}
 
         {GA_ID && (

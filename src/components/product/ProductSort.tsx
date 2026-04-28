@@ -35,6 +35,7 @@ export function ProductSort({ labels }: ProductSortProps) {
       value={current}
       onChange={handleChange}
       className="text-sm border border-apple-gray-200 rounded-full px-3 py-1.5 bg-white text-apple-gray-700 focus:outline-none focus:ring-2 focus:ring-apple-blue"
+      style={{ colorScheme: "dark" }}
     >
       {sortOptions.map((opt) => (
         <option key={opt.value} value={opt.value}>
