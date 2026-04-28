@@ -1,10 +1,26 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Cormorant_Garamond, Jost } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import { seoConfig } from "@/config/seo";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
 import "@/styles/globals.css";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-jost",
+  display: "swap",
+});
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
@@ -111,7 +127,7 @@ export default function RootLayout({
   const searchPath = localizedPath("/store/products", locale);
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${cormorant.variable} ${jost.variable}`}>
       <head>
         <script
           type="application/ld+json"

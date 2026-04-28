@@ -21,7 +21,7 @@ export function StoreNavbar() {
       style={{
         background: "rgba(7, 6, 5, 0.78)",
         backdropFilter: "blur(20px)",
-        borderColor: "rgba(214, 179, 93, 0.18)",
+        borderColor: "rgba(201, 168, 76, 0.18)",
       }}
       aria-label={dict.nav.aria}
     >
@@ -34,9 +34,9 @@ export function StoreNavbar() {
           <span
             className="text-[1.02rem] uppercase"
             style={{
-              color: "#d6b35d",
+              color: "#C9A84C",
               letterSpacing: "0.38em",
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: 'var(--font-cormorant), "Cormorant Garamond", Georgia, serif',
             }}
           >
             JOOP
@@ -44,9 +44,9 @@ export function StoreNavbar() {
           <span
             className="mt-1 text-[0.92rem] uppercase"
             style={{
-              color: "#d6b35d",
+              color: "#C9A84C",
               letterSpacing: "0.24em",
-              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontFamily: 'var(--font-cormorant), "Cormorant Garamond", Georgia, serif',
             }}
           >
             COMPAGNY

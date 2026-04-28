@@ -88,23 +88,23 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
 
         {/* Info */}
         <div className="p-5">
-          <p className="text-xs mb-1 font-medium" style={{ color: "#f6c668", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+          <p className="text-xs mb-1 font-medium" style={{ color: "#C9A84C", letterSpacing: "0.08em", textTransform: "uppercase" }}>
             {product.category}
           </p>
           <h3 className="prod-name text-sm font-bold mb-1.5 line-clamp-2">
             {product.name}
           </h3>
           {product.shortDescription && (
-            <p className="text-xs mb-3 line-clamp-2 leading-relaxed" style={{ color: "#e3c5d7" }}>
+            <p className="text-xs mb-3 line-clamp-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
               {product.shortDescription}
             </p>
           )}
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold tabular-nums" style={{ color: isOnSale ? "#ff8b5d" : "#fff7fb" }}>
+            <span className="text-sm font-bold tabular-nums" style={{ color: isOnSale ? "#C9A84C" : "#FFFFFF" }}>
               {formatXOF(product.price)}
             </span>
             {isOnSale && product.compareAtPrice && (
-              <span className="text-xs tabular-nums line-through" style={{ color: "#a67a9b" }}>
+              <span className="text-xs tabular-nums line-through" style={{ color: "rgba(255,255,255,0.4)" }}>
                 {formatXOF(product.compareAtPrice)}
               </span>
             )}

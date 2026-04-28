@@ -177,8 +177,8 @@ export default async function HomePage() {
           style={{
             minHeight: "calc(100vh - 100px)",
             background:
-              "linear-gradient(180deg, #070605 0%, #0a0907 48%, #110d09 100%)",
-            borderColor: "rgba(214,179,93,0.14)",
+              "linear-gradient(180deg, #0A0A08 0%, #0A0A08 48%, #0A0A08 100%)",
+            borderColor: "rgba(201,168,76,0.14)",
           }}
         >
           <div className="absolute inset-0">
@@ -188,14 +188,14 @@ export default async function HomePage() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(180deg, rgba(7,6,5,0.4) 0%, rgba(7,6,5,0.18) 18%, rgba(7,6,5,0.72) 68%, rgba(7,6,5,0.96) 100%), radial-gradient(circle at 18% 22%, rgba(214,179,93,0.12), transparent 24%), radial-gradient(circle at 88% 16%, rgba(255,255,255,0.08), transparent 16%)",
+                "linear-gradient(180deg, rgba(7,6,5,0.4) 0%, rgba(7,6,5,0.18) 18%, rgba(7,6,5,0.72) 68%, rgba(7,6,5,0.96) 100%), radial-gradient(circle at 18% 22%, rgba(201,168,76,0.12), transparent 24%), radial-gradient(circle at 88% 16%, rgba(255,255,255,0.08), transparent 16%)",
             }}
           />
           <div
             className="absolute inset-x-0 top-0 h-px"
             style={{
               background:
-                "linear-gradient(90deg, transparent 0%, rgba(214,179,93,0.32) 50%, transparent 100%)",
+                "linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.32) 50%, transparent 100%)",
             }}
           />
 
@@ -205,11 +205,11 @@ export default async function HomePage() {
                 <div className="max-w-[760px] pt-8 md:pt-16">
                   <div
                     className="mb-8 inline-flex items-center gap-4 text-[11px] uppercase tracking-[0.34em]"
-                    style={{ color: "rgba(214,179,93,0.9)" }}
+                    style={{ color: "rgba(201,168,76,0.9)" }}
                   >
                     <span
                       className="block h-px w-12"
-                      style={{ background: "rgba(214,179,93,0.5)" }}
+                      style={{ background: "rgba(201,168,76,0.5)" }}
                     />
                     {copy.seasonLabel}
                   </div>
@@ -217,7 +217,7 @@ export default async function HomePage() {
                   <h1
                     className="max-w-[12ch] text-balance"
                     style={{
-                      color: "#f6f1e8",
+                      color: "#FFFFFF",
                       fontSize: "clamp(3.6rem, 9vw, 7.8rem)",
                       lineHeight: 0.9,
                       letterSpacing: "-0.05em",
@@ -230,7 +230,7 @@ export default async function HomePage() {
                   <p
                     className="mt-5 max-w-[18ch]"
                     style={{
-                      color: "#e0be67",
+                      color: "#C9A84C",
                       fontSize: "clamp(1.35rem, 3vw, 2.25rem)",
                       lineHeight: 1.02,
                       fontStyle: "italic",
@@ -242,7 +242,7 @@ export default async function HomePage() {
                   <p
                     className="mt-6 max-w-[680px] text-balance"
                     style={{
-                      color: "rgba(235,226,212,0.84)",
+                      color: "rgba(255,255,255,0.84)",
                       fontSize: "clamp(1rem, 2vw, 1.18rem)",
                       lineHeight: 1.9,
                     }}
@@ -260,11 +260,11 @@ export default async function HomePage() {
                     <Link
                       href="#signature"
                       className="inline-flex items-center gap-3 text-sm uppercase tracking-[0.24em]"
-                      style={{ color: "rgba(235,226,212,0.74)" }}
+                      style={{ color: "rgba(255,255,255,0.74)" }}
                     >
                       <span
                         className="block h-px w-10"
-                        style={{ background: "rgba(235,226,212,0.34)" }}
+                        style={{ background: "rgba(255,255,255,0.34)" }}
                       />
                       {copy.storyLink}
                     </Link>
@@ -278,7 +278,7 @@ export default async function HomePage() {
                   style={{
                     background:
                       "linear-gradient(180deg, rgba(13,11,9,0.72) 0%, rgba(13,11,9,0.9) 100%)",
-                    border: "1px solid rgba(214,179,93,0.18)",
+                    border: "1px solid rgba(201,168,76,0.18)",
                     backdropFilter: "blur(16px)",
                     boxShadow: "0 28px 60px rgba(0,0,0,0.28)",
                   }}
@@ -287,13 +287,13 @@ export default async function HomePage() {
                     <div>
                       <p
                         className="text-[10px] uppercase tracking-[0.3em]"
-                        style={{ color: "rgba(214,179,93,0.85)" }}
+                        style={{ color: "rgba(201,168,76,0.85)" }}
                       >
                         {copy.selectionLabel}
                       </p>
                       <p
                         className="mt-2 text-sm"
-                        style={{ color: "rgba(235,226,212,0.66)" }}
+                        style={{ color: "rgba(255,255,255,0.66)" }}
                       >
                         {siteConfig.tagline}
                       </p>
@@ -301,8 +301,8 @@ export default async function HomePage() {
                     <div
                       className="hidden h-10 w-10 items-center justify-center rounded-full md:flex"
                       style={{
-                        border: "1px solid rgba(214,179,93,0.18)",
-                        color: "#d6b35d",
+                        border: "1px solid rgba(201,168,76,0.18)",
+                        color: "#C9A84C",
                       }}
                     >
                       03
@@ -347,29 +347,29 @@ export default async function HomePage() {
                           <div className="min-w-0">
                             <p
                               className="text-[10px] uppercase tracking-[0.24em]"
-                              style={{ color: "rgba(214,179,93,0.85)" }}
+                              style={{ color: "rgba(201,168,76,0.85)" }}
                             >
                               {translateCategory(locale, product.category)}
                             </p>
                             <h2
                               className="mt-2 text-xl text-balance"
-                              style={{ color: "#f6f1e8", lineHeight: 1.02 }}
+                              style={{ color: "#FFFFFF", lineHeight: 1.02 }}
                             >
                               {productText.name}
                             </h2>
                             <p
                               className="mt-2 line-clamp-2 text-sm"
-                              style={{ color: "rgba(235,226,212,0.68)" }}
+                              style={{ color: "rgba(255,255,255,0.68)" }}
                             >
                               {productText.shortDescription}
                             </p>
                             <div className="mt-3 flex items-center justify-between gap-3">
-                              <span style={{ color: "#f6f1e8" }}>
+                              <span style={{ color: "#FFFFFF" }}>
                                 {formatXOF(getPrice(product))}
                               </span>
                               <span
                                 className="text-[10px] uppercase tracking-[0.24em]"
-                                style={{ color: "#d6b35d" }}
+                                style={{ color: "#C9A84C" }}
                               >
                                 {copy.selectionCta}
                               </span>
@@ -386,17 +386,17 @@ export default async function HomePage() {
             <div className="mt-8 flex items-center justify-between gap-6 pb-16 md:pb-20">
               <div
                 className="inline-flex items-center gap-4 text-[10px] uppercase tracking-[0.32em]"
-                style={{ color: "rgba(235,226,212,0.62)" }}
+                style={{ color: "rgba(255,255,255,0.62)" }}
               >
                 <span
                   className="block h-px w-10"
-                  style={{ background: "rgba(235,226,212,0.26)" }}
+                  style={{ background: "rgba(255,255,255,0.26)" }}
                 />
                 {copy.scrollLabel}
               </div>
               <div
                 className="hidden text-[10px] uppercase tracking-[0.28em] md:block"
-                style={{ color: "rgba(235,226,212,0.5)" }}
+                style={{ color: "rgba(255,255,255,0.5)" }}
               >
                 {siteConfig.address} / {home.paymentSubtitle}
               </div>
@@ -406,9 +406,9 @@ export default async function HomePage() {
           <div
             className="absolute inset-x-0 bottom-0 overflow-hidden py-4"
             style={{
-              background: "#d6b35d",
-              color: "#080706",
-              borderTop: "1px solid rgba(214,179,93,0.45)",
+              background: "#C9A84C",
+              color: "#0A0A08",
+              borderTop: "1px solid rgba(201,168,76,0.45)",
             }}
           >
             <div className="joop-home-marquee-track" aria-hidden="true">
@@ -434,21 +434,21 @@ export default async function HomePage() {
                 style={{
                   background:
                     "linear-gradient(135deg, rgba(17,14,10,0.96) 0%, rgba(9,8,6,0.98) 100%)",
-                  border: "1px solid rgba(214,179,93,0.12)",
+                  border: "1px solid rgba(201,168,76,0.12)",
                   boxShadow: "0 36px 80px rgba(0,0,0,0.28)",
                 }}
               >
                 <div>
                   <p
                     className="text-[11px] uppercase tracking-[0.32em]"
-                    style={{ color: "#d6b35d" }}
+                    style={{ color: "#C9A84C" }}
                   >
                     {home.storyEyebrow}
                   </p>
                   <h2
                     className="mt-4 max-w-[12ch] text-balance"
                     style={{
-                      color: "#f6f1e8",
+                      color: "#FFFFFF",
                       fontSize: "clamp(2.5rem, 6vw, 4.7rem)",
                       lineHeight: 0.92,
                     }}
@@ -458,7 +458,7 @@ export default async function HomePage() {
                   <p
                     className="mt-6 max-w-[640px]"
                     style={{
-                      color: "rgba(235,226,212,0.74)",
+                      color: "rgba(255,255,255,0.74)",
                       fontSize: "1.02rem",
                       lineHeight: 1.95,
                     }}
@@ -467,7 +467,7 @@ export default async function HomePage() {
                   </p>
                   <p
                     className="mt-6 max-w-[640px] text-sm"
-                    style={{ color: "rgba(214,179,93,0.72)", lineHeight: 1.9 }}
+                    style={{ color: "rgba(201,168,76,0.72)", lineHeight: 1.9 }}
                   >
                     {copy.worldsLead}
                   </p>
@@ -480,22 +480,22 @@ export default async function HomePage() {
                         style={{
                           background:
                             index === 0
-                              ? "rgba(214,179,93,0.08)"
+                              ? "rgba(201,168,76,0.08)"
                               : index === 1
                               ? "rgba(255,255,255,0.04)"
-                              : "rgba(214,179,93,0.05)",
+                              : "rgba(201,168,76,0.05)",
                           border: "1px solid rgba(255,255,255,0.06)",
                         }}
                       >
                         <span
                           className="text-[10px] uppercase tracking-[0.24em]"
-                          style={{ color: "#d6b35d" }}
+                          style={{ color: "#C9A84C" }}
                         >
                           0{index + 1}
                         </span>
                         <p
                           className="mt-3 text-sm leading-7"
-                          style={{ color: "#f0e7d8" }}
+                          style={{ color: "rgba(255,255,255,0.8)" }}
                         >
                           {item}
                         </p>
@@ -510,7 +510,7 @@ export default async function HomePage() {
                     className="group rounded-[30px] p-4 transition-transform duration-300 hover:-translate-y-1"
                     style={{
                       background: "rgba(255,255,255,0.04)",
-                      border: "1px solid rgba(214,179,93,0.12)",
+                      border: "1px solid rgba(201,168,76,0.12)",
                     }}
                   >
                     <div className="relative aspect-[0.9] overflow-hidden rounded-[24px]">
@@ -536,19 +536,19 @@ export default async function HomePage() {
                       <div className="absolute inset-x-0 bottom-0 p-6">
                         <p
                           className="text-[10px] uppercase tracking-[0.26em]"
-                          style={{ color: "#d6b35d" }}
+                          style={{ color: "#C9A84C" }}
                         >
                           {translateCategory(locale, coffretShowcase.category)}
                         </p>
                         <h3
                           className="mt-3 text-3xl text-balance"
-                          style={{ color: "#f6f1e8", lineHeight: 1 }}
+                          style={{ color: "#FFFFFF", lineHeight: 1 }}
                         >
                           {translateProductContent(locale, coffretShowcase).name}
                         </h3>
                         <p
                           className="mt-3 text-sm"
-                          style={{ color: "rgba(235,226,212,0.72)", lineHeight: 1.8 }}
+                          style={{ color: "rgba(255,255,255,0.72)", lineHeight: 1.8 }}
                         >
                           {
                             translateProductContent(locale, coffretShowcase)
@@ -556,12 +556,12 @@ export default async function HomePage() {
                           }
                         </p>
                         <div className="mt-5 flex items-center justify-between gap-4">
-                          <span style={{ color: "#f6f1e8" }}>
+                          <span style={{ color: "#FFFFFF" }}>
                             {formatXOF(getPrice(coffretShowcase))}
                           </span>
                           <span
                             className="text-[10px] uppercase tracking-[0.24em]"
-                            style={{ color: "#d6b35d" }}
+                            style={{ color: "#C9A84C" }}
                           >
                             {home.buy}
                           </span>
@@ -581,7 +581,7 @@ export default async function HomePage() {
               <div className="mb-8 md:mb-10">
                 <p
                   className="text-[11px] uppercase tracking-[0.32em]"
-                  style={{ color: "#d6b35d" }}
+                  style={{ color: "#C9A84C" }}
                 >
                   {home.catalogEyebrow}
                 </p>
@@ -589,7 +589,7 @@ export default async function HomePage() {
                   <h2
                     className="max-w-[10ch] text-balance"
                     style={{
-                      color: "#f6f1e8",
+                      color: "#FFFFFF",
                       fontSize: "clamp(2.6rem, 6vw, 5rem)",
                       lineHeight: 0.92,
                     }}
@@ -598,7 +598,7 @@ export default async function HomePage() {
                   </h2>
                   <p
                     className="max-w-[560px] text-sm md:justify-self-end"
-                    style={{ color: "rgba(235,226,212,0.7)", lineHeight: 1.9 }}
+                    style={{ color: "rgba(255,255,255,0.7)", lineHeight: 1.9 }}
                   >
                     {copy.worldsLead}
                   </p>
@@ -621,7 +621,7 @@ export default async function HomePage() {
                       style={{
                         background:
                           "linear-gradient(180deg, rgba(17,14,10,0.9) 0%, rgba(9,8,6,0.98) 100%)",
-                        border: "1px solid rgba(214,179,93,0.12)",
+                        border: "1px solid rgba(201,168,76,0.12)",
                       }}
                     >
                       {imageUrl ? (
@@ -649,15 +649,15 @@ export default async function HomePage() {
                             className="inline-flex h-11 min-w-[44px] items-center justify-center rounded-full px-3 text-[10px] uppercase tracking-[0.28em]"
                             style={{
                               background: "rgba(7,6,5,0.56)",
-                              color: "#d6b35d",
-                              border: "1px solid rgba(214,179,93,0.16)",
+                              color: "#C9A84C",
+                              border: "1px solid rgba(201,168,76,0.16)",
                             }}
                           >
                             0{index + 1}
                           </span>
                           <span
                             className="text-[10px] uppercase tracking-[0.26em]"
-                            style={{ color: "rgba(235,226,212,0.66)" }}
+                            style={{ color: "rgba(255,255,255,0.66)" }}
                           >
                             {category?._count.products ?? 0} {home.categoriesCount(category?._count.products ?? 0)}
                           </span>
@@ -666,7 +666,7 @@ export default async function HomePage() {
                         <div>
                           <p
                             className="text-[10px] uppercase tracking-[0.26em]"
-                            style={{ color: "#d6b35d" }}
+                            style={{ color: "#C9A84C" }}
                           >
                             {translateCategory(
                               locale,
@@ -675,7 +675,7 @@ export default async function HomePage() {
                           </p>
                           <h3
                             className="mt-3 text-4xl"
-                            style={{ color: "#f6f1e8", lineHeight: 0.95 }}
+                            style={{ color: "#FFFFFF", lineHeight: 0.95 }}
                           >
                             {translateCategory(
                               locale,
@@ -685,7 +685,7 @@ export default async function HomePage() {
                           <p
                             className="mt-4 max-w-[28ch] text-sm"
                             style={{
-                              color: "rgba(235,226,212,0.74)",
+                              color: "rgba(255,255,255,0.74)",
                               lineHeight: 1.9,
                             }}
                           >
@@ -694,7 +694,7 @@ export default async function HomePage() {
                           {productText?.name ? (
                             <p
                               className="mt-5 text-[11px] uppercase tracking-[0.22em]"
-                              style={{ color: "rgba(235,226,212,0.56)" }}
+                              style={{ color: "rgba(255,255,255,0.56)" }}
                             >
                               {productText.name}
                             </p>
@@ -716,14 +716,14 @@ export default async function HomePage() {
                 <div>
                   <p
                     className="text-[11px] uppercase tracking-[0.32em]"
-                    style={{ color: "#d6b35d" }}
+                    style={{ color: "#C9A84C" }}
                   >
                     {home.featuredEyebrow}
                   </p>
                   <h2
                     className="mt-4 max-w-[11ch] text-balance"
                     style={{
-                      color: "#f6f1e8",
+                      color: "#FFFFFF",
                       fontSize: "clamp(2.6rem, 6vw, 5rem)",
                       lineHeight: 0.92,
                     }}
@@ -734,7 +734,7 @@ export default async function HomePage() {
                 <Link
                   href={productListingHref}
                   className="hidden text-[11px] uppercase tracking-[0.28em] md:block"
-                  style={{ color: "#d6b35d" }}
+                  style={{ color: "#C9A84C" }}
                 >
                   {home.viewAll}
                 </Link>
@@ -754,7 +754,7 @@ export default async function HomePage() {
                       style={{
                         background:
                           "linear-gradient(180deg, rgba(17,14,10,0.94) 0%, rgba(9,8,6,0.98) 100%)",
-                        border: "1px solid rgba(214,179,93,0.12)",
+                        border: "1px solid rgba(201,168,76,0.12)",
                         boxShadow: "0 22px 54px rgba(0,0,0,0.18)",
                       }}
                     >
@@ -780,7 +780,7 @@ export default async function HomePage() {
                           className="absolute inset-x-0 bottom-0 h-px"
                           style={{
                             background:
-                              "linear-gradient(90deg, rgba(214,179,93,0.7), transparent)",
+                              "linear-gradient(90deg, rgba(201,168,76,0.7), transparent)",
                           }}
                         />
                       </div>
@@ -789,39 +789,39 @@ export default async function HomePage() {
                         <div className="mb-4 flex items-center justify-between gap-4">
                           <p
                             className="text-[10px] uppercase tracking-[0.26em]"
-                            style={{ color: "#d6b35d" }}
+                            style={{ color: "#C9A84C" }}
                           >
                             {translateCategory(locale, product.category)}
                           </p>
                           <span
                             className="text-[10px] uppercase tracking-[0.22em]"
-                            style={{ color: "rgba(235,226,212,0.46)" }}
+                            style={{ color: "rgba(255,255,255,0.46)" }}
                           >
                             0{index + 1}
                           </span>
                         </div>
                         <h3
                           className="text-2xl text-balance"
-                          style={{ color: "#f6f1e8", lineHeight: 1 }}
+                          style={{ color: "#FFFFFF", lineHeight: 1 }}
                         >
                           {productText.name}
                         </h3>
                         <p
                           className="mt-3 text-sm"
                           style={{
-                            color: "rgba(235,226,212,0.7)",
+                            color: "rgba(255,255,255,0.7)",
                             lineHeight: 1.9,
                           }}
                         >
                           {productText.shortDescription}
                         </p>
                         <div className="mt-6 flex items-center justify-between gap-4">
-                          <span style={{ color: "#f6f1e8" }}>
+                          <span style={{ color: "#FFFFFF" }}>
                             {formatXOF(getPrice(product))}
                           </span>
                           <span
                             className="text-[10px] uppercase tracking-[0.24em]"
-                            style={{ color: "#d6b35d" }}
+                            style={{ color: "#C9A84C" }}
                           >
                             {home.buy}
                           </span>
@@ -837,7 +837,7 @@ export default async function HomePage() {
               <Link
                 href={productListingHref}
                 className="text-[11px] uppercase tracking-[0.28em]"
-                style={{ color: "#d6b35d" }}
+                style={{ color: "#C9A84C" }}
               >
                 {home.viewAll}
               </Link>
@@ -854,19 +854,19 @@ export default async function HomePage() {
                   style={{
                     background:
                       "linear-gradient(135deg, rgba(17,14,10,0.96) 0%, rgba(9,8,6,0.98) 100%)",
-                    border: "1px solid rgba(214,179,93,0.12)",
+                    border: "1px solid rgba(201,168,76,0.12)",
                   }}
                 >
                   <p
                     className="text-[11px] uppercase tracking-[0.32em]"
-                    style={{ color: "#d6b35d" }}
+                    style={{ color: "#C9A84C" }}
                   >
                     {home.commitmentEyebrow}
                   </p>
                   <h2
                     className="mt-4 max-w-[12ch] text-balance"
                     style={{
-                      color: "#f6f1e8",
+                      color: "#FFFFFF",
                       fontSize: "clamp(2.4rem, 5.4vw, 4.4rem)",
                       lineHeight: 0.94,
                     }}
@@ -883,27 +883,27 @@ export default async function HomePage() {
                           style={{
                             background:
                               index === 0
-                                ? "rgba(214,179,93,0.08)"
+                                ? "rgba(201,168,76,0.08)"
                                 : "rgba(255,255,255,0.04)",
                             border: "1px solid rgba(255,255,255,0.06)",
                           }}
                         >
                           <span
                             className="text-[10px] uppercase tracking-[0.28em]"
-                            style={{ color: "#d6b35d" }}
+                            style={{ color: "#C9A84C" }}
                           >
                             0{index + 1}
                           </span>
                           <h3
                             className="mt-4 text-2xl text-balance"
-                            style={{ color: "#f6f1e8", lineHeight: 1 }}
+                            style={{ color: "#FFFFFF", lineHeight: 1 }}
                           >
                             {reason.title}
                           </h3>
                           <p
                             className="mt-4 text-sm"
                             style={{
-                              color: "rgba(235,226,212,0.7)",
+                              color: "rgba(255,255,255,0.7)",
                               lineHeight: 1.9,
                             }}
                           >
@@ -921,21 +921,21 @@ export default async function HomePage() {
                   className="flex h-full flex-col justify-between rounded-[32px] p-6 md:p-8"
                   style={{
                     background:
-                      "linear-gradient(160deg, rgba(214,179,93,0.16) 0%, rgba(17,14,10,0.98) 38%, rgba(9,8,6,0.98) 100%)",
-                    border: "1px solid rgba(214,179,93,0.14)",
+                      "linear-gradient(160deg, rgba(201,168,76,0.16) 0%, rgba(17,14,10,0.98) 38%, rgba(9,8,6,0.98) 100%)",
+                    border: "1px solid rgba(201,168,76,0.14)",
                   }}
                 >
                   <div>
                     <p
                       className="text-[11px] uppercase tracking-[0.32em]"
-                      style={{ color: "#d6b35d" }}
+                      style={{ color: "#C9A84C" }}
                     >
                       {home.paymentEyebrow}
                     </p>
                     <h2
                       className="mt-4 max-w-[11ch] text-balance"
                       style={{
-                        color: "#f6f1e8",
+                        color: "#FFFFFF",
                         fontSize: "clamp(2.2rem, 4vw, 3.8rem)",
                         lineHeight: 0.95,
                       }}
@@ -945,7 +945,7 @@ export default async function HomePage() {
                     <p
                       className="mt-5 text-sm"
                       style={{
-                        color: "rgba(235,226,212,0.72)",
+                        color: "rgba(255,255,255,0.72)",
                         lineHeight: 1.9,
                       }}
                     >
@@ -967,10 +967,10 @@ export default async function HomePage() {
                           border: "1px solid rgba(255,255,255,0.06)",
                         }}
                       >
-                        <span style={{ color: "#f6f1e8" }}>{item.label}</span>
+                        <span style={{ color: "#FFFFFF" }}>{item.label}</span>
                         <span
                           className="text-[10px] uppercase tracking-[0.22em]"
-                          style={{ color: "#d6b35d" }}
+                          style={{ color: "#C9A84C" }}
                         >
                           {item.hint}
                         </span>

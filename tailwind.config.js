@@ -4,15 +4,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: [
-          "-apple-system",
-          "BlinkMacSystemFont",
-          '"SF Pro Display"',
-          '"SF Pro Text"',
-          "Helvetica Neue",
-          "Arial",
-          "sans-serif",
-        ],
+        sans: ["var(--font-jost)", "Jost", "Helvetica Neue", "Arial", "sans-serif"],
+        display: ["var(--font-cormorant)", "Cormorant Garamond", "Georgia", "serif"],
+        serif: ["var(--font-cormorant)", "Cormorant Garamond", "Georgia", "serif"],
         mono: ['"SF Mono"', "ui-monospace", "monospace"],
       },
       colors: {
