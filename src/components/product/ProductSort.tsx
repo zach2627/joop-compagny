@@ -34,8 +34,14 @@ export function ProductSort({ labels }: ProductSortProps) {
     <select
       value={current}
       onChange={handleChange}
-      className="text-sm border border-apple-gray-200 rounded-full px-3 py-1.5 bg-white text-apple-gray-700 focus:outline-none focus:ring-2 focus:ring-apple-blue"
-      style={{ colorScheme: "dark" }}
+      className="rounded-full px-4 py-2 text-sm focus:outline-none"
+      style={{
+        colorScheme: "dark",
+        background: "rgba(17,17,9,0.9)",
+        border: "1px solid rgba(201,168,76,0.14)",
+        color: "var(--color-text)",
+        boxShadow: "0 10px 26px rgba(0,0,0,0.28)",
+      }}
     >
       {sortOptions.map((opt) => (
         <option key={opt.value} value={opt.value}>

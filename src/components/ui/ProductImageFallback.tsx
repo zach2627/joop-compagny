@@ -35,8 +35,9 @@ export function ProductImageFallback({
       <div
         className={fallbackClassName}
         style={{
-          background: "#1A1A14",
-          color: "#FFFFFF",
+          background:
+            "linear-gradient(180deg, rgba(22,20,15,0.96) 0%, rgba(12,12,9,0.94) 100%)",
+          color: "var(--color-text)",
           position: "relative",
           overflow: "hidden",
         }}
@@ -48,9 +49,9 @@ export function ProductImageFallback({
           <div
             className="flex h-14 w-14 items-center justify-center rounded-full"
             style={{
-              border: "1px solid rgba(201,168,76,0.28)",
+              border: "1px solid rgba(201,168,76,0.34)",
               background: "rgba(201,168,76,0.08)",
-              color: "#C9A84C",
+              color: "#e8c97a",
             }}
           >
             <svg
@@ -78,7 +79,7 @@ export function ProductImageFallback({
           className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-10 text-center"
           style={{
             background:
-              "linear-gradient(180deg, rgba(26,26,20,0) 0%, rgba(26,26,20,0.84) 48%, rgba(26,26,20,0.98) 100%)",
+              "linear-gradient(180deg, rgba(10,10,8,0) 0%, rgba(10,10,8,0.74) 44%, rgba(10,10,8,0.96) 100%)",
           }}
         >
           <span

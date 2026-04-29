@@ -25,25 +25,34 @@ export default async function CartPage() {
     return (
       <div
         className="flex min-h-screen items-center justify-center px-4"
-        style={{ background: "#0A0A08" }}
+        style={{
+          background:
+            "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+        }}
       >
-        <div className="text-center">
+        <div className="max-w-md text-center">
           <div
             className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full text-xs font-semibold uppercase tracking-[0.32em]"
             style={{
-              background: "#111109",
-              border: "1px solid rgba(201,168,76,0.18)",
-              color: "#C9A84C",
+              background: "rgba(17,17,9,0.86)",
+              border: "1px solid rgba(201,168,76,0.16)",
+              color: "var(--color-primary-dark)",
+              boxShadow: "0 16px 34px rgba(0,0,0,0.32)",
             }}
           >
             JOOP
           </div>
-          <h1 className="mb-3 text-2xl font-semibold" style={{ color: "#FFFFFF" }}>
+          <h1
+            className="mb-3"
+            style={{
+              fontFamily: "var(--font-cormorant), serif",
+              fontSize: "clamp(2.2rem, 5vw, 3.6rem)",
+              lineHeight: 0.96,
+            }}
+          >
             {dict.cart.emptyTitle}
           </h1>
-          <p className="mb-8" style={{ color: "rgba(255,255,255,0.6)" }}>
-            {dict.cart.emptyText}
-          </p>
+          <p className="mb-8 luxe-copy">{dict.cart.emptyText}</p>
           <Link
             href={localizedPath("/store/products", locale)}
             className="btn-primary px-8 py-3.5"
@@ -56,18 +65,21 @@ export default async function CartPage() {
   }
 
   return (
-    <div style={{ background: "#0A0A08", minHeight: "100vh" }}>
-      <div className="container-xl py-12">
+    <div
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+      }}
+    >
+      <div className="container-xl py-10 md:py-14">
         <div className="mb-8">
-          <p
-            className="mb-2 text-xs font-semibold uppercase tracking-widest"
-            style={{ color: "#C9A84C" }}
-          >
-            {dict.cart.eyebrow}
-          </p>
+          <p className="luxe-kicker mb-2">{dict.cart.eyebrow}</p>
           <h1
-            className="font-black text-white"
-            style={{ fontSize: "clamp(2rem, 5vw, 3rem)", letterSpacing: "-0.03em" }}
+            style={{
+              fontSize: "clamp(2.4rem, 5vw, 4.2rem)",
+              lineHeight: 0.94,
+            }}
           >
             {dict.cart.heading(itemCount)}
           </h1>
@@ -108,42 +120,53 @@ export default async function CartPage() {
             })}
           </div>
 
-          <aside className="shrink-0 lg:w-[360px]">
+          <aside className="shrink-0 lg:w-[380px]">
             <div
-              className="sticky top-24 rounded-2xl p-6"
+              className="sticky top-28 rounded-[30px] p-6"
               style={{
-                background: "#111109",
-                border: "1px solid rgba(201,168,76,0.2)",
+                background: "rgba(17,17,9,0.86)",
+                border: "1px solid rgba(201,168,76,0.16)",
+                boxShadow: "0 26px 58px rgba(0,0,0,0.34)",
+                backdropFilter: "blur(18px)",
               }}
             >
-              <h2 className="mb-6 text-lg font-semibold" style={{ color: "#FFFFFF" }}>
+              <h2
+                className="mb-6"
+                style={{
+                  fontFamily: "var(--font-cormorant), serif",
+                  fontSize: "2rem",
+                  lineHeight: 1,
+                }}
+              >
                 {dict.cart.summary}
               </h2>
 
               <div className="mb-6 space-y-3">
                 <div
                   className="flex justify-between text-sm"
-                  style={{ color: "rgba(255,255,255,0.6)" }}
+                  style={{ color: "var(--color-text-secondary)" }}
                 >
                   <span>{dict.cart.items(itemCount)}</span>
-                  <span className="tabular-nums text-white">{formatXOF(subtotal)}</span>
+                  <span className="tabular-nums" style={{ color: "var(--color-text)" }}>
+                    {formatXOF(subtotal)}
+                  </span>
                 </div>
                 <div
                   className="flex justify-between text-sm"
-                  style={{ color: "rgba(255,255,255,0.6)" }}
+                  style={{ color: "var(--color-text-secondary)" }}
                 >
                   <span>{dict.cart.delivery}</span>
-                  <span className="font-medium" style={{ color: "#C9A84C" }}>
+                  <span className="font-medium" style={{ color: "var(--color-primary-dark)" }}>
                     {dict.cart.toCalculate}
                   </span>
                 </div>
                 <div
                   className="mt-3 border-t pt-3"
-                  style={{ borderColor: "rgba(201,168,76,0.15)" }}
+                  style={{ borderColor: "rgba(184,138,84,0.12)" }}
                 >
                   <div className="flex justify-between text-lg font-bold">
-                    <span className="text-white">{dict.cart.total}</span>
-                    <span className="tabular-nums" style={{ color: "#C9A84C" }}>
+                    <span style={{ color: "var(--color-text)" }}>{dict.cart.total}</span>
+                    <span className="tabular-nums" style={{ color: "var(--color-primary-dark)" }}>
                       {formatXOF(total)}
                     </span>
                   </div>
@@ -165,9 +188,9 @@ export default async function CartPage() {
                   <div
                     key={text}
                     className="flex items-center gap-2 text-xs"
-                    style={{ color: "rgba(255,255,255,0.4)" }}
+                    style={{ color: "var(--color-text-tertiary)" }}
                   >
-                    <span style={{ color: "#C9A84C" }}>{index}</span>
+                    <span style={{ color: "var(--color-primary-dark)" }}>{index}</span>
                     <span>{text}</span>
                   </div>
                 ))}

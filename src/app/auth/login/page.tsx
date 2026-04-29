@@ -12,15 +12,20 @@ import { sanitizeRedirectPath } from "@/lib/auth/redirect";
 import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
 import { dictionaries } from "@/lib/i18n/translations";
 
-const authShellStyle = { background: "#0A0A08" };
+const authShellStyle = {
+  background:
+    "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+};
 const authPanelStyle = {
-  background: "#111109",
-  border: "1px solid rgba(201,168,76,0.2)",
+  background: "rgba(17,17,9,0.84)",
+  border: "1px solid rgba(201,168,76,0.16)",
+  boxShadow: "0 28px 64px rgba(0,0,0,0.36)",
+  backdropFilter: "blur(18px)",
 };
 const authInputStyle = {
-  background: "#111109",
-  border: "1px solid rgba(255,255,255,0.08)",
-  color: "#FFFFFF",
+  background: "rgba(17,17,9,0.92)",
+  border: "1px solid rgba(201,168,76,0.14)",
+  color: "var(--color-text)",
 };
 
 function LoginForm() {
@@ -61,7 +66,7 @@ function LoginForm() {
       <div>
         <label
           className="mb-1.5 block text-sm font-medium"
-          style={{ color: "rgba(255,255,255,0.6)" }}
+          style={{ color: "var(--color-text-secondary)" }}
           htmlFor="email"
         >
           {dict.email}
@@ -83,7 +88,7 @@ function LoginForm() {
         <div className="mb-1.5 flex items-center justify-between">
           <label
             className="text-sm font-medium"
-            style={{ color: "rgba(255,255,255,0.6)" }}
+            style={{ color: "var(--color-text-secondary)" }}
             htmlFor="password"
           >
             {dict.password}
@@ -91,7 +96,7 @@ function LoginForm() {
           <Link
             href={localizedPath("/auth/forgot-password", locale)}
             className="text-xs hover:underline"
-            style={{ color: "#C9A84C" }}
+            style={{ color: "var(--color-primary-dark)" }}
           >
             {dict.forgotPassword}
           </Link>
@@ -113,9 +118,9 @@ function LoginForm() {
         <div
           className="rounded-apple-md px-4 py-3 text-sm"
           style={{
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(201,168,76,0.2)",
-            color: "#FFFFFF",
+            background: "rgba(184,138,84,0.08)",
+            border: "1px solid rgba(184,138,84,0.16)",
+            color: "var(--color-text)",
           }}
           role="alert"
           aria-live="polite"
@@ -149,10 +154,17 @@ export default function LoginPage() {
               style={{ objectFit: "contain" }}
             />
           </Link>
-          <h1 className="text-2xl font-semibold" style={{ color: "#FFFFFF" }}>
+          <h1
+            style={{
+              color: "var(--color-text)",
+              fontFamily: "var(--font-cormorant), serif",
+              fontSize: "2.4rem",
+              lineHeight: 0.98,
+            }}
+          >
             {dict.loginTitle(siteConfig.name)}
           </h1>
-          <p className="mt-1 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <p className="mt-2 text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {dict.loginSubtitle}
           </p>
         </div>
@@ -160,18 +172,21 @@ export default function LoginPage() {
         <div className="rounded-apple-xl p-8" style={authPanelStyle}>
           <Suspense
             fallback={
-              <div className="h-48 animate-pulse rounded-apple-md" style={{ background: "#1A1A14" }} />
+              <div
+                className="h-48 animate-pulse rounded-apple-md"
+                style={{ background: "rgba(220,193,188,0.24)" }}
+              />
             }
           >
             <LoginForm />
           </Suspense>
 
-          <div className="mt-6 text-center text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <div className="mt-6 text-center text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {dict.noAccount}{" "}
             <Link
               href={localizedPath("/auth/register", locale)}
               className="font-medium hover:underline"
-              style={{ color: "#C9A84C" }}
+              style={{ color: "var(--color-primary-dark)" }}
             >
               {dict.createAccount}
             </Link>

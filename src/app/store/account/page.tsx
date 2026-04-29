@@ -1,16 +1,15 @@
-// src/app/store/account/page.tsx
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import prisma from "@/lib/db/prisma";
-import { verifyAccessToken } from "@/lib/auth/jwt";
+import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 import { logoutAction } from "@/features/auth/actions";
-import { ORDER_STATUS_STYLE } from "@/lib/constants/orderStatus";
+import { verifyAccessToken } from "@/lib/auth/jwt";
+import { productThumbnailImage } from "@/lib/images/cloudinary";
+import { getProductImageUrl } from "@/lib/images/product-gallery";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
-import { getProductImageUrl } from "@/lib/images/product-gallery";
-import { productThumbnailImage } from "@/lib/images/cloudinary";
-import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
+import { ORDER_STATUS_STYLE } from "@/lib/constants/orderStatus";
+import prisma from "@/lib/db/prisma";
 
 export default async function AccountPage() {
   const locale = getRequestLocale();
@@ -61,18 +60,28 @@ export default async function AccountPage() {
   const statusStyle = ORDER_STATUS_STYLE;
 
   return (
-    <div className="px-4 py-12" style={{ background: "#0A0A08", minHeight: "100vh" }}>
-      <div className="mx-auto max-w-3xl space-y-6">
-        <div className="flex items-center justify-between">
+    <div
+      className="px-4 py-10 md:py-14"
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+      }}
+    >
+      <div className="mx-auto max-w-4xl space-y-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p
-              className="mb-1 text-xs font-semibold uppercase tracking-widest"
-              style={{ color: "#C9A84C" }}
+            <p className="luxe-kicker mb-1">{dict.account.personalSpace}</p>
+            <h1
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "clamp(2.3rem, 4vw, 3.8rem)",
+                lineHeight: 0.96,
+              }}
             >
-              {dict.account.personalSpace}
-            </p>
-            <h1 className="text-2xl font-semibold text-white">{dict.account.account}</h1>
-            <p className="mt-1 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+              {dict.account.account}
+            </h1>
+            <p className="mt-2 text-sm" style={{ color: "var(--color-text-secondary)" }}>
               {user.email}
             </p>
           </div>
@@ -80,92 +89,100 @@ export default async function AccountPage() {
           <form action={logoutAction}>
             <button
               type="submit"
-              className="rounded-full px-4 py-2 text-sm transition-all duration-200"
-              style={{
-                color: "#C9A84C",
-                border: "1px solid rgba(201,168,76,0.3)",
-              }}
+              className="btn-secondary"
+              style={{ minWidth: "140px" }}
             >
               {dict.account.logout}
             </button>
           </form>
         </div>
 
-        <div
-          className="rounded-apple-xl p-6"
-          style={{ background: "#111109", border: "1px solid rgba(201,168,76,0.15)" }}
-        >
-          <h2 className="mb-4 text-base font-semibold" style={{ color: "#C9A84C" }}>
-            {dict.account.personalInfo}
-          </h2>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            {[
-              { label: dict.account.name, value: user.name ?? "-" },
-              { label: dict.account.email, value: user.email },
-              { label: dict.account.phone, value: user.phone ?? "-" },
-              {
-                label: dict.account.memberSince,
-                value: new Date(user.createdAt).toLocaleDateString(dateLocale, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }),
-              },
-            ].map(({ label, value }) => (
-              <div key={label}>
-                <p style={{ color: "rgba(255,255,255,0.6)" }}>{label}</p>
-                <p className="mt-0.5 font-medium text-white">{value}</p>
+        <div className="grid gap-6 md:grid-cols-2">
+          <section className="luxe-panel p-6">
+            <h2
+              className="mb-4"
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "1.8rem",
+                color: "var(--color-primary-dark)",
+              }}
+            >
+              {dict.account.personalInfo}
+            </h2>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              {[
+                { label: dict.account.name, value: user.name ?? "-" },
+                { label: dict.account.email, value: user.email },
+                { label: dict.account.phone, value: user.phone ?? "-" },
+                {
+                  label: dict.account.memberSince,
+                  value: new Date(user.createdAt).toLocaleDateString(dateLocale, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }),
+                },
+              ].map(({ label, value }) => (
+                <div key={label}>
+                  <p style={{ color: "var(--color-text-secondary)" }}>{label}</p>
+                  <p className="mt-1 font-medium" style={{ color: "var(--color-text)" }}>
+                    {value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {user.addresses[0] ? (
+            <section className="luxe-panel p-6">
+              <h2
+                className="mb-4"
+                style={{
+                  fontFamily: "var(--font-cormorant), serif",
+                  fontSize: "1.8rem",
+                  color: "var(--color-primary-dark)",
+                }}
+              >
+                {dict.account.defaultAddress}
+              </h2>
+              <div className="space-y-1 text-sm" style={{ color: "var(--color-text)" }}>
+                <p>
+                  {user.addresses[0].firstName} {user.addresses[0].lastName}
+                </p>
+                <p>{user.addresses[0].streetLine1}</p>
+                {user.addresses[0].streetLine2 ? <p>{user.addresses[0].streetLine2}</p> : null}
+                <p>
+                  {user.addresses[0].city}, {user.addresses[0].region}
+                </p>
+                <p>{user.addresses[0].phone}</p>
               </div>
-            ))}
-          </div>
+            </section>
+          ) : null}
         </div>
 
-        {user.addresses[0] && (
-          <div
-            className="rounded-apple-xl p-6"
-            style={{ background: "#111109", border: "1px solid rgba(201,168,76,0.15)" }}
-          >
-            <h2 className="mb-4 text-base font-semibold" style={{ color: "#C9A84C" }}>
-              {dict.account.defaultAddress}
-            </h2>
-            <div className="space-y-1 text-sm text-white">
-              <p>
-                {user.addresses[0].firstName} {user.addresses[0].lastName}
-              </p>
-              <p>{user.addresses[0].streetLine1}</p>
-              {user.addresses[0].streetLine2 && <p>{user.addresses[0].streetLine2}</p>}
-              <p>
-                {user.addresses[0].city}, {user.addresses[0].region}
-              </p>
-              <p>{user.addresses[0].phone}</p>
-            </div>
-          </div>
-        )}
-
-        <div
-          className="rounded-apple-xl p-6"
-          style={{ background: "#111109", border: "1px solid rgba(201,168,76,0.15)" }}
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-base font-semibold" style={{ color: "#C9A84C" }}>
+        <section className="luxe-panel p-6">
+          <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <h2
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "1.8rem",
+                color: "var(--color-primary-dark)",
+              }}
+            >
               {dict.account.recentOrders}
             </h2>
-            <Link
-              href={localizedPath("/store/orders", locale)}
-              className="text-sm hover:underline"
-              style={{ color: "#C9A84C" }}
-            >
+            <Link href={localizedPath("/store/orders", locale)} className="btn-ghost">
               {dict.account.viewAll}
             </Link>
           </div>
 
           {user.orders.length === 0 ? (
             <div className="py-8 text-center text-sm">
-              <p style={{ color: "rgba(255,255,255,0.6)" }}>{dict.account.noRecentOrders}</p>
+              <p style={{ color: "var(--color-text-secondary)" }}>{dict.account.noRecentOrders}</p>
               <Link
                 href={localizedPath("/store/products", locale)}
-                className="mt-2 inline-block hover:underline"
-                style={{ color: "#C9A84C" }}
+                className="mt-2 inline-block"
+                style={{ color: "var(--color-primary-dark)" }}
               >
                 {dict.account.discoverArrow}
               </Link>
@@ -175,8 +192,11 @@ export default async function AccountPage() {
               {user.orders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between rounded-apple-md p-4"
-                  style={{ background: "#1A1A14", border: "1px solid rgba(255,255,255,0.08)" }}
+                  className="flex flex-col gap-4 rounded-[24px] p-4 md:flex-row md:items-center md:justify-between"
+                  style={{
+                    background: "rgba(255,255,255,0.34)",
+                    border: "1px solid rgba(184,138,84,0.1)",
+                  }}
                 >
                   <div className="flex items-center gap-3">
                     {(() => {
@@ -189,8 +209,11 @@ export default async function AccountPage() {
 
                       return (
                         <div
-                          className="overflow-hidden rounded-apple-sm"
-                          style={{ background: "#111109" }}
+                          className="overflow-hidden rounded-[18px]"
+                          style={{
+                            background:
+                              "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
+                          }}
                         >
                           <ProductImageFallback
                             src={productThumbnailImage(imageUrl)}
@@ -206,8 +229,10 @@ export default async function AccountPage() {
                     })()}
 
                     <div>
-                      <p className="text-sm font-medium text-white">{order.orderNumber}</p>
-                      <p className="mt-0.5 text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>
+                      <p className="text-sm font-medium" style={{ color: "var(--color-text)" }}>
+                        {order.orderNumber}
+                      </p>
+                      <p className="mt-0.5 text-xs" style={{ color: "var(--color-text-secondary)" }}>
                         {new Date(order.createdAt).toLocaleDateString(dateLocale)} -{" "}
                         {dict.account.itemCount(order.items.length)}
                       </p>
@@ -221,7 +246,7 @@ export default async function AccountPage() {
                     >
                       {statusLabel[order.status] ?? order.status}
                     </span>
-                    <p className="text-sm font-semibold" style={{ color: "#C9A84C" }}>
+                    <p className="text-sm font-semibold" style={{ color: "var(--color-primary-dark)" }}>
                       {Number(order.total).toLocaleString(dateLocale)} F
                     </p>
                   </div>
@@ -229,7 +254,7 @@ export default async function AccountPage() {
               ))}
             </div>
           )}
-        </div>
+        </section>
       </div>
     </div>
   );

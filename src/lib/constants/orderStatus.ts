@@ -11,13 +11,13 @@ export const ORDER_STATUS_LABEL: Record<string, string> = {
 };
 
 export const ORDER_STATUS_STYLE: Record<string, { background: string; color: string }> = {
-  PENDING: { background: "rgba(201,168,76,0.12)", color: "#C9A84C" },
-  CONFIRMED: { background: "rgba(201,168,76,0.16)", color: "#C9A84C" },
-  PROCESSING: { background: "rgba(201,168,76,0.14)", color: "#C9A84C" },
-  SHIPPED: { background: "rgba(201,168,76,0.14)", color: "#C9A84C" },
-  DELIVERED: { background: "rgba(201,168,76,0.16)", color: "#C9A84C" },
-  CANCELLED: { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)" },
-  REFUNDED: { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)" },
+  PENDING: { background: "rgba(201,168,76,0.12)", color: "#E8C97A" },
+  CONFIRMED: { background: "rgba(201,168,76,0.14)", color: "#E8C97A" },
+  PROCESSING: { background: "rgba(201,168,76,0.12)", color: "#E8C97A" },
+  SHIPPED: { background: "rgba(201,168,76,0.12)", color: "#E8C97A" },
+  DELIVERED: { background: "rgba(201,168,76,0.14)", color: "#E8C97A" },
+  CANCELLED: { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.72)" },
+  REFUNDED: { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.72)" },
 };
 
 /** Badge Tailwind class (admin UI) */

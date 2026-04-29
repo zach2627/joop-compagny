@@ -1,9 +1,11 @@
-// src/components/product/ProductCard.tsx
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 import { formatXOF } from "@/features/payment/paydunya";
 import { localizedPath, type Locale } from "@/lib/i18n/config";
 import { productCardImage } from "@/lib/images/cloudinary";
-import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 
 interface ProductCardProps {
   product: {
@@ -17,13 +19,13 @@ interface ProductCardProps {
     compareAtPrice?: number;
     category: string;
     stockStatus: string;
+    ariaLabel: string;
   };
   locale: Locale;
   labels: {
     sale: string;
     lowStock: string;
     outOfStock: string;
-    viewProduct: (name: string) => string;
   };
 }
 
@@ -35,14 +37,16 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
   return (
     <Link
       href={localizedPath(`/store/products/${product.slug}`, locale)}
-      className="group block"
-      aria-label={labels.viewProduct(product.name)}
+      className="group block h-full"
+      aria-label={product.ariaLabel}
     >
-      <div className="prod-card-inner">
-        {/* Image */}
+      <motion.div whileHover={{ y: -8, scale: 1.01 }} transition={{ duration: 0.35 }} className="prod-card-inner">
         <div
           className="relative aspect-square overflow-hidden"
-          style={{ background: "#1A1A14" }}
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(27,24,18,0.94) 0%, rgba(18,16,12,0.94) 100%)",
+          }}
         >
           <ProductImageFallback
             src={productCardImage(product.imageUrl)}
@@ -54,29 +58,40 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
             fallbackClassName="absolute inset-0"
           />
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+          <div className="absolute left-3 top-3 flex flex-col gap-1.5">
             {isOnSale && (
               <span
-                className="rounded-full px-2.5 py-1 text-[10px] font-bold"
+                className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
                 style={{
-                  background: "#C9A84C",
-                  color: "#0A0A08",
-                  border: "1px solid rgba(201,168,76,0.22)",
+                  background: "linear-gradient(135deg, #e8c97a 0%, #c9a84c 100%)",
+                  color: "#0a0a08",
+                  boxShadow: "0 10px 22px rgba(201,168,76,0.22)",
                 }}
               >
                 {labels.sale}
               </span>
             )}
             {isLowStock && (
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold"
-                style={{ background: "rgba(201,168,76,0.12)", color: "#C9A84C", border: "1px solid rgba(201,168,76,0.28)" }}>
+              <span
+                className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
+                style={{
+                  background: "rgba(184,138,84,0.12)",
+                  color: "var(--color-primary)",
+                  border: "1px solid rgba(201,168,76,0.2)",
+                }}
+              >
                 {labels.lowStock}
               </span>
             )}
             {isOutOfStock && (
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold"
-                style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.12)" }}>
+              <span
+                className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
+                style={{
+                  background: "rgba(255,255,255,0.08)",
+                  color: "var(--color-text-secondary)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
                 {labels.outOfStock}
               </span>
             )}
@@ -85,31 +100,42 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
           <div className="prod-accent" />
         </div>
 
-        {/* Info */}
         <div className="p-5">
-          <p className="text-xs mb-1 font-medium" style={{ color: "#C9A84C", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+          <p
+            className="mb-2 text-[10px] uppercase tracking-[0.28em]"
+            style={{ color: "var(--color-primary-dark)" }}
+          >
             {product.category}
           </p>
-          <h3 className="prod-name text-sm font-bold mb-1.5 line-clamp-2">
+          <h3 className="prod-name mb-2 line-clamp-2 text-xl" style={{ lineHeight: 1.02 }}>
             {product.name}
           </h3>
-          {product.shortDescription && (
-            <p className="text-xs mb-3 line-clamp-2 leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
+          {product.shortDescription ? (
+            <p
+              className="mb-4 line-clamp-2 text-sm"
+              style={{ color: "var(--color-text-secondary)", lineHeight: 1.8 }}
+            >
               {product.shortDescription}
             </p>
-          )}
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold tabular-nums" style={{ color: "#C9A84C" }}>
+          ) : null}
+          <div className="flex items-center gap-3">
+            <span
+              className="text-base font-semibold tabular-nums"
+              style={{ color: "var(--color-primary-dark)" }}
+            >
               {formatXOF(product.price)}
             </span>
             {isOnSale && product.compareAtPrice && (
-              <span className="text-xs tabular-nums line-through" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <span
+                className="text-xs tabular-nums line-through"
+                style={{ color: "var(--color-text-tertiary)" }}
+              >
                 {formatXOF(product.compareAtPrice)}
               </span>
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     </Link>
   );
 }

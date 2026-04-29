@@ -1,14 +1,13 @@
-// src/components/product/ProductPageSection.tsx
 "use client";
 
 import { useState } from "react";
-import { ProductVariantSelector, type ProductImage } from "./ProductVariantSelector";
+import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 import type { Locale } from "@/lib/i18n/config";
 import {
   productDetailImage,
   productThumbnailImage,
 } from "@/lib/images/cloudinary";
-import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
+import { ProductVariantSelector, type ProductImage } from "./ProductVariantSelector";
 
 interface Variant {
   id: string;
@@ -45,7 +44,6 @@ interface Props {
     added: string;
     add: string;
   };
-  /** Slot JSX pour le bloc d'info produit (côté droit) */
   infoSlot: React.ReactNode;
 }
 
@@ -62,28 +60,24 @@ export function ProductPageSection({
   variantLabels,
   infoSlot,
 }: Props) {
-  // URL de l'image actuellement affichée dans la grande vue
-  const [activeImageUrl, setActiveImageUrl] = useState<string | null>(
-    primaryImageUrl
-  );
+  const [activeImageUrl, setActiveImageUrl] = useState<string | null>(primaryImageUrl);
 
   return (
-    <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-
-      {/* ── Galerie ─────────────────────────────────────────────────── */}
+    <div className="grid gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
       <div className="space-y-4">
-        {/* Image principale */}
         <div
-          className="relative aspect-square rounded-apple-xl overflow-hidden"
+          className="relative aspect-square overflow-hidden rounded-[36px]"
           style={{
-            background: "#1A1A14",
-            border: "1px solid rgba(201,168,76,0.15)",
+            background:
+              "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
+            border: "1px solid rgba(201,168,76,0.14)",
+            boxShadow: "0 26px 62px rgba(0,0,0,0.34)",
           }}
         >
           <ProductImageFallback
             src={productDetailImage(activeImageUrl)}
             alt={
-              productImages.find((i) => i.url === activeImageUrl)?.alt ??
+              productImages.find((image) => image.url === activeImageUrl)?.alt ??
               primaryImageAlt
             }
             label={productName}
@@ -95,50 +89,51 @@ export function ProductPageSection({
           />
         </div>
 
-        {/* Miniatures — cliquables + indicateur actif */}
         {productImages.length > 1 && (
-          <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
-            {productImages.map((img) => {
-              const isActive = img.url === activeImageUrl;
+          <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+            {productImages.map((image) => {
+              const isActive = image.url === activeImageUrl;
+
               return (
                 <button
-                  key={img.id}
-                  onClick={() => setActiveImageUrl(img.url)}
-                  title={img.alt ?? img.color ?? productName}
-                  className="relative w-20 h-20 shrink-0 rounded-apple-md overflow-hidden
-                             transition-all duration-200 focus-visible:outline-2
-                             focus-visible:outline-offset-2 focus-visible:outline-[#C9A84C]"
+                  key={image.id}
+                  onClick={() => setActiveImageUrl(image.url)}
+                  title={image.alt ?? image.color ?? productName}
+                  className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[22px] transition-all duration-200"
                   style={{
-                    background: "#1A1A14",
-                    border: `2px solid ${
+                    background: "rgba(17,17,9,0.92)",
+                    border: `1.5px solid ${
                       isActive
-                        ? "rgba(201,168,76,0.8)"
-                        : "rgba(201,168,76,0.15)"
+                        ? "rgba(201,168,76,0.42)"
+                        : "rgba(201,168,76,0.12)"
                     }`,
+                    boxShadow: isActive
+                      ? "0 18px 32px rgba(201,168,76,0.14)"
+                      : "none",
                   }}
                 >
                   <ProductImageFallback
-                    src={productThumbnailImage(img.url)}
-                    alt={img.alt ?? productName}
-                    label={img.alt ?? img.color ?? productName}
+                    src={productThumbnailImage(image.url)}
+                    alt={image.alt ?? productName}
+                    label={image.alt ?? image.color ?? productName}
                     fill
                     sizes="80px"
                     imageClassName="object-contain p-2"
                     fallbackClassName="absolute inset-0"
                   />
-                  {/* Indicateur couleur sous la miniature */}
-                  {img.color && (
+                  {image.color ? (
                     <span
-                      className="absolute bottom-0 inset-x-0 text-[9px] font-medium
-                                 text-center truncate px-1 py-0.5"
+                      className="absolute inset-x-0 bottom-0 truncate px-1 py-0.5 text-center text-[9px]"
                       style={{
-                        background: "rgba(0,0,0,0.6)",
-                        color: isActive ? "#C9A84C" : "rgba(255,255,255,0.4)",
+                        background: "rgba(10,10,8,0.82)",
+                        color: isActive
+                          ? "var(--color-primary-dark)"
+                          : "var(--color-text-tertiary)",
                       }}
                     >
-                      {img.color}
+                      {image.color}
                     </span>
-                  )}
+                  ) : null}
                 </button>
               );
             })}
@@ -146,24 +141,22 @@ export function ProductPageSection({
         )}
       </div>
 
-      {/* ── Infos + sélecteur ───────────────────────────────────────── */}
-      <div className="lg:sticky lg:top-24 lg:self-start space-y-6">
-        {/* Bloc statique (titre, rating, prix initial, livraison, description) */}
-        {infoSlot}
-
-        {/* Sélecteur interactif */}
-        <ProductVariantSelector
-          productId={productId}
-          variants={variants}
-          locale={locale}
-          storageOptions={storageOptions}
-          colorOptions={colorOptions}
-          labels={variantLabels}
-          productImages={productImages}
-          onImageChange={(url) => {
-            if (url) setActiveImageUrl(url);
-          }}
-        />
+      <div className="space-y-6 lg:sticky lg:top-28 lg:self-start">
+        <div className="luxe-panel-strong p-6 md:p-7">{infoSlot}</div>
+        <div className="luxe-panel p-6 md:p-7">
+          <ProductVariantSelector
+            productId={productId}
+            variants={variants}
+            locale={locale}
+            storageOptions={storageOptions}
+            colorOptions={colorOptions}
+            labels={variantLabels}
+            productImages={productImages}
+            onImageChange={(url) => {
+              if (url) setActiveImageUrl(url);
+            }}
+          />
+        </div>
       </div>
     </div>
   );

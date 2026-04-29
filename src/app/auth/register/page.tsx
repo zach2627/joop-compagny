@@ -9,15 +9,20 @@ import { registerAction } from "@/features/auth/actions";
 import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
 import { dictionaries } from "@/lib/i18n/translations";
 
-const authShellStyle = { background: "#0A0A08" };
+const authShellStyle = {
+  background:
+    "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+};
 const authPanelStyle = {
-  background: "#111109",
-  border: "1px solid rgba(201,168,76,0.2)",
+  background: "rgba(17,17,9,0.84)",
+  border: "1px solid rgba(201,168,76,0.16)",
+  boxShadow: "0 28px 64px rgba(0,0,0,0.36)",
+  backdropFilter: "blur(18px)",
 };
 const authInputStyle = {
-  background: "#111109",
-  border: "1px solid rgba(255,255,255,0.08)",
-  color: "#FFFFFF",
+  background: "rgba(17,17,9,0.92)",
+  border: "1px solid rgba(201,168,76,0.14)",
+  color: "var(--color-text)",
 };
 
 export default function RegisterPage() {
@@ -50,8 +55,17 @@ export default function RegisterPage() {
           <Link href={localizedPath("/", locale)} className="mb-4 inline-block">
             <Image src="/icon.svg" alt="JOOP COMPAGNY" width={48} height={48} />
           </Link>
-          <h1 className="text-2xl font-semibold text-white">{dict.registerTitle}</h1>
-          <p className="mt-1 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <h1
+            style={{
+              color: "var(--color-text)",
+              fontFamily: "var(--font-cormorant), serif",
+              fontSize: "2.4rem",
+              lineHeight: 0.98,
+            }}
+          >
+            {dict.registerTitle}
+          </h1>
+          <p className="mt-2 text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {dict.registerSubtitle}
           </p>
         </div>
@@ -61,7 +75,7 @@ export default function RegisterPage() {
             <div>
               <label
                 className="mb-1.5 block text-sm font-medium"
-                style={{ color: "rgba(255,255,255,0.6)" }}
+                style={{ color: "var(--color-text-secondary)" }}
                 htmlFor="name"
               >
                 {dict.fullName}
@@ -82,7 +96,7 @@ export default function RegisterPage() {
             <div>
               <label
                 className="mb-1.5 block text-sm font-medium"
-                style={{ color: "rgba(255,255,255,0.6)" }}
+                style={{ color: "var(--color-text-secondary)" }}
                 htmlFor="email"
               >
                 Email
@@ -103,7 +117,7 @@ export default function RegisterPage() {
             <div>
               <label
                 className="mb-1.5 block text-sm font-medium"
-                style={{ color: "rgba(255,255,255,0.6)" }}
+                style={{ color: "var(--color-text-secondary)" }}
                 htmlFor="password"
               >
                 {dict.password}
@@ -124,7 +138,7 @@ export default function RegisterPage() {
               <p
                 id="password-hint"
                 className="mt-1 text-xs"
-                style={{ color: "rgba(255,255,255,0.4)" }}
+                style={{ color: "var(--color-text-tertiary)" }}
               >
                 {dict.passwordHint}
               </p>
@@ -133,7 +147,7 @@ export default function RegisterPage() {
             <div>
               <label
                 className="mb-1.5 block text-sm font-medium"
-                style={{ color: "rgba(255,255,255,0.6)" }}
+                style={{ color: "var(--color-text-secondary)" }}
                 htmlFor="confirmPassword"
               >
                 {dict.confirmPassword}
@@ -156,9 +170,9 @@ export default function RegisterPage() {
               <div
                 className="rounded-apple-md px-4 py-3 text-sm"
                 style={{
-                  background: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(201,168,76,0.2)",
-                  color: "#FFFFFF",
+                  background: "rgba(184,138,84,0.08)",
+                  border: "1px solid rgba(184,138,84,0.16)",
+                  color: "var(--color-text)",
                 }}
               >
                 {error}
@@ -170,12 +184,12 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <div className="mt-6 text-center text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {dict.alreadyAccount}{" "}
             <Link
               href={localizedPath("/auth/login", locale)}
               className="font-medium hover:underline"
-              style={{ color: "#C9A84C" }}
+              style={{ color: "var(--color-primary-dark)" }}
             >
               {dict.signIn}
             </Link>

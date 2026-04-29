@@ -7,15 +7,20 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
 import { dictionaries } from "@/lib/i18n/translations";
 
-const authShellStyle = { background: "#0A0A08" };
+const authShellStyle = {
+  background:
+    "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+};
 const authPanelStyle = {
-  background: "#111109",
-  border: "1px solid rgba(201,168,76,0.2)",
+  background: "rgba(17,17,9,0.84)",
+  border: "1px solid rgba(201,168,76,0.16)",
+  boxShadow: "0 28px 64px rgba(0,0,0,0.36)",
+  backdropFilter: "blur(18px)",
 };
 const authInputStyle = {
-  background: "#111109",
-  border: "1px solid rgba(255,255,255,0.08)",
-  color: "#FFFFFF",
+  background: "rgba(17,17,9,0.92)",
+  border: "1px solid rgba(201,168,76,0.14)",
+  color: "var(--color-text)",
 };
 
 function ResetPasswordForm() {
@@ -34,11 +39,11 @@ function ResetPasswordForm() {
   if (!token) {
     return (
       <div className="space-y-3 py-4 text-center">
-        <p className="text-sm text-white">{dict.invalidLink}</p>
+        <p className="text-sm" style={{ color: "var(--color-text)" }}>{dict.invalidLink}</p>
         <Link
           href={localizedPath("/auth/forgot-password", locale)}
           className="text-sm font-medium hover:underline"
-          style={{ color: "#C9A84C" }}
+          style={{ color: "var(--color-primary-dark)" }}
         >
           {dict.requestNewLink}
         </Link>
@@ -84,11 +89,16 @@ function ResetPasswordForm() {
         <div
           className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
           style={{
-            background: "rgba(201,168,76,0.08)",
-            border: "1px solid rgba(201,168,76,0.3)",
+            background: "rgba(184,138,84,0.08)",
+            border: "1px solid rgba(184,138,84,0.16)",
           }}
         >
-          <svg className="h-7 w-7" fill="none" stroke="#C9A84C" viewBox="0 0 24 24">
+          <svg
+            className="h-7 w-7"
+            fill="none"
+            stroke="var(--color-primary-dark)"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -97,8 +107,10 @@ function ResetPasswordForm() {
             />
           </svg>
         </div>
-        <p className="mb-2 font-semibold text-white">{dict.passwordUpdated}</p>
-        <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+        <p className="mb-2 font-semibold" style={{ color: "var(--color-text)" }}>
+          {dict.passwordUpdated}
+        </p>
+        <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
           {dict.redirectingLogin}
         </p>
       </div>
@@ -110,7 +122,7 @@ function ResetPasswordForm() {
       <div>
         <label
           className="mb-1.5 block text-sm font-medium"
-          style={{ color: "rgba(255,255,255,0.6)" }}
+          style={{ color: "var(--color-text-secondary)" }}
           htmlFor="password"
         >
           {dict.newPassword}
@@ -128,7 +140,7 @@ function ResetPasswordForm() {
           minLength={8}
           disabled={status === "loading"}
         />
-        <p className="mt-1.5 text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+        <p className="mt-1.5 text-xs" style={{ color: "var(--color-text-tertiary)" }}>
           {dict.minPassword}
         </p>
       </div>
@@ -136,7 +148,7 @@ function ResetPasswordForm() {
       <div>
         <label
           className="mb-1.5 block text-sm font-medium"
-          style={{ color: "rgba(255,255,255,0.6)" }}
+          style={{ color: "var(--color-text-secondary)" }}
           htmlFor="confirmPassword"
         >
           {dict.confirmPassword}
@@ -160,9 +172,9 @@ function ResetPasswordForm() {
         <div
           className="rounded-apple-md px-4 py-3 text-sm"
           style={{
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(201,168,76,0.2)",
-            color: "#FFFFFF",
+            background: "rgba(184,138,84,0.08)",
+            border: "1px solid rgba(184,138,84,0.16)",
+            color: "var(--color-text)",
           }}
         >
           {error}
@@ -188,8 +200,17 @@ export default function ResetPasswordPage() {
           <Link href={localizedPath("/", locale)} className="mb-4 inline-block">
             <Image src="/icon.svg" alt="JOOP COMPAGNY" width={48} height={48} />
           </Link>
-          <h1 className="text-2xl font-semibold text-white">{dict.resetTitle}</h1>
-          <p className="mt-1 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <h1
+            style={{
+              color: "var(--color-text)",
+              fontFamily: "var(--font-cormorant), serif",
+              fontSize: "2.4rem",
+              lineHeight: 0.98,
+            }}
+          >
+            {dict.resetTitle}
+          </h1>
+          <p className="mt-2 text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {dict.resetSubtitle}
           </p>
         </div>
@@ -197,17 +218,20 @@ export default function ResetPasswordPage() {
         <div className="rounded-apple-xl p-8" style={authPanelStyle}>
           <Suspense
             fallback={
-              <div className="h-48 animate-pulse rounded-apple-md" style={{ background: "#1A1A14" }} />
+              <div
+                className="h-48 animate-pulse rounded-apple-md"
+                style={{ background: "rgba(220,193,188,0.24)" }}
+              />
             }
           >
             <ResetPasswordForm />
           </Suspense>
 
-          <div className="mt-6 text-center text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+          <div className="mt-6 text-center text-sm" style={{ color: "var(--color-text-secondary)" }}>
             <Link
               href={localizedPath("/auth/login", locale)}
               className="font-medium hover:underline"
-              style={{ color: "#C9A84C" }}
+              style={{ color: "var(--color-primary-dark)" }}
             >
               {dict.backToLogin}
             </Link>

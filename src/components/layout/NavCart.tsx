@@ -11,15 +11,24 @@ export function NavCart({ itemCount, href, label }: NavCartProps) {
   return (
     <Link
       href={href}
-      className="relative p-2 rounded-full hover:bg-white/10 transition-colors"
+      className="relative inline-flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300"
       aria-label={label}
+      style={{
+        background: "rgba(17,17,9,0.84)",
+        border: "1px solid rgba(201,168,76,0.14)",
+        color: "var(--color-text)",
+        backdropFilter: "blur(14px)",
+      }}
     >
-      <ShoppingBag className="w-5 h-5 text-white" />
+      <ShoppingBag className="h-4 w-4" strokeWidth={1.9} />
       {itemCount > 0 && (
         <span
-          className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1
-                     bg-apple-blue text-[#0A0A08] text-[10px] font-bold rounded-full
-                     flex items-center justify-center"
+          className="absolute -right-1 -top-1 inline-flex min-h-[20px] min-w-[20px] items-center justify-center rounded-full px-1 text-[10px] font-bold"
+          style={{
+            background: "linear-gradient(135deg, #e8c97a 0%, #c9a84c 100%)",
+            color: "#0a0a08",
+            boxShadow: "0 8px 18px rgba(201,168,76,0.24)",
+          }}
         >
           {itemCount > 99 ? "99+" : itemCount}
         </span>
