@@ -5,6 +5,7 @@ import { StoreFooter } from "@/components/layout/StoreFooter";
 import { StoreNavbar } from "@/components/layout/StoreNavbar";
 import { ProductCard } from "@/components/product/ProductCard";
 import { HeroCarousel } from "@/components/ui/HeroCarousel";
+import { GoldParticles, RotatingBorderAside } from "@/components/ui/HeroGlam";
 import { ParallaxSection } from "@/components/ui/ParallaxSection";
 import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -207,6 +208,31 @@ export default async function HomePage() {
             <HeroCarousel imageUrls={heroImages} />
           </div>
           <div className="hero-overlay absolute inset-0" />
+
+          {/* Islamic geometric arabesque pattern */}
+          <svg
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            aria-hidden="true"
+            style={{ opacity: 0.03 }}
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <pattern id="arabesque" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <circle cx="40" cy="40" r="30" fill="none" stroke="#C9A84C" strokeWidth="0.5" />
+                <circle cx="40" cy="40" r="20" fill="none" stroke="#C9A84C" strokeWidth="0.5" />
+                <line x1="10" y1="40" x2="70" y2="40" stroke="#C9A84C" strokeWidth="0.5" />
+                <line x1="40" y1="10" x2="40" y2="70" stroke="#C9A84C" strokeWidth="0.5" />
+                <line x1="18.8" y1="18.8" x2="61.2" y2="61.2" stroke="#C9A84C" strokeWidth="0.5" />
+                <line x1="61.2" y1="18.8" x2="18.8" y2="61.2" stroke="#C9A84C" strokeWidth="0.5" />
+                <polygon points="40,12 47,33 70,33 52,47 58,68 40,55 22,68 28,47 10,33 33,33" fill="none" stroke="#C9A84C" strokeWidth="0.4" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#arabesque)" />
+          </svg>
+
+          {/* Gold floating particles */}
+          <GoldParticles />
+
           <div
             className="absolute inset-x-0 top-0 h-px"
             style={{
@@ -220,25 +246,38 @@ export default async function HomePage() {
               <ScrollReveal>
                 <div className="max-w-[720px]">
                   <p className="luxe-kicker">{copy.seasonLabel}</p>
+
+                  {/* Decorative golden horizontal line */}
+                  <div
+                    className="mt-4 mb-0"
+                    style={{
+                      height: "1px",
+                      width: "clamp(80px, 14vw, 160px)",
+                      background:
+                        "linear-gradient(90deg, rgba(201,168,76,0.9) 0%, rgba(232,201,122,0.4) 60%, transparent 100%)",
+                    }}
+                  />
+
                   <h1
-                    className="mt-5 max-w-[11ch] text-balance"
+                    className="mt-4 max-w-[11ch] text-balance"
                     style={{
                       fontSize: "clamp(3.6rem, 8vw, 7.3rem)",
                       lineHeight: 0.88,
-                      color: "#fffdf8",
-                      textShadow: "0 20px 44px rgba(0,0,0,0.36)",
+                      textShadow:
+                        "0 2px 18px rgba(201,168,76,0.22), 0 20px 44px rgba(0,0,0,0.36)",
                     }}
                   >
-                    {home.heroTitle}
+                    <span className="hero-title-shimmer">{home.heroTitle}</span>
                   </h1>
                   <p
                     className="mt-5 max-w-[17ch]"
                     style={{
-                      color: "#f7ece4",
+                      color: "#C9A84C",
                       fontSize: "clamp(1.32rem, 2.6vw, 2.2rem)",
                       lineHeight: 1.05,
                       fontStyle: "italic",
                       fontFamily: "var(--font-cormorant), serif",
+                      filter: "drop-shadow(0 0 10px rgba(201,168,76,0.35))",
                     }}
                   >
                     {home.heroAccent}
@@ -305,12 +344,12 @@ export default async function HomePage() {
               {heroFeatured ? (
                 <ParallaxSection className="hidden lg:block" offset={34}>
                   <ScrollReveal delay={120}>
+                    <RotatingBorderAside>
                     <aside
                       className="rounded-[34px] p-6"
                       style={{
                         background:
                           "linear-gradient(180deg, rgba(17,17,9,0.88) 0%, rgba(10,10,8,0.92) 100%)",
-                        border: "1px solid rgba(201,168,76,0.14)",
                         backdropFilter: "blur(18px)",
                         boxShadow: "0 28px 80px rgba(0,0,0,0.34)",
                       }}
@@ -380,6 +419,7 @@ export default async function HomePage() {
                         </div>
                       </div>
                     </aside>
+                    </RotatingBorderAside>
                   </ScrollReveal>
                 </ParallaxSection>
               ) : null}
