@@ -66,6 +66,7 @@ const HOME_EDITORIAL: Record<
     scrollLabel: string;
     discoverLabel: string;
     categoryNarratives: Record<string, string>;
+    categorySubtitles: Record<string, string>;
     marquee: string[];
   }
 > = {
@@ -91,6 +92,12 @@ const HOME_EDITORIAL: Record<
       encens: "Des rituels d'interieur qui installent calme, douceur et profondeur.",
       coffrets: "Des compositions deja pensees comme des cadeaux signature.",
     },
+    categorySubtitles: {
+      bijoux: "Eclat & preciosite",
+      parfums: "Sillage & memoire",
+      encens: "Rituel & quietude",
+      coffrets: "Offrande & raffinement",
+    },
     marquee: ["Rituels delicats", "Selections feminines", "Cadeaux signature", "Livraison Dakar"],
   },
   en: {
@@ -114,6 +121,12 @@ const HOME_EDITORIAL: Record<
       parfums: "Warm, powdery and memorable trails that define a presence.",
       encens: "Interior rituals that settle calm, softness and depth.",
       coffrets: "Gift compositions already arranged like signature offerings.",
+    },
+    categorySubtitles: {
+      bijoux: "Radiance & preciosity",
+      parfums: "Trail & memory",
+      encens: "Ritual & stillness",
+      coffrets: "Offering & refinement",
     },
     marquee: ["Delicate rituals", "Feminine edits", "Signature gifts", "Dakar delivery"],
   },
@@ -159,6 +172,7 @@ function buildWorlds(
       showcase,
       showcaseText,
       narrative: copy.categoryNarratives[slug],
+      subtitle: copy.categorySubtitles[slug],
     };
   });
 }
@@ -500,8 +514,8 @@ export default async function HomePage() {
               </div>
             </ScrollReveal>
 
-            <StaggerReveal className="grid gap-5 lg:grid-cols-4">
-              {worlds.map(({ slug, category, showcase, showcaseText, narrative }, index) => {
+            <StaggerReveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
+              {worlds.map(({ slug, category, showcase, showcaseText, narrative, subtitle }, index) => {
                 const translatedCategory = translateCategory(
                   locale,
                   category ?? { name: slug, slug }
@@ -511,25 +525,45 @@ export default async function HomePage() {
                   <Link
                     key={slug}
                     href={localizedPath(`/store/products?category=${slug}`, locale)}
-                    className={`group relative block overflow-hidden rounded-[34px] ${
-                      index === 0 ? "lg:col-span-2 lg:row-span-2 min-h-[520px]" : "min-h-[250px]"
-                    }`}
+                    className="group relative flex flex-col overflow-hidden rounded-[34px] transition-transform duration-500 hover:-translate-y-1"
                     style={{
+                      minHeight: "380px",
                       background:
                         "linear-gradient(180deg, rgba(16,16,12,0.96) 0%, rgba(10,10,8,0.94) 100%)",
                       border: "1px solid rgba(201,168,76,0.12)",
                       boxShadow: "0 26px 60px rgba(0,0,0,0.34)",
                     }}
                   >
+                    {/* Motif décoratif — lignes courbes dorées, très subtiles */}
+                    <div className="pointer-events-none absolute inset-0" style={{ opacity: 0.05 }}>
+                      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <pattern
+                            id={`pat-${slug}`}
+                            x="0" y="0" width="60" height="60"
+                            patternUnits="userSpaceOnUse"
+                          >
+                            <path
+                              d="M30 4 Q48 18 56 30 Q48 42 30 56 Q12 42 4 30 Q12 18 30 4Z"
+                              fill="none" stroke="#C9A84C" strokeWidth="0.7"
+                            />
+                            <circle cx="30" cy="30" r="3" fill="none" stroke="#C9A84C" strokeWidth="0.5" />
+                          </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill={`url(#pat-${slug})`} />
+                      </svg>
+                    </div>
+
+                    {/* Image produit showcase */}
                     {showcase ? (
                       <>
-                        <div className="absolute inset-0 opacity-90">
+                        <div className="absolute inset-0 opacity-80">
                           <ProductImageFallback
                             src={heroBackgroundImage(getPrimaryImageUrl(showcase))}
                             alt={showcaseText?.name ?? translatedCategory}
                             label={showcaseText?.name ?? translatedCategory}
                             fill
-                            sizes="(max-width: 1024px) 100vw, 33vw"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             imageClassName="object-cover transition-transform duration-700 group-hover:scale-105"
                             fallbackClassName="absolute inset-0"
                           />
@@ -538,66 +572,94 @@ export default async function HomePage() {
                           className="absolute inset-0"
                           style={{
                             background:
-                              index === 0
-                                ? "linear-gradient(180deg, rgba(10,10,8,0.06) 0%, rgba(10,10,8,0.18) 18%, rgba(10,10,8,0.78) 100%)"
-                                : "linear-gradient(180deg, rgba(10,10,8,0.18) 0%, rgba(10,10,8,0.68) 100%)",
+                              "linear-gradient(180deg, rgba(10,10,8,0.14) 0%, rgba(10,10,8,0.72) 100%)",
                           }}
                         />
                       </>
                     ) : null}
 
-                    <div className="relative z-10 flex h-full flex-col justify-between p-6 md:p-7">
+                    {/* Dégradé doré subtil depuis le bas */}
+                    <div
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(201,168,76,0.06) 0%, transparent 55%)",
+                      }}
+                    />
+
+                    {/* Bordure dorée animée en bas (0 → 100% au hover) */}
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+                      style={{
+                        background:
+                          "linear-gradient(90deg, transparent, rgba(201,168,76,0.85), transparent)",
+                      }}
+                    />
+
+                    <div className="relative z-10 flex flex-1 flex-col justify-between p-6 md:p-7">
+                      {/* Ornement floral en haut à gauche + compteur produits */}
                       <div className="flex items-start justify-between gap-4">
                         <span
-                          className="inline-flex items-center rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.26em]"
+                          className="flex h-8 w-8 items-center justify-center rounded-full"
                           style={{
                             background: "rgba(201,168,76,0.12)",
-                            color: "var(--color-primary)",
-                            border: "1px solid rgba(201,168,76,0.22)",
+                            border: "1px solid rgba(201,168,76,0.24)",
                             backdropFilter: "blur(12px)",
+                            color: "var(--color-primary)",
                           }}
                         >
-                          0{index + 1}
+                          <svg viewBox="0 0 16 16" className="h-3 w-3" fill="currentColor" aria-hidden="true">
+                            <path d="M8 0L9.6 6.4L16 8L9.6 9.6L8 16L6.4 9.6L0 8L6.4 6.4Z" />
+                          </svg>
                         </span>
                         <span
                           className="text-[10px] uppercase tracking-[0.24em]"
-                          style={{ color: "rgba(255,248,242,0.76)" }}
+                          style={{ color: "rgba(255,248,242,0.72)" }}
                         >
-                          {category?._count.products ?? 0} {home.categoriesCount(category?._count.products ?? 0)}
+                          {category?._count.products ?? 0}{" "}
+                          {home.categoriesCount(category?._count.products ?? 0)}
                         </span>
                       </div>
 
+                      {/* Texte bas de card */}
                       <div>
                         <p
                           className="text-[10px] uppercase tracking-[0.28em]"
-                          style={{ color: "#fff7ef" }}
+                          style={{ color: "var(--color-primary)" }}
                         >
                           {translatedCategory}
                         </p>
                         <h3
-                          className="mt-3 text-balance"
+                          className="mt-3 text-balance transition-colors duration-300 group-hover:text-amber-200"
                           style={{
+                            fontFamily: "var(--font-cormorant), serif",
+                            fontStyle: "italic",
                             color: "#fffdf8",
-                            fontSize: index === 0 ? "clamp(2.6rem, 5vw, 4.2rem)" : "2rem",
-                            lineHeight: 0.95,
+                            fontSize: "2.1rem",
+                            lineHeight: 0.96,
                           }}
                         >
                           {translatedCategory}
                         </h3>
+                        {subtitle ? (
+                          <p
+                            className="mt-2 text-sm"
+                            style={{
+                              fontFamily: "var(--font-cormorant), serif",
+                              fontStyle: "italic",
+                              color: "rgba(232,201,122,0.72)",
+                              letterSpacing: "0.02em",
+                            }}
+                          >
+                            {subtitle}
+                          </p>
+                        ) : null}
                         <p
                           className="mt-4 max-w-[28ch] text-sm"
-                          style={{ color: "rgba(255,248,242,0.82)", lineHeight: 1.85 }}
+                          style={{ color: "rgba(255,248,242,0.78)", lineHeight: 1.85 }}
                         >
                           {narrative}
                         </p>
-                        {showcaseText?.name ? (
-                          <p
-                            className="mt-5 text-[10px] uppercase tracking-[0.24em]"
-                            style={{ color: "rgba(255,248,242,0.64)" }}
-                          >
-                            {showcaseText.name}
-                          </p>
-                        ) : null}
                       </div>
                     </div>
                   </Link>
