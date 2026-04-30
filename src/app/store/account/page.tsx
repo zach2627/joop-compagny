@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
+
+export const metadata: Metadata = {
+  title: "Mon compte | JOOP COMPAGNY",
+  robots: { index: false, follow: false },
+};
 import { redirect } from "next/navigation";
 import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 import { logoutAction } from "@/features/auth/actions";

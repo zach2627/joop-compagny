@@ -71,12 +71,12 @@ export default async function AdminDashboard() {
             <div className="mb-4 flex items-start justify-between">
               <div
                 className={`flex h-10 w-10 items-center justify-center rounded-apple-md ${
-                  color === "gold" ? "bg-blue-50" : "bg-white"
+                  color === "gold" ? "bg-amber-50" : "bg-white"
                 }`}
               >
                 <Icon
                   className={`h-5 w-5 ${
-                    color === "gold" ? "text-blue-600" : "text-apple-gray-500"
+                    color === "gold" ? "text-amber-600" : "text-apple-gray-500"
                   }`}
                 />
               </div>

@@ -93,7 +93,7 @@ export default async function AnalyticsPage() {
   ];
 
   const colorMap: Record<string, { bg: string; text: string }> = {
-    gold: { bg: "bg-blue-50", text: "text-blue-600" },
+    gold: { bg: "bg-amber-50", text: "text-amber-600" },
     surface: { bg: "bg-white", text: "text-apple-gray-500" },
   };
 

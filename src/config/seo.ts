@@ -12,7 +12,7 @@ export const seoConfig = {
   defaultDescriptionEn:
     "Discover a bold luxury selection of jewelry, perfumes and incense in Senegal. Wave and Orange Money payments with delivery in Dakar and nationwide.",
   twitterHandle: "@JOOPCompagny",
-  themeColor: "#130b19",
+  themeColor: "#0A0A08",
 };
 
 export const categoryMeta: Record<
