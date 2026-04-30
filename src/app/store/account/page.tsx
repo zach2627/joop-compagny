@@ -1,22 +1,21 @@
-// src/app/store/account/page.tsx
 import type { Metadata } from "next";
-import Image from "next/image";
+import Link from "next/link";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Mon compte | JOOP COMPAGNY",
   robots: { index: false, follow: false },
 };
-import Link from "next/link";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { verifyAccessToken } from "@/lib/auth/jwt";
-import prisma from "@/lib/db/prisma";
+import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 import { logoutAction } from "@/features/auth/actions";
-import { ORDER_STATUS_STYLE } from "@/lib/constants/orderStatus";
+import { verifyAccessToken } from "@/lib/auth/jwt";
+import { productThumbnailImage } from "@/lib/images/cloudinary";
+import { getProductImageUrl } from "@/lib/images/product-gallery";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
-import { getProductImageUrl } from "@/lib/images/product-gallery";
-import { productThumbnailImage } from "@/lib/images/cloudinary";
+import { ORDER_STATUS_STYLE } from "@/lib/constants/orderStatus";
+import prisma from "@/lib/db/prisma";
 
 export default async function AccountPage() {
   const locale = getRequestLocale();
@@ -28,7 +27,10 @@ export default async function AccountPage() {
     locale
   );
   const token = cookies().get("st_session")?.value;
-  if (!token) redirect(loginPath);
+
+  if (!token) {
+    redirect(loginPath);
+  }
 
   let payload: { userId: string; email: string; role: string };
   try {
@@ -56,113 +58,137 @@ export default async function AccountPage() {
     },
   });
 
-  if (!user) redirect(localizedPath("/auth/login", locale));
+  if (!user) {
+    redirect(localizedPath("/auth/login", locale));
+  }
 
   const statusLabel = dict.account.statuses as Record<string, string>;
   const statusStyle = ORDER_STATUS_STYLE;
 
   return (
-    <div style={{ background: "#0D0D0D", minHeight: "100vh" }} className="py-12 px-4">
-      <div className="max-w-3xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+    <div
+      className="px-4 py-10 md:py-14"
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+      }}
+    >
+      <div className="mx-auto max-w-4xl space-y-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p
-              className="text-xs font-semibold tracking-widest uppercase mb-1"
-              style={{ color: "#C9A84C" }}
+            <p className="luxe-kicker mb-1">{dict.account.personalSpace}</p>
+            <h1
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "clamp(2.3rem, 4vw, 3.8rem)",
+                lineHeight: 0.96,
+              }}
             >
-              {dict.account.personalSpace}
-            </p>
-            <h1 className="text-2xl font-semibold" style={{ color: "#FFFFFF" }}>
               {dict.account.account}
             </h1>
-            <p className="text-sm mt-1" style={{ color: "#6e6e73" }}>
+            <p className="mt-2 text-sm" style={{ color: "var(--color-text-secondary)" }}>
               {user.email}
             </p>
           </div>
+
           <form action={logoutAction}>
             <button
               type="submit"
-              className="text-sm px-4 py-2 rounded-full transition-all duration-200"
-              style={{ color: "#F87171", border: "1px solid rgba(248,113,113,0.3)" }}
+              className="btn-secondary"
+              style={{ minWidth: "140px" }}
             >
               {dict.account.logout}
             </button>
           </form>
         </div>
 
-        <div
-          className="rounded-apple-xl p-6"
-          style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.15)" }}
-        >
-          <h2 className="text-base font-semibold mb-4" style={{ color: "#C9A84C" }}>
-            {dict.account.personalInfo}
-          </h2>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            {[
-              { label: dict.account.name, value: user.name ?? "-" },
-              { label: dict.account.email, value: user.email },
-              { label: dict.account.phone, value: user.phone ?? "-" },
-              {
-                label: dict.account.memberSince,
-                value: new Date(user.createdAt).toLocaleDateString(dateLocale, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                }),
-              },
-            ].map(({ label, value }) => (
-              <div key={label}>
-                <p style={{ color: "#6e6e73" }}>{label}</p>
-                <p className="font-medium mt-0.5" style={{ color: "#FFFFFF" }}>
-                  {value}
+        <div className="grid gap-6 md:grid-cols-2">
+          <section className="luxe-panel p-6">
+            <h2
+              className="mb-4"
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "1.8rem",
+                color: "var(--color-primary-dark)",
+              }}
+            >
+              {dict.account.personalInfo}
+            </h2>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              {[
+                { label: dict.account.name, value: user.name ?? "-" },
+                { label: dict.account.email, value: user.email },
+                { label: dict.account.phone, value: user.phone ?? "-" },
+                {
+                  label: dict.account.memberSince,
+                  value: new Date(user.createdAt).toLocaleDateString(dateLocale, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }),
+                },
+              ].map(({ label, value }) => (
+                <div key={label}>
+                  <p style={{ color: "var(--color-text-secondary)" }}>{label}</p>
+                  <p className="mt-1 font-medium" style={{ color: "var(--color-text)" }}>
+                    {value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {user.addresses[0] ? (
+            <section className="luxe-panel p-6">
+              <h2
+                className="mb-4"
+                style={{
+                  fontFamily: "var(--font-cormorant), serif",
+                  fontSize: "1.8rem",
+                  color: "var(--color-primary-dark)",
+                }}
+              >
+                {dict.account.defaultAddress}
+              </h2>
+              <div className="space-y-1 text-sm" style={{ color: "var(--color-text)" }}>
+                <p>
+                  {user.addresses[0].firstName} {user.addresses[0].lastName}
                 </p>
+                <p>{user.addresses[0].streetLine1}</p>
+                {user.addresses[0].streetLine2 ? <p>{user.addresses[0].streetLine2}</p> : null}
+                <p>
+                  {user.addresses[0].city}, {user.addresses[0].region}
+                </p>
+                <p>{user.addresses[0].phone}</p>
               </div>
-            ))}
-          </div>
+            </section>
+          ) : null}
         </div>
 
-        {user.addresses[0] && (
-          <div
-            className="rounded-apple-xl p-6"
-            style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.15)" }}
-          >
-            <h2 className="text-base font-semibold mb-4" style={{ color: "#C9A84C" }}>
-              {dict.account.defaultAddress}
-            </h2>
-            <div className="text-sm space-y-1" style={{ color: "#d2d2d7" }}>
-              <p>
-                {user.addresses[0].firstName} {user.addresses[0].lastName}
-              </p>
-              <p>{user.addresses[0].streetLine1}</p>
-              {user.addresses[0].streetLine2 && <p>{user.addresses[0].streetLine2}</p>}
-              <p>
-                {user.addresses[0].city}, {user.addresses[0].region}
-              </p>
-              <p>{user.addresses[0].phone}</p>
-            </div>
-          </div>
-        )}
-
-        <div
-          className="rounded-apple-xl p-6"
-          style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.15)" }}
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold" style={{ color: "#C9A84C" }}>
+        <section className="luxe-panel p-6">
+          <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <h2
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "1.8rem",
+                color: "var(--color-primary-dark)",
+              }}
+            >
               {dict.account.recentOrders}
             </h2>
-            <Link href={localizedPath("/store/orders", locale)} className="text-sm hover:underline" style={{ color: "#C9A84C" }}>
+            <Link href={localizedPath("/store/orders", locale)} className="btn-ghost">
               {dict.account.viewAll}
             </Link>
           </div>
 
           {user.orders.length === 0 ? (
-            <div className="text-center py-8 text-sm">
-              <p style={{ color: "#6e6e73" }}>{dict.account.noRecentOrders}</p>
+            <div className="py-8 text-center text-sm">
+              <p style={{ color: "var(--color-text-secondary)" }}>{dict.account.noRecentOrders}</p>
               <Link
                 href={localizedPath("/store/products", locale)}
-                className="hover:underline mt-2 inline-block"
-                style={{ color: "#C9A84C" }}
+                className="mt-2 inline-block"
+                style={{ color: "var(--color-primary-dark)" }}
               >
                 {dict.account.discoverArrow}
               </Link>
@@ -172,8 +198,11 @@ export default async function AccountPage() {
               {user.orders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between p-4 rounded-apple-md"
-                  style={{ background: "#242424", border: "1px solid #2E2E2E" }}
+                  className="flex flex-col gap-4 rounded-[24px] p-4 md:flex-row md:items-center md:justify-between"
+                  style={{
+                    background: "rgba(255,255,255,0.34)",
+                    border: "1px solid rgba(184,138,84,0.1)",
+                  }}
                 >
                   <div className="flex items-center gap-3">
                     {(() => {
@@ -184,41 +213,46 @@ export default async function AccountPage() {
                         fallbackUrl: firstItem.product.images[0]?.url,
                       });
 
-                      if (!imageUrl) return null;
-
                       return (
-                        <Image
-                          src={productThumbnailImage(imageUrl)}
-                          alt=""
-                          width={48}
-                          height={48}
-                          className="w-12 h-12 object-cover rounded-apple-sm"
-                          style={{ background: "#1A1A1A" }}
-                        />
+                        <div
+                          className="overflow-hidden rounded-[18px]"
+                          style={{
+                            background:
+                              "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
+                          }}
+                        >
+                          <ProductImageFallback
+                            src={productThumbnailImage(imageUrl)}
+                            alt={firstItem.product.name}
+                            label={firstItem.product.name}
+                            width={48}
+                            height={48}
+                            imageClassName="h-12 w-12 object-cover"
+                            fallbackClassName="h-12 w-12"
+                          />
+                        </div>
                       );
                     })()}
+
                     <div>
-                      <p className="text-sm font-medium" style={{ color: "#FFFFFF" }}>
+                      <p className="text-sm font-medium" style={{ color: "var(--color-text)" }}>
                         {order.orderNumber}
                       </p>
-                      <p className="text-xs mt-0.5" style={{ color: "#6e6e73" }}>
-                        {new Date(order.createdAt).toLocaleDateString(dateLocale)} · {dict.account.itemCount(order.items.length)}
+                      <p className="mt-0.5 text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                        {new Date(order.createdAt).toLocaleDateString(dateLocale)} -{" "}
+                        {dict.account.itemCount(order.items.length)}
                       </p>
                     </div>
                   </div>
+
                   <div className="flex items-center gap-3">
                     <span
-                      className="text-xs px-2.5 py-1 rounded-full font-medium"
-                      style={
-                        statusStyle[order.status] ?? {
-                          background: "rgba(107,114,128,0.15)",
-                          color: "#9CA3AF",
-                        }
-                      }
+                      className="rounded-full px-2.5 py-1 text-xs font-medium"
+                      style={statusStyle[order.status] ?? statusStyle.PENDING}
                     >
                       {statusLabel[order.status] ?? order.status}
                     </span>
-                    <p className="text-sm font-semibold" style={{ color: "#C9A84C" }}>
+                    <p className="text-sm font-semibold" style={{ color: "var(--color-primary-dark)" }}>
                       {Number(order.total).toLocaleString(dateLocale)} F
                     </p>
                   </div>
@@ -226,7 +260,7 @@ export default async function AccountPage() {
               ))}
             </div>
           )}
-        </div>
+        </section>
       </div>
     </div>
   );

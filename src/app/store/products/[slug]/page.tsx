@@ -1,21 +1,21 @@
-// src/app/store/products/[slug]/page.tsx
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { ProductPageSection } from "@/components/product/ProductPageSection";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { ProductStructuredData } from "@/components/seo/ProductStructuredData";
+import { seoConfig } from "@/config/seo";
 import { siteConfig } from "@/config/site";
 import { getProductBySlug } from "@/features/products/service";
 import { formatXOF } from "@/features/payment/paydunya";
-import { ProductPageSection } from "@/components/product/ProductPageSection";
-import { ProductStructuredData } from "@/components/seo/ProductStructuredData";
-import { seoConfig } from "@/config/seo";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
-import { translateCategory } from "@/lib/i18n/translations";
 import {
   translateProductContent,
   translateProductImageAlt,
   translateVariantName,
 } from "@/lib/i18n/product-content";
+import { translateCategory } from "@/lib/i18n/translations";
 
 interface PageProps {
   params: { slug: string };
@@ -25,7 +25,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const locale = getRequestLocale();
   const dict = getDictionary(locale);
   const product = await getProductBySlug(params.slug);
-  if (!product) return { title: locale === "en" ? "Product not found" : "Produit introuvable" };
+  if (!product) {
+    return {
+      title: locale === "en" ? "Product not found" : "Produit introuvable",
+    };
+  }
 
   const productText = translateProductContent(locale, product);
   const title = productText.metaTitle ?? productText.name;
@@ -34,8 +38,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     productText.shortDescription ??
     productText.description?.slice(0, 155) ??
     "";
-  const canonicalUrl = `${seoConfig.siteUrl}${localizedPath(`/store/products/${params.slug}`, locale)}`;
-  const primaryImage = product.images.find((img) => img.isPrimary) ?? product.images[0];
+  const canonicalUrl = `${seoConfig.siteUrl}${localizedPath(
+    `/store/products/${params.slug}`,
+    locale
+  )}`;
+  const primaryImage = product.images.find((image) => image.isPrimary) ?? product.images[0];
 
   return {
     title,
@@ -48,9 +55,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url: canonicalUrl,
       locale: dict.meta.locale,
-      images: product.images.map((img) => ({
-        url: img.url,
-        alt: translateProductImageAlt(locale, product.slug, img.alt, productText.name),
+      images: product.images.map((image) => ({
+        url: image.url,
+        alt: translateProductImageAlt(locale, product.slug, image.alt, productText.name),
       })),
     },
     twitter: {
@@ -68,28 +75,41 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const product = await getProductBySlug(params.slug);
   if (!product) notFound();
 
-  const defaultVariant = product.variants.find((v) => v.isDefault) ?? product.variants[0];
-  const primaryImage = product.images.find((img) => img.isPrimary) ?? product.images[0];
+  const defaultVariant =
+    product.variants.find((variant) => variant.isDefault) ?? product.variants[0];
+  const primaryImage = product.images.find((image) => image.isPrimary) ?? product.images[0];
   const productText = translateProductContent(locale, product);
 
   const avgRating =
     product.reviews.length > 0
-      ? product.reviews.reduce((sum, r) => sum + r.rating, 0) / product.reviews.length
+      ? product.reviews.reduce((sum, review) => sum + review.rating, 0) /
+        product.reviews.length
       : 0;
 
-  const storageOptions = [...new Set(product.variants.map((v) => v.storage).filter(Boolean))];
+  const storageOptions = [
+    ...new Set(product.variants.map((variant) => variant.storage).filter(Boolean)),
+  ];
   const colorOptions = [
-    ...new Map(product.variants.map((v) => [v.color, { color: v.color, hex: v.colorHex }])).values(),
-  ].filter((c) => c.color);
+    ...new Map(
+      product.variants.map((variant) => [
+        variant.color,
+        { color: variant.color, hex: variant.colorHex },
+      ])
+    ).values(),
+  ].filter((item) => item.color);
 
   const currentPrice = Number(defaultVariant?.price ?? product.basePrice);
   const inStock = (defaultVariant?.stock ?? 0) > 0;
   const categoryName = translateCategory(locale, product.category);
 
   return (
-    <div style={{ background: "#0D0D0D", minHeight: "100vh" }}>
-
-      {/* Structured Data Schema.org */}
+    <div
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+      }}
+    >
       <ProductStructuredData
         name={productText.name}
         description={
@@ -110,176 +130,230 @@ export default async function ProductDetailPage({ params }: PageProps) {
         reviewCount={product.reviews.length > 0 ? product.reviews.length : undefined}
       />
 
-      <div className="container-xl py-12">
+      <div className="container-xl py-10 md:py-14">
+        <ScrollReveal>
+          <nav
+            className="mb-8 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.24em]"
+            style={{ color: "var(--color-text-tertiary)" }}
+          >
+            <Link
+              href={localizedPath("/store/products", locale)}
+              className="transition-colors duration-300"
+              style={{ color: "var(--color-primary-dark)" }}
+            >
+              {dict.products.breadcrumbProducts}
+            </Link>
+            <span>/</span>
+            <span style={{ color: "var(--color-text-secondary)" }}>{categoryName}</span>
+            <span>/</span>
+            <span style={{ color: "var(--color-text)" }}>{productText.name}</span>
+          </nav>
+        </ScrollReveal>
 
-        {/* Breadcrumb */}
-        <nav className="text-xs mb-8 flex items-center gap-2" style={{ color: "#6e6e73" }}>
-          <Link href={localizedPath("/store/products", locale)} style={{ color: "#C9A84C" }} className="hover:underline">
-            {dict.products.breadcrumbProducts}
-          </Link>
-          <span>›</span>
-          <span style={{ color: "#6e6e73" }}>{categoryName}</span>
-          <span>›</span>
-          <span style={{ color: "#d2d2d7" }}>{productText.name}</span>
-        </nav>
-
-        <ProductPageSection
-          productId={product.id}
-          productName={productText.name}
-          locale={locale}
-          primaryImageUrl={primaryImage?.url ?? null}
-          primaryImageAlt={translateProductImageAlt(
-            locale,
-            product.slug,
-            primaryImage?.alt,
-            productText.name
-          )}
-          productImages={product.images.map((img) => ({
-            id: img.id,
-            url: img.url,
-            alt: translateProductImageAlt(locale, product.slug, img.alt, productText.name),
-            color: img.color ?? null,
-          }))}
-          variants={product.variants.map((v) => ({
-            id: v.id,
-            name: translateVariantName(locale, product.slug, v.name),
-            storage: v.storage ?? undefined,
-            color: v.color ?? undefined,
-            colorHex: v.colorHex ?? undefined,
-            price: Number(v.price),
-            compareAt: v.compareAt ? Number(v.compareAt) : undefined,
-            stock: v.stock,
-            stockStatus: v.stockStatus,
-            isDefault: v.isDefault,
-          }))}
-          storageOptions={storageOptions.filter((s): s is string => s !== null)}
-          colorOptions={colorOptions.filter(
-            (c): c is { color: string; hex: string | null } => c.color !== null
-          )}
-          variantLabels={{
-            storage: dict.products.variant.storage,
-            color: dict.products.variant.color,
-            lowStock:
-              locale === "en"
-                ? "Only {stock} left in stock"
-                : "Plus que {stock} en stock",
-            outOfStock: dict.products.variant.outOfStock,
-            quantity: dict.products.variant.quantity,
-            decrease: dict.products.variant.decrease,
-            increase: dict.products.variant.increase,
-            adding: dict.products.variant.adding,
-            added: dict.products.variant.added,
-            add: dict.products.variant.add,
-          }}
-          infoSlot={
-            <>
-              {/* Catégorie badge */}
-              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase"
-                style={{ background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.25)", color: "#C9A84C" }}>
-                {categoryName}
-              </div>
-
-              {/* Titre */}
-              <div>
-                <h1 className="text-display-sm mb-2" style={{ color: "#FFFFFF" }}>{productText.name}</h1>
-                {productText.shortDescription && (
-                  <p className="text-lg" style={{ color: "#86868b" }}>{productText.shortDescription}</p>
-                )}
-              </div>
-
-              {/* Rating */}
-              {product.reviews.length > 0 && (
-                <div className="flex items-center gap-2">
-                  <div className="flex" style={{ color: "#C9A84C" }}>
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <span key={star} style={{ opacity: star <= Math.round(avgRating) ? 1 : 0.25 }}>★</span>
-                    ))}
-                  </div>
-                  <span className="text-sm" style={{ color: "#6e6e73" }}>
-                    {avgRating.toFixed(1)} ({product._count.reviews} {locale === "en" ? "reviews" : "avis"})
-                  </span>
+        <ScrollReveal delay={80}>
+          <ProductPageSection
+            productId={product.id}
+            productName={productText.name}
+            locale={locale}
+            primaryImageUrl={primaryImage?.url ?? null}
+            primaryImageAlt={translateProductImageAlt(
+              locale,
+              product.slug,
+              primaryImage?.alt,
+              productText.name
+            )}
+            productImages={product.images.map((image) => ({
+              id: image.id,
+              url: image.url,
+              alt: translateProductImageAlt(locale, product.slug, image.alt, productText.name),
+              color: image.color ?? null,
+            }))}
+            variants={product.variants.map((variant) => ({
+              id: variant.id,
+              name: translateVariantName(locale, product.slug, variant.name),
+              storage: variant.storage ?? undefined,
+              color: variant.color ?? undefined,
+              colorHex: variant.colorHex ?? undefined,
+              price: Number(variant.price),
+              compareAt: variant.compareAt ? Number(variant.compareAt) : undefined,
+              stock: variant.stock,
+              stockStatus: variant.stockStatus,
+              isDefault: variant.isDefault,
+            }))}
+            storageOptions={storageOptions.filter((value): value is string => value !== null)}
+            colorOptions={colorOptions.filter(
+              (item): item is { color: string; hex: string | null } => item.color !== null
+            )}
+            variantLabels={{
+              storage: dict.products.variant.storage,
+              color: dict.products.variant.color,
+              lowStock:
+                locale === "en" ? "Only {stock} left in stock" : "Plus que {stock} en stock",
+              outOfStock: dict.products.variant.outOfStock,
+              quantity: dict.products.variant.quantity,
+              decrease: dict.products.variant.decrease,
+              increase: dict.products.variant.increase,
+              adding: dict.products.variant.adding,
+              added: dict.products.variant.added,
+              add: dict.products.variant.add,
+            }}
+            infoSlot={
+              <>
+                <div
+                  className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+                  style={{
+                    background: "rgba(184,138,84,0.1)",
+                    border: "1px solid rgba(184,138,84,0.2)",
+                    color: "var(--color-primary-dark)",
+                  }}
+                >
+                  {categoryName}
                 </div>
-              )}
 
-              {/* Prix de base */}
-              <div className="flex items-baseline gap-3">
-                <span className="price-xl" style={{ color: "#C9A84C" }}>
-                  {formatXOF(currentPrice)}
-                </span>
-                {defaultVariant?.compareAt && (
-                  <span className="price-lg price-strike" style={{ color: "#515154" }}>
-                    {formatXOF(Number(defaultVariant.compareAt))}
-                  </span>
-                )}
-              </div>
-
-              {/* Infos livraison */}
-              <div className="rounded-apple-lg p-4 space-y-3"
-                style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.15)" }}>
-                {[
-                  { icon: "🚀", text: dict.products.details.delivery },
-                  { icon: "💳", text: dict.products.details.payment },
-                  { icon: "✅", text: dict.products.details.warranty },
-                ].map(({ icon, text }) => (
-                  <div key={text} className="flex items-center gap-3 text-sm" style={{ color: "#d2d2d7" }}>
-                    <span>{icon}</span>
-                    <span>{text}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Description */}
-              {productText.description && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-2" style={{ color: "#C9A84C" }}>{dict.products.details.description}</h3>
-                  <p className="text-sm whitespace-pre-line leading-relaxed" style={{ color: "#86868b" }}>
-                    {productText.description}
-                  </p>
+                <div className="mt-5">
+                  <h1
+                    className="text-balance"
+                    style={{
+                      fontSize: "clamp(2.6rem, 4.5vw, 4.8rem)",
+                      lineHeight: 0.95,
+                    }}
+                  >
+                    {productText.name}
+                  </h1>
+                  {productText.shortDescription ? (
+                    <p className="mt-4 text-lg luxe-copy">{productText.shortDescription}</p>
+                  ) : null}
                 </div>
-              )}
-            </>
-          }
-        />
 
-        {/* Avis */}
-        {product.reviews.length > 0 && (
-          <section className="mt-20">
-            <h2 className="text-2xl font-semibold mb-8" style={{ color: "#FFFFFF" }}>
-              {dict.products.details.reviews(product._count.reviews)}
-            </h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              {product.reviews.map((review) => (
-                <div key={review.id} className="rounded-apple-lg p-5"
-                  style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.1)" }}>
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <p className="text-sm font-semibold" style={{ color: "#FFFFFF" }}>
-                        {review.user.name ?? dict.products.details.client}
-                      </p>
-                      <div className="text-sm mt-0.5" style={{ color: "#C9A84C" }}>
-                        {"★".repeat(review.rating)}
-                        <span style={{ opacity: 0.25 }}>{"★".repeat(5 - review.rating)}</span>
-                      </div>
+                {product.reviews.length > 0 ? (
+                  <div className="mt-5 flex items-center gap-2">
+                    <div className="flex" style={{ color: "var(--color-primary-dark)" }}>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <span
+                          key={star}
+                          style={{ opacity: star <= Math.round(avgRating) ? 1 : 0.24 }}
+                        >
+                          *
+                        </span>
+                      ))}
                     </div>
-                    {review.isVerified && (
-                      <span className="text-[10px] px-2 py-0.5 rounded-full"
-                        style={{ background: "rgba(201,168,76,0.15)", color: "#C9A84C" }}>
-                        {dict.products.details.verifiedPurchase}
-                      </span>
-                    )}
+                    <span className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+                      {avgRating.toFixed(1)} ({product._count.reviews}{" "}
+                      {locale === "en" ? "reviews" : "avis"})
+                    </span>
                   </div>
-                  {review.title && (
-                    <p className="text-sm font-medium mb-1" style={{ color: "#d2d2d7" }}>{review.title}</p>
-                  )}
-                  {review.body && (
-                    <p className="text-sm" style={{ color: "#86868b" }}>{review.body}</p>
-                  )}
+                ) : null}
+
+                <div className="mt-6 flex items-baseline gap-3">
+                  <span className="price-xl" style={{ color: "var(--color-primary-dark)" }}>
+                    {formatXOF(currentPrice)}
+                  </span>
+                  {defaultVariant?.compareAt ? (
+                    <span className="price-lg price-strike">
+                      {formatXOF(Number(defaultVariant.compareAt))}
+                    </span>
+                  ) : null}
                 </div>
+
+                <div
+                  className="mt-6 space-y-3 rounded-[26px] p-5"
+                  style={{
+                    background: "rgba(255,255,255,0.4)",
+                    border: "1px solid rgba(184,138,84,0.1)",
+                  }}
+                >
+                  {[
+                    { index: "01", text: dict.products.details.delivery },
+                    { index: "02", text: dict.products.details.payment },
+                    { index: "03", text: dict.products.details.warranty },
+                  ].map((item) => (
+                    <div
+                      key={item.text}
+                      className="flex items-center gap-3 text-sm"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      <span style={{ color: "var(--color-primary-dark)" }}>{item.index}</span>
+                      <span>{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {productText.description ? (
+                  <div className="mt-6">
+                    <h3 className="mb-2 text-sm font-semibold" style={{ color: "var(--color-primary-dark)" }}>
+                      {dict.products.details.description}
+                    </h3>
+                    <p
+                      className="whitespace-pre-line text-sm leading-relaxed"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      {productText.description}
+                    </p>
+                  </div>
+                ) : null}
+              </>
+            }
+          />
+        </ScrollReveal>
+
+        {product.reviews.length > 0 ? (
+          <section className="mt-20">
+            <ScrollReveal>
+              <h2 className="mb-8 text-3xl" style={{ lineHeight: 1 }}>
+                {dict.products.details.reviews(product._count.reviews)}
+              </h2>
+            </ScrollReveal>
+            <div className="grid gap-4 md:grid-cols-2">
+              {product.reviews.map((review, index) => (
+                <ScrollReveal key={review.id} delay={index * 60}>
+                  <div
+                    className="rounded-[28px] p-5"
+                    style={{
+                      background: "rgba(17,17,9,0.84)",
+                      border: "1px solid rgba(201,168,76,0.12)",
+                      boxShadow: "0 18px 40px rgba(0,0,0,0.32)",
+                    }}
+                  >
+                    <div className="mb-3 flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-sm font-semibold" style={{ color: "var(--color-text)" }}>
+                          {review.user.name ?? dict.products.details.client}
+                        </p>
+                        <div className="mt-0.5 text-sm" style={{ color: "var(--color-primary-dark)" }}>
+                          {"*".repeat(review.rating)}
+                          <span style={{ opacity: 0.24 }}>
+                            {"*".repeat(5 - review.rating)}
+                          </span>
+                        </div>
+                      </div>
+                      {review.isVerified ? (
+                        <span
+                          className="rounded-full px-2 py-0.5 text-[10px] uppercase tracking-[0.18em]"
+                          style={{
+                            background: "rgba(184,138,84,0.1)",
+                            color: "var(--color-primary-dark)",
+                          }}
+                        >
+                          {dict.products.details.verifiedPurchase}
+                        </span>
+                      ) : null}
+                    </div>
+                    {review.title ? (
+                      <p className="mb-1 text-sm font-medium" style={{ color: "var(--color-text)" }}>
+                        {review.title}
+                      </p>
+                    ) : null}
+                    {review.body ? (
+                      <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
+                        {review.body}
+                      </p>
+                    ) : null}
+                  </div>
+                </ScrollReveal>
               ))}
             </div>
           </section>
-        )}
-
+        ) : null}
       </div>
     </div>
   );

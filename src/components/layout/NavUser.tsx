@@ -1,7 +1,8 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { User, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, User } from "lucide-react";
 import { localizedPath, type Locale } from "@/lib/i18n/config";
 
 interface NavUserProps {
@@ -14,6 +15,13 @@ interface NavUserProps {
   };
 }
 
+const iconShellStyle = {
+  background: "rgba(17,17,9,0.84)",
+  border: "1px solid rgba(201,168,76,0.14)",
+  color: "var(--color-text)",
+  backdropFilter: "blur(14px)",
+} as const;
+
 export function NavUser({ session, locale, labels }: NavUserProps) {
   const pathname = usePathname();
   const loginUrl = localizedPath(
@@ -22,31 +30,38 @@ export function NavUser({ session, locale, labels }: NavUserProps) {
   );
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1.5">
       {session ? (
         <>
           {["ADMIN", "STAFF"].includes(session.role) && (
             <Link
               href={localizedPath("/admin", locale)}
-              className="p-2 rounded-full hover:bg-white/10 transition-colors"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300"
               aria-label={labels.admin}
+              style={iconShellStyle}
             >
-              <LayoutDashboard className="w-5 h-5 text-[#d2d2d7]" />
+              <LayoutDashboard className="h-4 w-4" strokeWidth={1.9} />
             </Link>
           )}
           <Link
             href={localizedPath("/store/account", locale)}
-            className="p-2 rounded-full hover:bg-white/10 transition-colors"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300"
             aria-label={labels.account}
+            style={iconShellStyle}
           >
-            <User className="w-5 h-5 text-[#d2d2d7]" />
+            <User className="h-4 w-4" strokeWidth={1.9} />
           </Link>
         </>
       ) : (
         <Link
           href={loginUrl}
-          className="text-sm text-[#d2d2d7] hover:text-white px-3 py-1.5
-                     rounded-full hover:bg-white/10 transition-colors"
+          className="rounded-full px-4 py-2 text-[11px] uppercase tracking-[0.28em] transition-all duration-300"
+          style={{
+            background: "rgba(17,17,9,0.76)",
+            border: "1px solid rgba(201,168,76,0.14)",
+            color: "var(--color-text-secondary)",
+            backdropFilter: "blur(14px)",
+          }}
         >
           {labels.login}
         </Link>
@@ -54,4 +69,3 @@ export function NavUser({ session, locale, labels }: NavUserProps) {
     </div>
   );
 }
-

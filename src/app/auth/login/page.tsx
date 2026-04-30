@@ -1,16 +1,32 @@
 // src/app/auth/login/page.tsx
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useTransition, useState, Suspense } from "react";
+import Link from "next/link";
+import { Suspense, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { loginAction } from "@/features/auth/actions";
 import { mergeGuestCartAction } from "@/features/cart/actions";
 import { siteConfig } from "@/config/site";
-import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
 import { sanitizeRedirectPath } from "@/lib/auth/redirect";
+import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
 import { dictionaries } from "@/lib/i18n/translations";
+
+const authShellStyle = {
+  background:
+    "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+};
+const authPanelStyle = {
+  background: "rgba(17,17,9,0.84)",
+  border: "1px solid rgba(201,168,76,0.16)",
+  boxShadow: "0 28px 64px rgba(0,0,0,0.36)",
+  backdropFilter: "blur(18px)",
+};
+const authInputStyle = {
+  background: "rgba(17,17,9,0.92)",
+  border: "1px solid rgba(201,168,76,0.14)",
+  color: "var(--color-text)",
+};
 
 function LoginForm() {
   const router = useRouter();
@@ -30,6 +46,7 @@ function LoginForm() {
     setError(null);
     const formData = new FormData(e.currentTarget);
     const result = await loginAction(formData);
+
     if (result.success) {
       await mergeGuestCartAction();
       startTransition(() => {
@@ -47,35 +64,71 @@ function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium mb-1.5" style={{ color: "#d2d2d7" }} htmlFor="email">{dict.email}</label>
-        <input id="email" name="email" type="email"
-          className="w-full px-4 py-3 rounded-apple-md text-sm transition-all duration-200"
-          style={{ background: "#242424", border: "1px solid #2E2E2E", color: "#FFFFFF" }}
-          placeholder="vous@exemple.sn" autoComplete="email" required disabled={isPending} />
+        <label
+          className="mb-1.5 block text-sm font-medium"
+          style={{ color: "var(--color-text-secondary)" }}
+          htmlFor="email"
+        >
+          {dict.email}
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          className="w-full rounded-apple-md px-4 py-3 text-sm transition-all duration-200"
+          style={authInputStyle}
+          placeholder="vous@exemple.sn"
+          autoComplete="email"
+          required
+          disabled={isPending}
+        />
       </div>
+
       <div>
-        <div className="flex items-center justify-between mb-1.5">
-          <label className="text-sm font-medium" style={{ color: "#d2d2d7" }} htmlFor="password">{dict.password}</label>
+        <div className="mb-1.5 flex items-center justify-between">
+          <label
+            className="text-sm font-medium"
+            style={{ color: "var(--color-text-secondary)" }}
+            htmlFor="password"
+          >
+            {dict.password}
+          </label>
           <Link
             href={localizedPath("/auth/forgot-password", locale)}
             className="text-xs hover:underline"
-            style={{ color: "#C9A84C" }}
+            style={{ color: "var(--color-primary-dark)" }}
           >
             {dict.forgotPassword}
           </Link>
         </div>
-        <input id="password" name="password" type="password"
-          className="w-full px-4 py-3 rounded-apple-md text-sm transition-all duration-200"
-          style={{ background: "#242424", border: "1px solid #2E2E2E", color: "#FFFFFF" }}
-          placeholder="••••••••" autoComplete="current-password" required disabled={isPending} />
+        <input
+          id="password"
+          name="password"
+          type="password"
+          className="w-full rounded-apple-md px-4 py-3 text-sm transition-all duration-200"
+          style={authInputStyle}
+          placeholder="********"
+          autoComplete="current-password"
+          required
+          disabled={isPending}
+        />
       </div>
+
       {error && (
-        <div className="px-4 py-3 rounded-apple-md text-sm"
-          style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", color: "#F87171" }}
-          role="alert" aria-live="polite">
+        <div
+          className="rounded-apple-md px-4 py-3 text-sm"
+          style={{
+            background: "rgba(184,138,84,0.08)",
+            border: "1px solid rgba(184,138,84,0.16)",
+            color: "var(--color-text)",
+          }}
+          role="alert"
+          aria-live="polite"
+        >
           {error}
         </div>
       )}
+
       <button type="submit" disabled={isPending} className="btn-primary w-full py-3.5">
         {isPending ? dict.signingIn : dict.signIn}
       </button>
@@ -89,11 +142,10 @@ export default function LoginPage() {
   const dict = dictionaries[locale].auth;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: "linear-gradient(135deg, #0D0D0D 0%, #1A1A1A 100%)" }}>
+    <div className="flex min-h-screen items-center justify-center p-4" style={authShellStyle}>
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <Link href={localizedPath("/", locale)} className="inline-block mb-4">
+        <div className="mb-8 text-center">
+          <Link href={localizedPath("/", locale)} className="mb-4 inline-block">
             <Image
               src="/icon.svg"
               alt={siteConfig.name}
@@ -102,22 +154,40 @@ export default function LoginPage() {
               style={{ objectFit: "contain" }}
             />
           </Link>
-          <h1 className="text-2xl font-semibold" style={{ color: "#FFFFFF" }}>
+          <h1
+            style={{
+              color: "var(--color-text)",
+              fontFamily: "var(--font-cormorant), serif",
+              fontSize: "2.4rem",
+              lineHeight: 0.98,
+            }}
+          >
             {dict.loginTitle(siteConfig.name)}
           </h1>
-          <p className="text-sm mt-1" style={{ color: "#6e6e73" }}>
+          <p className="mt-2 text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {dict.loginSubtitle}
           </p>
         </div>
 
-        <div className="rounded-apple-xl p-8"
-          style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.2)" }}>
-          <Suspense fallback={<div className="h-48 animate-pulse rounded-apple-md" style={{ background: "#242424" }} />}>
+        <div className="rounded-apple-xl p-8" style={authPanelStyle}>
+          <Suspense
+            fallback={
+              <div
+                className="h-48 animate-pulse rounded-apple-md"
+                style={{ background: "rgba(220,193,188,0.24)" }}
+              />
+            }
+          >
             <LoginForm />
           </Suspense>
-          <div className="mt-6 text-center text-sm" style={{ color: "#6e6e73" }}>
+
+          <div className="mt-6 text-center text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {dict.noAccount}{" "}
-            <Link href={localizedPath("/auth/register", locale)} className="font-medium hover:underline" style={{ color: "#C9A84C" }}>
+            <Link
+              href={localizedPath("/auth/register", locale)}
+              className="font-medium hover:underline"
+              style={{ color: "var(--color-primary-dark)" }}
+            >
               {dict.createAccount}
             </Link>
           </div>

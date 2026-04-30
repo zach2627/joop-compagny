@@ -12,7 +12,7 @@ export default function StoreLayout({
     <>
       <StoreBanner />
       <StoreNavbar />
-      <main className="pt-[96px]">
+      <main className="pt-[116px]">
         {children}
       </main>
       <StoreFooter />

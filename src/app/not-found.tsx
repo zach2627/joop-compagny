@@ -3,19 +3,19 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-apple-gray-50 px-4">
-      <div className="text-center max-w-md">
-        <svg viewBox="0 0 24 24" className="w-16 h-16 fill-apple-gray-200 mx-auto mb-6">
+    <div className="flex min-h-screen items-center justify-center bg-apple-gray-50 px-4">
+      <div className="max-w-md text-center">
+        <svg viewBox="0 0 24 24" className="mx-auto mb-6 h-16 w-16 fill-[#C9A84C]">
           <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
         </svg>
-        <h1 className="text-6xl font-bold text-apple-gray-200 mb-4">404</h1>
-        <h2 className="text-xl font-semibold text-apple-gray-900 mb-2">Page introuvable</h2>
-        <p className="text-apple-gray-500 mb-8">
-          La page que vous recherchez n&apos;existe pas ou a été déplacée.
+        <h1 className="mb-4 text-6xl font-bold text-white">404</h1>
+        <h2 className="mb-2 text-xl font-semibold text-white">Page introuvable</h2>
+        <p className="mb-8 text-[rgba(255,255,255,0.6)]">
+          La page que vous recherchez n&apos;existe pas ou a ete deplacee.
         </p>
-        <div className="flex gap-3 justify-center flex-wrap">
+        <div className="flex flex-wrap justify-center gap-3">
           <Link href="/" className="btn-primary px-6 py-3">
-            Retour à l&apos;accueil
+            Retour a l&apos;accueil
           </Link>
           <Link href="/store/products" className="btn-ghost px-6 py-3">
             Voir les produits

@@ -7,12 +7,12 @@ export function StoreBanner() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-50 flex items-center h-[var(--banner-height)]"
+      className="fixed left-0 right-0 top-0 z-50 flex h-[var(--banner-height)] items-center overflow-hidden"
       style={{
         background:
-          "linear-gradient(90deg, rgba(7,6,5,0.98) 0%, rgba(10,9,7,0.98) 100%)",
-        borderBottom: "1px solid rgba(214,179,93,0.16)",
-        overflow: "hidden",
+          "linear-gradient(90deg, rgba(10,10,8,0.96) 0%, rgba(18,18,13,0.98) 100%)",
+        borderBottom: "1px solid rgba(201,168,76,0.12)",
+        backdropFilter: "blur(14px)",
       }}
       aria-label={dict.banner.aria}
     >
@@ -25,7 +25,7 @@ export function StoreBanner() {
           display: flex;
           white-space: nowrap;
           will-change: transform;
-          animation: joop-marquee 28s linear infinite;
+          animation: joop-marquee 30s linear infinite;
         }
         .joop-marquee-track:hover {
           animation-play-state: paused;
@@ -35,10 +35,10 @@ export function StoreBanner() {
       <div className="joop-marquee-track" aria-hidden="true">
         <span
           style={{
-            color: "#d6b35d",
+            color: "var(--color-primary-dark)",
             fontSize: "10px",
             fontWeight: 600,
-            letterSpacing: "0.28em",
+            letterSpacing: "0.32em",
             textTransform: "uppercase",
             paddingRight: "4rem",
           }}
@@ -47,10 +47,10 @@ export function StoreBanner() {
         </span>
         <span
           style={{
-            color: "#d6b35d",
+            color: "rgba(255,255,255,0.56)",
             fontSize: "10px",
-            fontWeight: 600,
-            letterSpacing: "0.28em",
+            fontWeight: 500,
+            letterSpacing: "0.32em",
             textTransform: "uppercase",
             paddingRight: "4rem",
           }}

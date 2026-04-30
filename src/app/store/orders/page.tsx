@@ -1,25 +1,25 @@
-// src/app/store/orders/page.tsx
-import Image from "next/image";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { verifyAccessToken } from "@/lib/auth/jwt";
-import prisma from "@/lib/db/prisma";
 import type { Metadata } from "next";
+import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
+import { verifyAccessToken } from "@/lib/auth/jwt";
 import { getShippingAddressView } from "@/features/orders/shippingAddress";
-import { ORDER_STATUS_STYLE } from "@/lib/constants/orderStatus";
+import { productThumbnailImage } from "@/lib/images/cloudinary";
+import { getProductImageUrl } from "@/lib/images/product-gallery";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
+import { ORDER_STATUS_STYLE } from "@/lib/constants/orderStatus";
 import {
   translateProductContent,
   translateVariantName,
 } from "@/lib/i18n/product-content";
-import { getProductImageUrl } from "@/lib/images/product-gallery";
-import { productThumbnailImage } from "@/lib/images/cloudinary";
+import prisma from "@/lib/db/prisma";
 
 export function generateMetadata(): Metadata {
   const locale = getRequestLocale();
   const dict = getDictionary(locale);
+
   return {
     title: dict.account.orders,
     description: dict.account.trackOrders,
@@ -56,43 +56,61 @@ export default async function OrdersPage({ searchParams }: PageProps) {
   if (!token) {
     if (recentOrderNumber) {
       return (
-        <div style={{ background: "#0D0D0D", minHeight: "100vh" }} className="py-12 px-4">
-          <div className="max-w-lg mx-auto text-center space-y-6 pt-20">
-            <div className="text-6xl">✓</div>
-            <h1 className="text-2xl font-semibold" style={{ color: "#FFFFFF" }}>
+        <div
+          className="px-4 py-12"
+          style={{
+            minHeight: "100vh",
+            background:
+              "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+          }}
+        >
+          <div className="mx-auto max-w-lg space-y-6 pt-20 text-center">
+            <div
+              className="mx-auto flex h-20 w-20 items-center justify-center rounded-full text-xs font-semibold uppercase tracking-[0.28em]"
+              style={{
+                background: "rgba(17,17,9,0.86)",
+                border: "1px solid rgba(201,168,76,0.16)",
+                color: "var(--color-primary-dark)",
+              }}
+            >
+              JOOP
+            </div>
+            <h1
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "clamp(2.3rem, 5vw, 3.7rem)",
+                lineHeight: 0.96,
+              }}
+            >
               {dict.account.confirmed}
             </h1>
-            <p className="text-sm" style={{ color: "#86868b" }}>
-              {dict.account.receivedWithNumber(recentOrderNumber)}
-            </p>
-            <div
-              className="rounded-apple-xl p-5 text-left space-y-3"
-              style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.2)" }}
-            >
+            <p className="text-sm luxe-copy">{dict.account.receivedWithNumber(recentOrderNumber)}</p>
+
+            <div className="luxe-panel space-y-3 p-5 text-left">
               {[
-                { icon: "🚀", text: dict.account.deliveryInfo },
-                { icon: "📞", text: dict.account.phoneInfo },
-                { icon: "✅", text: dict.account.warrantyInfo },
+                { icon: "01", text: dict.account.deliveryInfo },
+                { icon: "02", text: dict.account.phoneInfo },
+                { icon: "03", text: dict.account.warrantyInfo },
               ].map(({ icon, text }) => (
                 <div
                   key={text}
                   className="flex items-center gap-3 text-sm"
-                  style={{ color: "#d2d2d7" }}
+                  style={{ color: "var(--color-text)" }}
                 >
-                  <span>{icon}</span>
+                  <span style={{ color: "var(--color-primary-dark)" }}>{icon}</span>
                   <span>{text}</span>
                 </div>
               ))}
             </div>
-            <div className="flex gap-3 justify-center flex-wrap">
-              <Link href={localizedPath("/store/products", locale)} className="btn-primary px-6 py-2.5 text-sm">
+
+            <div className="flex flex-wrap justify-center gap-3">
+              <Link
+                href={localizedPath("/store/products", locale)}
+                className="btn-primary px-6 py-2.5 text-sm"
+              >
                 {dict.account.continueShopping}
               </Link>
-              <Link
-                href={localizedPath("/auth/login", locale)}
-                className="text-sm px-6 py-2.5 rounded-full transition-all"
-                style={{ color: "#C9A84C", border: "1px solid rgba(201,168,76,0.3)" }}
-              >
+              <Link href={localizedPath("/auth/login", locale)} className="btn-secondary px-6 py-2.5 text-sm">
                 {dict.account.createAccount}
               </Link>
             </div>
@@ -126,62 +144,87 @@ export default async function OrdersPage({ searchParams }: PageProps) {
   });
 
   return (
-    <div style={{ background: "#0D0D0D", minHeight: "100vh" }} className="py-12 px-4">
-      <div className="max-w-3xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+    <div
+      className="px-4 py-10 md:py-14"
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+      }}
+    >
+      <div className="mx-auto max-w-4xl space-y-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <p
-              className="text-xs font-semibold tracking-widest uppercase mb-1"
-              style={{ color: "#C9A84C" }}
+            <p className="luxe-kicker mb-1">{dict.account.personalSpace}</p>
+            <h1
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "clamp(2.3rem, 4vw, 3.8rem)",
+                lineHeight: 0.96,
+              }}
             >
-              {dict.account.personalSpace}
-            </p>
-            <h1 className="text-2xl font-semibold" style={{ color: "#FFFFFF" }}>
               {dict.account.orders}
             </h1>
-            <p className="text-sm mt-1" style={{ color: "#6e6e73" }}>
+            <p className="mt-2 text-sm" style={{ color: "var(--color-text-secondary)" }}>
               {dict.account.ordersCount(orders.length)}
             </p>
           </div>
-          <Link
-            href={localizedPath("/store/account", locale)}
-            className="text-sm px-4 py-2 rounded-full transition-all duration-200"
-            style={{ color: "#C9A84C", border: "1px solid rgba(201,168,76,0.3)" }}
-          >
+
+          <Link href={localizedPath("/store/account", locale)} className="btn-secondary">
             {dict.account.backToAccount}
           </Link>
         </div>
 
-        {recentOrderNumber && (
+        {recentOrderNumber ? (
           <div
-            className="rounded-apple-xl p-5 flex items-center gap-4"
-            style={{ background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)" }}
+            className="flex items-center gap-4 rounded-[28px] p-5"
+            style={{
+              background: "rgba(184,138,84,0.1)",
+              border: "1px solid rgba(184,138,84,0.16)",
+            }}
           >
-            <span className="text-2xl">✓</span>
+            <span
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full"
+              style={{
+                background: "rgba(17,17,9,0.84)",
+                color: "var(--color-primary-dark)",
+              }}
+            >
+              OK
+            </span>
             <div>
-              <p className="font-semibold" style={{ color: "#4ADE80" }}>
+              <p className="font-semibold" style={{ color: "var(--color-primary-dark)" }}>
                 {dict.account.confirmed}
               </p>
-              <p className="text-sm mt-0.5" style={{ color: "#86868b" }}>
+              <p className="mt-0.5 text-sm" style={{ color: "var(--color-text-secondary)" }}>
                 {dict.account.receivedWithNumber(recentOrderNumber)}
               </p>
             </div>
           </div>
-        )}
+        ) : null}
 
         {orders.length === 0 ? (
-          <div
-            className="rounded-apple-xl p-12 text-center"
-            style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.15)" }}
-          >
-            <p className="text-4xl mb-4">🛍️</p>
-            <p className="font-medium mb-2" style={{ color: "#FFFFFF" }}>
+          <div className="luxe-panel p-12 text-center">
+            <p
+              className="mb-4"
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "3rem",
+                color: "var(--color-primary-dark)",
+              }}
+            >
+              Bag
+            </p>
+            <p className="mb-2 font-medium" style={{ color: "var(--color-text)" }}>
               {dict.account.empty}
             </p>
-            <p className="text-sm mb-6" style={{ color: "#6e6e73" }}>
+            <p className="mb-6 text-sm" style={{ color: "var(--color-text-secondary)" }}>
               {dict.account.emptyText}
             </p>
-            <Link href={localizedPath("/store/products", locale)} className="btn-primary px-6 py-2.5 text-sm">
+            <Link
+              href={localizedPath("/store/products", locale)}
+              className="btn-primary px-6 py-2.5 text-sm"
+            >
               {dict.account.discover}
             </Link>
           </div>
@@ -198,96 +241,108 @@ export default async function OrdersPage({ searchParams }: PageProps) {
                 .join(", ");
 
               return (
-              <div
-                key={order.id}
-                className="rounded-apple-xl overflow-hidden"
-                style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.15)" }}
-              >
                 <div
-                  className="flex items-center justify-between px-6 py-4"
-                  style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+                  key={order.id}
+                  className="overflow-hidden rounded-[30px]"
+                  style={{
+                    background: "rgba(17,17,9,0.84)",
+                    border: "1px solid rgba(201,168,76,0.12)",
+                    boxShadow: "0 20px 46px rgba(0,0,0,0.32)",
+                  }}
                 >
-                  <div>
-                    <p className="font-semibold text-sm" style={{ color: "#FFFFFF" }}>
-                      {order.orderNumber}
-                    </p>
-                    <p className="text-xs mt-0.5" style={{ color: "#6e6e73" }}>
-                      {new Date(order.createdAt).toLocaleDateString(dateLocale, {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                      {" · "}
-                      {paymentMethodLabel[order.paymentMethod] ?? order.paymentMethod}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="text-xs px-3 py-1 rounded-full font-medium"
-                      style={statusStyle[order.status] ?? statusStyle.PENDING}
-                    >
-                      {statusLabel[order.status] ?? order.status}
-                    </span>
-                    <p className="text-sm font-bold" style={{ color: "#C9A84C" }}>
-                      {Number(order.total).toLocaleString(dateLocale)} F
-                    </p>
-                  </div>
-                </div>
-                <div className="px-6 py-4 space-y-3">
-                  {order.items.map((item) => {
-                    const productText = translateProductContent(locale, item.product);
-                    const variantName = translateVariantName(
-                      locale,
-                      item.product.slug,
-                      item.variant.name
-                    );
-                    const imageUrl = getProductImageUrl(item.product.slug, {
-                      color: item.variant.color,
-                      fallbackUrl: item.product.images[0]?.url,
-                    });
-
-                    return (
-                    <div key={item.id} className="flex items-center gap-4">
-                      <div
-                        className="w-14 h-14 rounded-apple-md overflow-hidden shrink-0 flex items-center justify-center"
-                        style={{ background: "#242424" }}
-                      >
-                        {imageUrl ? (
-                          <Image
-                            src={productThumbnailImage(imageUrl)}
-                            alt={productText.name}
-                            width={56}
-                            height={56}
-                            className="w-full h-full object-contain p-1"
-                          />
-                        ) : (
-                          <span className="text-xl">📦</span>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate" style={{ color: "#FFFFFF" }}>
-                          {productText.name}
-                        </p>
-                        <p className="text-xs mt-0.5" style={{ color: "#6e6e73" }}>
-                        {variantName} · {dict.account.quantity}: {item.quantity}
-                        </p>
-                      </div>
-                      <p className="text-sm font-semibold shrink-0" style={{ color: "#d2d2d7" }}>
-                        {Number(item.totalPrice).toLocaleString(dateLocale)} F
+                  <div
+                    className="flex flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between"
+                    style={{ borderBottom: "1px solid rgba(184,138,84,0.08)" }}
+                  >
+                    <div>
+                      <p className="text-sm font-semibold" style={{ color: "var(--color-text)" }}>
+                        {order.orderNumber}
+                      </p>
+                      <p className="mt-1 text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                        {new Date(order.createdAt).toLocaleDateString(dateLocale, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}{" "}
+                        - {paymentMethodLabel[order.paymentMethod] ?? order.paymentMethod}
                       </p>
                     </div>
-                    );
-                  })}
-                </div>
-                {addressLine && (
-                  <div
-                    className="px-6 py-3 text-xs"
-                    style={{ borderTop: "1px solid rgba(255,255,255,0.06)", color: "#6e6e73" }}
-                  >
-                    📍 {addressLine}
+
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="rounded-full px-3 py-1 text-xs font-medium"
+                        style={statusStyle[order.status] ?? statusStyle.PENDING}
+                      >
+                        {statusLabel[order.status] ?? order.status}
+                      </span>
+                      <p className="text-sm font-bold" style={{ color: "var(--color-primary-dark)" }}>
+                        {Number(order.total).toLocaleString(dateLocale)} F
+                      </p>
+                    </div>
                   </div>
-                )}
-              </div>
+
+                  <div className="space-y-3 px-6 py-4">
+                    {order.items.map((item) => {
+                      const productText = translateProductContent(locale, item.product);
+                      const variantName = translateVariantName(
+                        locale,
+                        item.product.slug,
+                        item.variant.name
+                      );
+                      const imageUrl = getProductImageUrl(item.product.slug, {
+                        color: item.variant.color,
+                        fallbackUrl: item.product.images[0]?.url,
+                      });
+
+                      return (
+                        <div key={item.id} className="flex items-center gap-4">
+                          <div
+                            className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-[18px]"
+                            style={{
+                              background:
+                                "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
+                            }}
+                          >
+                            <ProductImageFallback
+                              src={productThumbnailImage(imageUrl)}
+                              alt={productText.name}
+                              label={productText.name}
+                              width={56}
+                              height={56}
+                              imageClassName="h-full w-full object-contain p-1"
+                              fallbackClassName="h-full w-full"
+                            />
+                          </div>
+
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium" style={{ color: "var(--color-text)" }}>
+                              {productText.name}
+                            </p>
+                            <p className="mt-0.5 text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                              {variantName} - {dict.account.quantity}: {item.quantity}
+                            </p>
+                          </div>
+
+                          <p className="shrink-0 text-sm font-semibold" style={{ color: "var(--color-text)" }}>
+                            {Number(item.totalPrice).toLocaleString(dateLocale)} F
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {addressLine ? (
+                    <div
+                      className="px-6 py-3 text-xs"
+                      style={{
+                        borderTop: "1px solid rgba(184,138,84,0.08)",
+                        color: "var(--color-text-secondary)",
+                      }}
+                    >
+                      Adresse: {addressLine}
+                    </div>
+                  ) : null}
+                </div>
               );
             })}
           </div>

@@ -1,11 +1,27 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { DEFAULT_LOCALE, getPathLocale, localizedPath } from "@/lib/i18n/config";
 import { dictionaries } from "@/lib/i18n/translations";
+
+const authShellStyle = {
+  background:
+    "radial-gradient(circle at top right, rgba(201,168,76,0.14), transparent 24%), linear-gradient(180deg, #0a0a08 0%, #15150f 100%)",
+};
+const authPanelStyle = {
+  background: "rgba(17,17,9,0.84)",
+  border: "1px solid rgba(201,168,76,0.16)",
+  boxShadow: "0 28px 64px rgba(0,0,0,0.36)",
+  backdropFilter: "blur(18px)",
+};
+const authInputStyle = {
+  background: "rgba(17,17,9,0.92)",
+  border: "1px solid rgba(201,168,76,0.14)",
+  color: "var(--color-text)",
+};
 
 export default function ForgotPasswordPage() {
   const pathname = usePathname();
@@ -41,43 +57,43 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: "linear-gradient(135deg, #0D0D0D 0%, #1A1A1A 100%)" }}
-    >
+    <div className="flex min-h-screen items-center justify-center p-4" style={authShellStyle}>
       <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <Link href={localizedPath("/", locale)} className="inline-block mb-4">
-            <Image
-              src="/icon.svg"
-              alt="JOOP COMPAGNY"
-              width={48}
-              height={48}
-              style={{ objectFit: "contain" }}
-            />
+        <div className="mb-8 text-center">
+          <Link href={localizedPath("/", locale)} className="mb-4 inline-block">
+            <Image src="/icon.svg" alt="JOOP COMPAGNY" width={48} height={48} />
           </Link>
-          <h1 className="text-2xl font-semibold" style={{ color: "#FFFFFF" }}>
+          <h1
+            style={{
+              color: "var(--color-text)",
+              fontFamily: "var(--font-cormorant), serif",
+              fontSize: "2.4rem",
+              lineHeight: 0.98,
+            }}
+          >
             {dict.forgotTitle}
           </h1>
-          <p className="text-sm mt-1" style={{ color: "#6e6e73" }}>
+          <p className="mt-2 text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {dict.forgotSubtitle}
           </p>
         </div>
 
-        <div
-          className="rounded-apple-xl p-8"
-          style={{ background: "#1A1A1A", border: "1px solid rgba(201,168,76,0.2)" }}
-        >
+        <div className="rounded-apple-xl p-8" style={authPanelStyle}>
           {status === "success" ? (
-            <div className="text-center py-4">
+            <div className="py-4 text-center">
               <div
-                className="w-14 h-14 rounded-full mx-auto mb-4 flex items-center justify-center"
+                className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
                 style={{
-                  background: "rgba(201,168,76,0.1)",
-                  border: "1px solid rgba(201,168,76,0.3)",
+                  background: "rgba(184,138,84,0.08)",
+                  border: "1px solid rgba(184,138,84,0.16)",
                 }}
               >
-                <svg className="w-7 h-7" fill="none" stroke="#C9A84C" viewBox="0 0 24 24">
+                <svg
+                  className="h-7 w-7"
+                  fill="none"
+                  stroke="var(--color-primary-dark)"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -86,12 +102,14 @@ export default function ForgotPasswordPage() {
                   />
                 </svg>
               </div>
-              <p className="font-semibold text-white mb-2">{dict.emailSent}</p>
-              <p className="text-sm leading-relaxed" style={{ color: "#6e6e73" }}>
-                {dict.forgotSuccessPrefix} <span style={{ color: "#d2d2d7" }}>{email}</span>,{" "}
+              <p className="mb-2 font-semibold" style={{ color: "var(--color-text)" }}>
+                {dict.emailSent}
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--color-text-secondary)" }}>
+                {dict.forgotSuccessPrefix} <span style={{ color: "var(--color-text)" }}>{email}</span>,{" "}
                 {dict.forgotSuccessSuffix}
               </p>
-              <p className="text-xs mt-3" style={{ color: "#3a3a3f" }}>
+              <p className="mt-3 text-xs" style={{ color: "var(--color-text-tertiary)" }}>
                 {dict.checkSpam}
               </p>
             </div>
@@ -99,8 +117,8 @@ export default function ForgotPasswordPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label
-                  className="block text-sm font-medium mb-1.5"
-                  style={{ color: "#d2d2d7" }}
+                  className="mb-1.5 block text-sm font-medium"
+                  style={{ color: "var(--color-text-secondary)" }}
                   htmlFor="email"
                 >
                   {dict.email}
@@ -110,8 +128,8 @@ export default function ForgotPasswordPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-apple-md text-sm transition-all duration-200"
-                  style={{ background: "#242424", border: "1px solid #2E2E2E", color: "#FFFFFF" }}
+                  className="w-full rounded-apple-md px-4 py-3 text-sm transition-all duration-200"
+                  style={authInputStyle}
                   placeholder="vous@exemple.sn"
                   autoComplete="email"
                   required
@@ -121,11 +139,11 @@ export default function ForgotPasswordPage() {
 
               {status === "error" && error && (
                 <div
-                  className="px-4 py-3 rounded-apple-md text-sm"
+                  className="rounded-apple-md px-4 py-3 text-sm"
                   style={{
-                    background: "rgba(239,68,68,0.1)",
-                    border: "1px solid rgba(239,68,68,0.3)",
-                    color: "#F87171",
+                    background: "rgba(184,138,84,0.08)",
+                    border: "1px solid rgba(184,138,84,0.16)",
+                    color: "var(--color-text)",
                   }}
                 >
                   {error}
@@ -142,11 +160,11 @@ export default function ForgotPasswordPage() {
             </form>
           )}
 
-          <div className="mt-6 text-center text-sm" style={{ color: "#6e6e73" }}>
+          <div className="mt-6 text-center text-sm" style={{ color: "var(--color-text-secondary)" }}>
             <Link
               href={localizedPath("/auth/login", locale)}
               className="font-medium hover:underline"
-              style={{ color: "#C9A84C" }}
+              style={{ color: "var(--color-primary-dark)" }}
             >
               {dict.backToLogin}
             </Link>

@@ -5,7 +5,7 @@ export default function Loading() {
   return (
     <div
       className="min-h-screen flex items-center justify-center"
-      style={{ background: "#080808" }}
+      style={{ background: "#0A0A08" }}
     >
       <div className="flex flex-col items-center gap-5">
         {/* Spinner */}
@@ -21,7 +21,7 @@ export default function Loading() {
           <span className="text-xs font-bold tracking-[0.25em] uppercase" style={{ color: "#C9A84C" }}>
             JOOP
           </span>
-          <span className="text-[10px] tracking-widest uppercase" style={{ color: "#3a3a3f" }}>
+          <span className="text-[10px] tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.4)" }}>
             COMPAGNY
           </span>
         </div>

@@ -53,20 +53,30 @@ export function ProductFilters({
   ];
 
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-7 rounded-[30px] p-5 md:p-6"
+      style={{
+        background: "rgba(17,17,9,0.84)",
+        border: "1px solid rgba(201,168,76,0.14)",
+        boxShadow: "0 24px 56px rgba(0,0,0,0.34)",
+        backdropFilter: "blur(18px)",
+      }}
+    >
       <div>
-        <h3 className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#f6c668" }}>
-          {labels.category}
-        </h3>
-        <ul className="space-y-1">
+        <h3 className="luxe-kicker mb-3">{labels.category}</h3>
+        <ul className="space-y-1.5">
           <li>
             <button
               onClick={() => updateFilters({ category: undefined })}
-              className="w-full text-left text-sm px-3 py-2 rounded-2xl transition-colors"
+              className="w-full rounded-2xl px-3 py-2 text-left text-sm transition-colors"
               style={
                 !currentFilters.category
-                  ? { background: "rgba(246,198,104,0.14)", color: "#fff6fb" }
-                  : { color: "#d6bfd0" }
+                  ? {
+                      background: "rgba(184,138,84,0.12)",
+                      border: "1px solid rgba(201,168,76,0.14)",
+                      color: "var(--color-text)",
+                    }
+                  : { color: "var(--color-text-secondary)" }
               }
             >
               {labels.all}
@@ -76,15 +86,19 @@ export function ProductFilters({
             <li key={cat.slug}>
               <button
                 onClick={() => updateFilters({ category: cat.slug })}
-                className="w-full text-left text-sm px-3 py-2 rounded-2xl transition-colors flex justify-between"
+                className="flex w-full justify-between rounded-2xl px-3 py-2 text-left text-sm transition-colors"
                 style={
                   currentFilters.category === cat.slug
-                    ? { background: "rgba(246,198,104,0.14)", color: "#fff6fb" }
-                    : { color: "#d6bfd0" }
+                    ? {
+                        background: "rgba(184,138,84,0.12)",
+                        border: "1px solid rgba(201,168,76,0.14)",
+                        color: "var(--color-text)",
+                      }
+                    : { color: "var(--color-text-secondary)" }
                 }
               >
                 <span>{cat.name}</span>
-                <span className="opacity-60 text-xs">{cat.count}</span>
+                <span style={{ color: "var(--color-text-tertiary)" }}>{cat.count}</span>
               </button>
             </li>
           ))}
@@ -92,13 +106,12 @@ export function ProductFilters({
       </div>
 
       <div>
-        <h3 className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#f6c668" }}>
-          {labels.price}
-        </h3>
-        <ul className="space-y-1">
+        <h3 className="luxe-kicker mb-3">{labels.price}</h3>
+        <ul className="space-y-1.5">
           {priceRanges.map(({ label, min, max }) => {
             const isActive =
               currentFilters.minPrice === min && currentFilters.maxPrice === max;
+
             return (
               <li key={label}>
                 <button
@@ -108,11 +121,14 @@ export function ProductFilters({
                       maxPrice: max?.toString(),
                     })
                   }
-                  className="w-full text-left text-sm px-3 py-2 rounded-2xl transition-colors"
+                  className="w-full rounded-2xl px-3 py-2 text-left text-sm transition-colors"
                   style={
                     isActive
-                      ? { background: "rgba(246,198,104,0.14)", color: "#fff6fb" }
-                      : { color: "#d6bfd0" }
+                      ? {
+                          background: "rgba(184,138,84,0.12)",
+                          color: "var(--color-text)",
+                        }
+                      : { color: "var(--color-text-secondary)" }
                   }
                 >
                   {label}
@@ -125,9 +141,7 @@ export function ProductFilters({
 
       {formatOptions.length > 0 && (
         <div>
-          <h3 className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "#f6c668" }}>
-            {labels.storage}
-          </h3>
+          <h3 className="luxe-kicker mb-3">{labels.storage}</h3>
           <div className="flex flex-wrap gap-2">
             {formatOptions.map((storage) => (
               <button
@@ -137,17 +151,17 @@ export function ProductFilters({
                     storage: currentFilters.storage === storage ? undefined : storage,
                   })
                 }
-                className="px-3 py-1.5 text-xs rounded-full border transition-colors"
+                className="rounded-full border px-3 py-1.5 text-xs transition-colors"
                 style={
                   currentFilters.storage === storage
                     ? {
-                        borderColor: "#f6c668",
-                        background: "rgba(246,198,104,0.14)",
-                        color: "#fff6fb",
+                        borderColor: "rgba(184,138,84,0.3)",
+                        background: "rgba(184,138,84,0.12)",
+                        color: "var(--color-text)",
                       }
                     : {
-                        borderColor: "rgba(246,198,104,0.16)",
-                        color: "#d6bfd0",
+                        borderColor: "rgba(184,138,84,0.12)",
+                        color: "var(--color-text-secondary)",
                       }
                 }
               >
@@ -159,16 +173,16 @@ export function ProductFilters({
       )}
 
       <div>
-        <label className="flex items-center gap-2.5 cursor-pointer">
+        <label className="flex cursor-pointer items-center gap-2.5">
           <input
             type="checkbox"
             checked={currentFilters.inStock ?? false}
             onChange={(event) =>
               updateFilters({ inStock: event.target.checked ? "true" : undefined })
             }
-            className="w-4 h-4 rounded accent-[#f6c668]"
+            className="h-4 w-4 rounded accent-[#c9a84c]"
           />
-          <span className="text-sm" style={{ color: "#d6bfd0" }}>
+          <span className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
             {labels.inStockOnly}
           </span>
         </label>
@@ -179,7 +193,11 @@ export function ProductFilters({
         currentFilters.maxPrice ||
         currentFilters.storage ||
         currentFilters.inStock) && (
-        <button onClick={() => router.push(resetHref)} className="text-sm" style={{ color: "#f6c668" }}>
+        <button
+          onClick={() => router.push(resetHref)}
+          className="text-sm"
+          style={{ color: "var(--color-primary-dark)" }}
+        >
           {labels.resetFilters}
         </button>
       )}

@@ -16,57 +16,48 @@ export function StoreFooter() {
     <footer
       style={{
         background:
-          "radial-gradient(circle at top left, rgba(214,179,93,0.1), transparent 18%), linear-gradient(180deg, #080706 0%, #0d0b09 100%)",
-        borderTop: "1px solid rgba(214,179,93,0.15)",
+          "linear-gradient(180deg, rgba(10,10,8,0.96) 0%, rgba(18,18,13,0.98) 100%)",
+        borderTop: "1px solid rgba(201,168,76,0.14)",
       }}
     >
-      <div className="container-xl py-14">
-        <div className="mb-10 grid grid-cols-1 gap-8 md:grid-cols-3">
-          <div className="flex flex-col items-start">
-            <div className="mb-5">
-              <p
-                className="text-[1.1rem] uppercase"
-                style={{
-                  color: "#d6b35d",
-                  letterSpacing: "0.36em",
-                  fontFamily: 'Georgia, "Times New Roman", serif',
-                }}
-              >
-                JOOP
-              </p>
-              <p
-                className="mt-2 text-[0.98rem] uppercase"
-                style={{
-                  color: "#d6b35d",
-                  letterSpacing: "0.22em",
-                  fontFamily: 'Georgia, "Times New Roman", serif',
-                }}
-              >
-                COMPAGNY
-              </p>
-            </div>
+      <div className="container-xl py-16 md:py-20">
+        <div
+          className="luxe-panel mb-10 grid gap-10 p-8 md:grid-cols-[minmax(0,1.1fr)_repeat(2,minmax(0,0.8fr))] md:p-10"
+        >
+          <div className="max-w-[420px]">
             <p
-              className="max-w-sm text-sm leading-relaxed"
-              style={{ color: "rgba(235,226,212,0.74)" }}
+              className="text-[1.18rem] uppercase"
+              style={{
+                color: "var(--color-primary-dark)",
+                letterSpacing: "0.36em",
+                fontFamily: 'var(--font-cormorant), "Cormorant Garamond", Georgia, serif',
+              }}
             >
+              JOOP
+            </p>
+            <p
+              className="mt-1 text-[0.84rem] uppercase"
+              style={{
+                color: "rgba(255,255,255,0.5)",
+                letterSpacing: "0.28em",
+              }}
+            >
+              Compagny
+            </p>
+            <p className="mt-6 text-sm leading-8" style={{ color: "var(--color-text-secondary)" }}>
               {dict.footer.description}
             </p>
           </div>
 
           <div>
-            <h3
-              className="mb-4 text-xs font-semibold uppercase tracking-widest"
-              style={{ color: "#f6c668" }}
-            >
-              {dict.footer.products}
-            </h3>
-            <div className="space-y-2">
+            <h3 className="luxe-kicker">{dict.footer.products}</h3>
+            <div className="mt-5 space-y-3">
               {productLinks.map(({ href, label }) => (
                 <Link
                   key={href}
                   href={href}
-                  className="block text-sm transition-colors hover:underline"
-                  style={{ color: "#f7eef5" }}
+                  className="block text-sm transition-colors duration-300"
+                  style={{ color: "var(--color-text-secondary)" }}
                 >
                   {label}
                 </Link>
@@ -75,23 +66,15 @@ export function StoreFooter() {
           </div>
 
           <div>
-            <h3
-              className="mb-4 text-xs font-semibold uppercase tracking-widest"
-              style={{ color: "#f6c668" }}
-            >
-              {dict.footer.contact}
-            </h3>
-            <div className="space-y-3 text-sm" style={{ color: "#f7eef5" }}>
+            <h3 className="luxe-kicker">{dict.footer.contact}</h3>
+            <div className="mt-5 space-y-3 text-sm" style={{ color: "var(--color-text-secondary)" }}>
               <p>{dict.footer.location}</p>
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="block transition-colors hover:underline"
-              >
+              <a href={`mailto:${siteConfig.email}`} className="block transition-colors duration-300">
                 {siteConfig.email}
               </a>
               <a
                 href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
-                className="block transition-colors hover:underline"
+                className="block transition-colors duration-300"
               >
                 {siteConfig.phone}
               </a>
@@ -101,15 +84,13 @@ export function StoreFooter() {
         </div>
 
         <div
-          className="flex flex-col items-center justify-between gap-4 pt-6 md:flex-row"
-          style={{ borderTop: "1px solid rgba(214,179,93,0.12)" }}
+          className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left"
+          style={{ color: "var(--color-text-tertiary)" }}
         >
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>
+          <p className="text-xs">
             {new Date().getFullYear()} {siteConfig.name}. {dict.footer.rights}
           </p>
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>
-            {siteConfig.tagline}
-          </p>
+          <p className="text-xs uppercase tracking-[0.24em]">{siteConfig.tagline}</p>
         </div>
       </div>
     </footer>

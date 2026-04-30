@@ -64,7 +64,7 @@ export default async function AnalyticsPage() {
       sub: `Ce mois : ${formatXOF(data.revenue.month)}`,
       change: data.revenue.growth,
       icon: DollarSign,
-      color: "blue",
+      color: "gold",
     },
     {
       title: "Commandes totales",
@@ -72,7 +72,7 @@ export default async function AnalyticsPage() {
       sub: `Ce mois : ${data.orders.month}`,
       change: null,
       icon: ShoppingBag,
-      color: "green",
+      color: "surface",
     },
     {
       title: "Clients",
@@ -80,7 +80,7 @@ export default async function AnalyticsPage() {
       sub: `+${data.customers.new} ce mois`,
       change: null,
       icon: Users,
-      color: "purple",
+      color: "surface",
     },
     {
       title: "Croissance vs mois dernier",
@@ -88,15 +88,13 @@ export default async function AnalyticsPage() {
       sub: `Mois dernier : ${formatXOF(data.revenue.lastMonth)}`,
       change: data.revenue.growth,
       icon: BarChart3,
-      color: "orange",
+      color: "gold",
     },
   ];
 
   const colorMap: Record<string, { bg: string; text: string }> = {
-    blue: { bg: "bg-blue-50", text: "text-blue-600" },
-    green: { bg: "bg-green-50", text: "text-green-600" },
-    purple: { bg: "bg-amber-50", text: "text-amber-600" },
-    orange: { bg: "bg-orange-50", text: "text-orange-600" },
+    gold: { bg: "bg-amber-50", text: "text-amber-600" },
+    surface: { bg: "bg-white", text: "text-apple-gray-500" },
   };
 
   return (
@@ -118,7 +116,7 @@ export default async function AnalyticsPage() {
               {change !== null && (
                 <div
                   className={`flex items-center gap-1 text-xs font-medium ${
-                    change >= 0 ? "text-green-600" : "text-red-600"
+                    change >= 0 ? "text-apple-blue" : "text-apple-gray-500"
                   }`}
                 >
                   {change >= 0 ? (
