@@ -95,16 +95,16 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
             {product.name}
           </h3>
           {product.shortDescription && (
-            <p className="text-xs mb-3 line-clamp-2 leading-relaxed" style={{ color: "#e3c5d7" }}>
+            <p className="text-xs mb-3 line-clamp-2 leading-relaxed" style={{ color: "rgba(235,226,212,0.7)" }}>
               {product.shortDescription}
             </p>
           )}
           <div className="flex items-center gap-2">
-            <span className="text-sm font-bold tabular-nums" style={{ color: isOnSale ? "#ff8b5d" : "#fff7fb" }}>
+            <span className="text-sm font-bold tabular-nums" style={{ color: isOnSale ? "#C9A84C" : "#f6f1e8" }}>
               {formatXOF(product.price)}
             </span>
             {isOnSale && product.compareAtPrice && (
-              <span className="text-xs tabular-nums line-through" style={{ color: "#a67a9b" }}>
+              <span className="text-xs tabular-nums line-through" style={{ color: "rgba(255,255,255,0.38)" }}>
                 {formatXOF(product.compareAtPrice)}
               </span>
             )}

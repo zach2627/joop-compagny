@@ -444,8 +444,7 @@ export function ProductEditForm({ product }: { product: ProductData }) {
 
       {/* ── Feedback + Actions ────────────────────────────────────────────── */}
       {error && (
-        <div className="px-4 py-3 rounded-apple-md text-sm"
-          style={{ background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#dc2626" }}>
+        <div className="px-4 py-3 rounded-apple-md text-sm border border-red-400/25 bg-red-500/10 text-red-300">
           {error}
         </div>
       )}

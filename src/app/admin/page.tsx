@@ -77,7 +77,7 @@ export default async function AdminDashboard() {
                     ? "bg-green-50"
                     : color === "amber"
                     ? "bg-amber-50"
-                    : "bg-purple-50"
+                    : "bg-amber-50"
                 }`}
               >
                 <Icon
@@ -88,7 +88,7 @@ export default async function AdminDashboard() {
                       ? "text-green-600"
                       : color === "amber"
                       ? "text-amber-600"
-                      : "text-purple-600"
+                      : "text-amber-600"
                   }`}
                 />
               </div>

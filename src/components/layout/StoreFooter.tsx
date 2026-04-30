@@ -47,7 +47,7 @@ export function StoreFooter() {
             </div>
             <p
               className="max-w-sm text-sm leading-relaxed"
-              style={{ color: "#f0d3e4" }}
+              style={{ color: "rgba(235,226,212,0.74)" }}
             >
               {dict.footer.description}
             </p>
@@ -104,10 +104,10 @@ export function StoreFooter() {
           className="flex flex-col items-center justify-between gap-4 pt-6 md:flex-row"
           style={{ borderTop: "1px solid rgba(214,179,93,0.12)" }}
         >
-          <p className="text-xs" style={{ color: "#a67a9b" }}>
+          <p className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>
             {new Date().getFullYear()} {siteConfig.name}. {dict.footer.rights}
           </p>
-          <p className="text-xs" style={{ color: "#a67a9b" }}>
+          <p className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>
             {siteConfig.tagline}
           </p>
         </div>

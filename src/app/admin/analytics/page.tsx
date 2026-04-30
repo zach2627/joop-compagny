@@ -95,7 +95,7 @@ export default async function AnalyticsPage() {
   const colorMap: Record<string, { bg: string; text: string }> = {
     blue: { bg: "bg-blue-50", text: "text-blue-600" },
     green: { bg: "bg-green-50", text: "text-green-600" },
-    purple: { bg: "bg-purple-50", text: "text-purple-600" },
+    purple: { bg: "bg-amber-50", text: "text-amber-600" },
     orange: { bg: "bg-orange-50", text: "text-orange-600" },
   };
 

@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { StoreBanner } from "@/components/layout/StoreBanner";
 import { StoreFooter } from "@/components/layout/StoreFooter";
 import { StoreNavbar } from "@/components/layout/StoreNavbar";
 import { HeroCarousel } from "@/components/ui/HeroCarousel";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { siteConfig } from "@/config/site";
+import { seoConfig } from "@/config/seo";
 import { getFeaturedProducts, getCategories } from "@/features/products/service";
 import { formatXOF } from "@/features/payment/paydunya";
 import type { Locale } from "@/lib/i18n/config";
@@ -19,6 +21,28 @@ import {
 import { translateCategory } from "@/lib/i18n/translations";
 
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getRequestLocale();
+  const isEn = locale === "en";
+  return {
+    title: isEn ? seoConfig.defaultTitleEn : seoConfig.defaultTitle,
+    description: isEn ? seoConfig.defaultDescriptionEn : seoConfig.defaultDescription,
+    openGraph: {
+      title: isEn ? seoConfig.defaultTitleEn : seoConfig.defaultTitle,
+      description: isEn ? seoConfig.defaultDescriptionEn : seoConfig.defaultDescription,
+      url: seoConfig.siteUrl,
+      siteName: seoConfig.siteName,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: isEn ? seoConfig.defaultTitleEn : seoConfig.defaultTitle,
+      description: isEn ? seoConfig.defaultDescriptionEn : seoConfig.defaultDescription,
+      site: seoConfig.twitterHandle,
+    },
+  };
+}
 
 type FeaturedProduct = Awaited<ReturnType<typeof getFeaturedProducts>>[number];
 type StoreCategory = Awaited<ReturnType<typeof getCategories>>[number];

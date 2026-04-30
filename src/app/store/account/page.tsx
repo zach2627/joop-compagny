@@ -1,5 +1,11 @@
 // src/app/store/account/page.tsx
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Mon compte | JOOP COMPAGNY",
+  robots: { index: false, follow: false },
+};
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
