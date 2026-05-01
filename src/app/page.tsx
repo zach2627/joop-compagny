@@ -908,20 +908,26 @@ export default async function HomePage() {
                       (reason: { title: string; desc: string }, index: number) => (
                         <div
                           key={reason.title}
-                          className="rounded-[24px] p-5"
+                          className="p-5"
                           style={{
-                            background:
-                              index === 1
-                                ? "rgba(220,193,188,0.24)"
-                                : "rgba(255,255,255,0.34)",
-                            border: "1px solid rgba(184,138,84,0.1)",
+                            background: "#111109",
+                            border: "0.5px solid rgba(201,168,76,0.15)",
+                            borderRadius: "8px",
                           }}
                         >
-                          <p className="luxe-kicker">0{index + 1}</p>
-                          <h3 className="mt-4 text-2xl text-balance" style={{ lineHeight: 1.02 }}>
+                          <p className="text-[11px] uppercase tracking-[0.34em]" style={{ color: "#C9A84C" }}>0{index + 1}</p>
+                          <h3
+                            className="mt-4 text-2xl text-balance"
+                            style={{
+                              fontFamily: "var(--font-cormorant), serif",
+                              fontStyle: "italic",
+                              color: "#FFFFFF",
+                              lineHeight: 1.02,
+                            }}
+                          >
                             {reason.title}
                           </h3>
-                          <p className="mt-4 text-sm luxe-copy">{reason.desc}</p>
+                          <p className="mt-4 text-sm" style={{ color: "rgba(255,255,255,0.6)", lineHeight: 1.8 }}>{reason.desc}</p>
                         </div>
                       )
                     )}
