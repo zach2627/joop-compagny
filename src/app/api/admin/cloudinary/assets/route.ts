@@ -36,9 +36,9 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const prefix = searchParams.get("prefix")?.trim() || "products/";
+  const prefix = searchParams.get("prefix")?.trim() || "products";
   const maxResults = Math.min(
-    Math.max(Number(searchParams.get("limit") ?? "60"), 1),
+    Math.max(Number(searchParams.get("limit") ?? "50"), 1),
     100
   );
 
