@@ -91,7 +91,7 @@ export function StoreNavbarClient({
               letterSpacing: "0.28em",
             }}
           >
-            Maison sensorielle
+            MAISON DANITA
           </span>
         </Link>
 

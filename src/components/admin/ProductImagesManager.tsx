@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Upload, Loader2, Trash2, Star, Tag } from "lucide-react";
 import Image from "next/image";
 import { productThumbnailImage } from "@/lib/images/cloudinary";
+import { CloudinaryMediaLibrary } from "./CloudinaryMediaLibrary";
 
 interface ProductImage {
   id: string;
@@ -17,6 +18,7 @@ interface ProductImage {
 
 interface Props {
   productId: string;
+  productSlug?: string;
   images: ProductImage[];
   variantColors?: string[];
 }
@@ -24,7 +26,12 @@ interface Props {
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE_MB = 5;
 
-export function ProductImagesManager({ productId, images, variantColors = [] }: Props) {
+export function ProductImagesManager({
+  productId,
+  productSlug,
+  images,
+  variantColors = [],
+}: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -35,6 +42,7 @@ export function ProductImagesManager({ productId, images, variantColors = [] }: 
   /** id de l'image dont on édite la couleur inline */
   const [editingColorId, setEditingColorId] = useState<string | null>(null);
   const [editingColorVal, setEditingColorVal] = useState("");
+  const uploadFolder = `products/${(productSlug?.trim() || productId).trim()}`;
 
   const refresh = () => startTransition(() => { router.refresh(); });
 
@@ -55,10 +63,10 @@ export function ProductImagesManager({ productId, images, variantColors = [] }: 
     try {
       const form = new FormData();
       form.append("file", file);
-      const uploadRes = await fetch(
-        `/api/admin/upload?folder=products/${productId}`,
-        { method: "POST", body: form }
-      );
+      const uploadRes = await fetch(`/api/admin/upload?folder=${encodeURIComponent(uploadFolder)}`, {
+        method: "POST",
+        body: form,
+      });
       if (!uploadRes.ok) {
         const { error } = await uploadRes.json();
         throw new Error(error ?? "Échec upload");
@@ -268,6 +276,13 @@ export function ProductImagesManager({ productId, images, variantColors = [] }: 
             : <><Upload className="w-3.5 h-3.5" /> Ajouter</>
           }
         </button>
+
+        <CloudinaryMediaLibrary
+          productId={productId}
+          productFolder={productSlug}
+          pendingColor={pendingColor}
+          onImagesAdded={refresh}
+        />
       </div>
 
       {uploadError && (

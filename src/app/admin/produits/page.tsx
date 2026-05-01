@@ -158,7 +158,11 @@ export default async function AdminProduitsPage() {
                     </td>
 
                     <td className="px-5 py-4">
-                      <ProductImagesManager productId={product.id} images={product.images} />
+                      <ProductImagesManager
+                        productId={product.id}
+                        productSlug={product.slug}
+                        images={product.images}
+                      />
                     </td>
 
                     <td className="px-5 py-4">

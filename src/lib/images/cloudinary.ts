@@ -96,3 +96,11 @@ export const heroBackgroundImage = (url: string | null | undefined) =>
     crop: "fill",
     gravity: "auto:subject",
   });
+
+export const editorialFeatureImage = (url: string | null | undefined) =>
+  getCloudinaryImageUrl(url, {
+    width: 1200,
+    height: 1500,
+    crop: "fill",
+    gravity: "auto:subject",
+  });

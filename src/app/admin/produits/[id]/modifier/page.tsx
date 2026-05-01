@@ -84,6 +84,7 @@ export default async function ModifierProduitPage({ params }: PageProps) {
         </h2>
         <ProductImagesManager
           productId={product.id}
+          productSlug={product.slug}
           images={product.images}
           variantColors={variantColors}
         />

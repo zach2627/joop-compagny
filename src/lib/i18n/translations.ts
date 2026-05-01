@@ -28,7 +28,7 @@ const fr = {
   banner: {
     aria: "Informations boutique",
     items: [
-      "Maison sensorielle a Dakar",
+      "MAISON DANITA",
       "Bijoux, parfums et encens selectionnes",
       "Paiement Wave et Orange Money",
       "Livraison a Dakar et partout au Senegal",
@@ -44,7 +44,7 @@ const fr = {
     rights: "Tous droits reserves.",
   },
   home: {
-    badge: "Maison sensorielle",
+    badge: "MAISON DANITA",
     heroTitle: "Des objets precieux pour marquer les moments",
     heroAccent: "Luxe colore, senteurs et cadeaux signatures",
     heroBody:

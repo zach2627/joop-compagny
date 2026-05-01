@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
 import Script from "next/script";
+import { ToastProvider } from "@/components/ui/Toast";
 import { siteConfig } from "@/config/site";
 import { seoConfig } from "@/config/seo";
 import { localizedPath } from "@/lib/i18n/config";
@@ -169,7 +170,9 @@ export default function RootLayout({
         />
       </head>
       <body className={`${jost.variable} ${cormorantGaramond.variable}`}>
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
 
         {GA_ID && (
           <>

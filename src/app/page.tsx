@@ -5,6 +5,7 @@ import { StoreFooter } from "@/components/layout/StoreFooter";
 import { StoreNavbar } from "@/components/layout/StoreNavbar";
 import { ProductCard } from "@/components/product/ProductCard";
 import { HeroCarousel } from "@/components/ui/HeroCarousel";
+import { GoldParticles, RotatingBorderAside } from "@/components/ui/HeroGlam";
 import { ParallaxSection } from "@/components/ui/ParallaxSection";
 import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -15,7 +16,11 @@ import { getFeaturedProducts, getCategories } from "@/features/products/service"
 import { formatXOF } from "@/features/payment/paydunya";
 import type { Locale } from "@/lib/i18n/config";
 import { localizedPath } from "@/lib/i18n/config";
-import { heroBackgroundImage, productCardImage } from "@/lib/images/cloudinary";
+import {
+  editorialFeatureImage,
+  heroBackgroundImage,
+  productCardImage,
+} from "@/lib/images/cloudinary";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
 import {
   translateProductContent,
@@ -132,6 +137,9 @@ const HOME_EDITORIAL: Record<
   },
 };
 
+const SIGNATURE_FEATURE_IMAGE =
+  "https://res.cloudinary.com/dlfytqzpw/image/upload/v1777630989/ChatGPT_Image_1_mai_2026_12_21_30_kopaje.png";
+
 function getPrimaryImageUrl(product: FeaturedProduct | null | undefined) {
   return product?.images[0]?.url ?? null;
 }
@@ -207,6 +215,26 @@ export default async function HomePage() {
             <HeroCarousel imageUrls={heroImages} />
           </div>
           <div className="hero-overlay absolute inset-0" />
+          <svg
+            className="pointer-events-none absolute inset-0 h-full w-full"
+            aria-hidden="true"
+            style={{ opacity: 0.03 }}
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <pattern id="arabesque" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <circle cx="40" cy="40" r="30" fill="none" stroke="#C9A84C" strokeWidth="0.5" />
+                <circle cx="40" cy="40" r="20" fill="none" stroke="#C9A84C" strokeWidth="0.5" />
+                <line x1="10" y1="40" x2="70" y2="40" stroke="#C9A84C" strokeWidth="0.5" />
+                <line x1="40" y1="10" x2="40" y2="70" stroke="#C9A84C" strokeWidth="0.5" />
+                <line x1="18.8" y1="18.8" x2="61.2" y2="61.2" stroke="#C9A84C" strokeWidth="0.5" />
+                <line x1="61.2" y1="18.8" x2="18.8" y2="61.2" stroke="#C9A84C" strokeWidth="0.5" />
+                <polygon points="40,12 47,33 70,33 52,47 58,68 40,55 22,68 28,47 10,33 33,33" fill="none" stroke="#C9A84C" strokeWidth="0.4" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#arabesque)" />
+          </svg>
+          <GoldParticles />
           <div
             className="absolute inset-x-0 top-0 h-px"
             style={{
@@ -220,25 +248,35 @@ export default async function HomePage() {
               <ScrollReveal>
                 <div className="max-w-[720px]">
                   <p className="luxe-kicker">{copy.seasonLabel}</p>
+                  <div
+                    className="mb-0 mt-4"
+                    style={{
+                      height: "1px",
+                      width: "clamp(80px, 14vw, 160px)",
+                      background:
+                        "linear-gradient(90deg, rgba(201,168,76,0.9) 0%, rgba(232,201,122,0.4) 60%, transparent 100%)",
+                    }}
+                  />
                   <h1
-                    className="mt-5 max-w-[11ch] text-balance"
+                    className="mt-4 max-w-[11ch] text-balance"
                     style={{
                       fontSize: "clamp(3.6rem, 8vw, 7.3rem)",
                       lineHeight: 0.88,
-                      color: "#fffdf8",
-                      textShadow: "0 20px 44px rgba(0,0,0,0.36)",
+                      textShadow:
+                        "0 2px 18px rgba(201,168,76,0.22), 0 20px 44px rgba(0,0,0,0.36)",
                     }}
                   >
-                    {home.heroTitle}
+                    <span className="hero-title-shimmer">{home.heroTitle}</span>
                   </h1>
                   <p
                     className="mt-5 max-w-[17ch]"
                     style={{
-                      color: "#f7ece4",
+                      color: "#C9A84C",
                       fontSize: "clamp(1.32rem, 2.6vw, 2.2rem)",
                       lineHeight: 1.05,
                       fontStyle: "italic",
                       fontFamily: "var(--font-cormorant), serif",
+                      filter: "drop-shadow(0 0 10px rgba(201,168,76,0.35))",
                     }}
                   >
                     {home.heroAccent}
@@ -305,12 +343,12 @@ export default async function HomePage() {
               {heroFeatured ? (
                 <ParallaxSection className="hidden lg:block" offset={34}>
                   <ScrollReveal delay={120}>
+                    <RotatingBorderAside>
                     <aside
                       className="rounded-[34px] p-6"
                       style={{
                         background:
                           "linear-gradient(180deg, rgba(17,17,9,0.88) 0%, rgba(10,10,8,0.92) 100%)",
-                        border: "1px solid rgba(201,168,76,0.14)",
                         backdropFilter: "blur(18px)",
                         boxShadow: "0 28px 80px rgba(0,0,0,0.34)",
                       }}
@@ -380,6 +418,7 @@ export default async function HomePage() {
                         </div>
                       </div>
                     </aside>
+                    </RotatingBorderAside>
                   </ScrollReveal>
                 </ParallaxSection>
               ) : null}
@@ -447,50 +486,131 @@ export default async function HomePage() {
 
         <section id="signature" className="py-16 md:py-24">
           <div className="container-xl">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center">
-              <ScrollReveal>
-                <div className="luxe-panel-strong p-7 md:p-10">
-                  <p className="luxe-kicker">{home.storyEyebrow}</p>
-                  <h2
-                    className="mt-5 max-w-[10ch] text-balance"
-                    style={{
-                      fontSize: "clamp(2.7rem, 5vw, 4.7rem)",
-                      lineHeight: 0.94,
-                    }}
-                  >
-                    {home.storyTitle}
-                  </h2>
-                  <p className="mt-6 max-w-[560px] text-base luxe-copy">
-                    {home.storyBody}
-                  </p>
-                  <p className="mt-6 max-w-[560px] text-sm" style={{ color: "var(--color-primary-dark)", lineHeight: 1.85 }}>
-                    {copy.worldsIntro}
-                  </p>
-                </div>
-              </ScrollReveal>
-
-              <ParallaxSection offset={28}>
-                <StaggerReveal className="grid gap-5 md:grid-cols-2">
-                  {home.highlights.map((item: string, index: number) => (
-                    <div
-                      key={item}
-                      className={`p-6 ${index === 0 ? "md:col-span-2" : ""} luxe-panel`}
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(340px,500px)] lg:items-start">
+              <div className="space-y-5">
+                <ScrollReveal>
+                  <div className="luxe-panel-strong p-7 md:p-10">
+                    <p className="luxe-kicker">{home.storyEyebrow}</p>
+                    <h2
+                      className="mt-5 max-w-[10ch] text-balance"
+                      style={{
+                        fontSize: "clamp(2.7rem, 5vw, 4.7rem)",
+                        lineHeight: 0.94,
+                      }}
                     >
-                      <p className="luxe-kicker">0{index + 1}</p>
-                      <p
-                        className="mt-4"
+                      {home.storyTitle}
+                    </h2>
+                    <p className="mt-6 max-w-[560px] text-base luxe-copy">
+                      {home.storyBody}
+                    </p>
+                    <p
+                      className="mt-6 max-w-[560px] text-sm"
+                      style={{ color: "var(--color-primary-dark)", lineHeight: 1.85 }}
+                    >
+                      {copy.worldsIntro}
+                    </p>
+                  </div>
+                </ScrollReveal>
+
+                <ParallaxSection offset={18}>
+                  <StaggerReveal className="grid gap-4 md:grid-cols-3">
+                    {home.highlights.map((item: string, index: number) => (
+                      <div key={item} className="luxe-panel p-5 md:p-6">
+                        <p className="luxe-kicker">0{index + 1}</p>
+                        <p
+                          className="mt-4"
+                          style={{
+                            fontFamily: "var(--font-cormorant), serif",
+                            fontSize: "clamp(1.45rem, 2.6vw, 1.9rem)",
+                            lineHeight: 1.08,
+                            color: "var(--color-text)",
+                          }}
+                        >
+                          {item}
+                        </p>
+                      </div>
+                    ))}
+                  </StaggerReveal>
+                </ParallaxSection>
+              </div>
+
+              <ParallaxSection offset={24}>
+                <ScrollReveal delay={140}>
+                  <div className="mx-auto w-full max-w-[500px]">
+                    <div
+                      className="rounded-[34px] p-4 md:p-5"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
+                        border: "1px solid rgba(201,168,76,0.14)",
+                        boxShadow: "0 28px 66px rgba(0,0,0,0.34)",
+                      }}
+                    >
+                      <div
+                        className="relative mx-auto aspect-[4/5] overflow-hidden rounded-[28px]"
                         style={{
-                          fontFamily: "var(--font-cormorant), serif",
-                          fontSize: index === 0 ? "2rem" : "1.6rem",
-                          lineHeight: 1.08,
-                          color: "var(--color-text)",
+                          maxHeight: "680px",
+                          background:
+                            "linear-gradient(180deg, rgba(18,16,12,0.92) 0%, rgba(10,10,8,0.98) 100%)",
                         }}
                       >
-                        {item}
-                      </p>
+                        <ProductImageFallback
+                          src={editorialFeatureImage(SIGNATURE_FEATURE_IMAGE)}
+                          alt={home.storyTitle}
+                          label={home.storyTitle}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 500px"
+                          imageClassName="object-cover object-center"
+                          fallbackClassName="absolute inset-0"
+                        />
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background:
+                              "linear-gradient(180deg, rgba(10,10,8,0.14) 0%, rgba(10,10,8,0.18) 40%, rgba(10,10,8,0.78) 100%)",
+                          }}
+                        />
+
+                        <div className="absolute left-4 top-4 md:left-5 md:top-5">
+                          <div
+                            className="rounded-full px-3 py-2 text-[10px] uppercase tracking-[0.28em]"
+                            style={{
+                              color: "#C9A84C",
+                              background: "rgba(10,10,8,0.56)",
+                              border: "1px solid rgba(201,168,76,0.18)",
+                              backdropFilter: "blur(12px)",
+                            }}
+                          >
+                            {home.storyEyebrow}
+                          </div>
+                        </div>
+
+                        <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
+                          <div
+                            className="max-w-[24rem] rounded-[24px] px-4 py-4 md:px-5 md:py-5"
+                            style={{
+                              background: "rgba(10,10,8,0.62)",
+                              border: "1px solid rgba(201,168,76,0.14)",
+                              backdropFilter: "blur(16px)",
+                            }}
+                          >
+                            <p className="luxe-kicker">{copy.signatureLabel}</p>
+                            <h3
+                              className="mt-3 text-balance"
+                              style={{
+                                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                                lineHeight: 0.92,
+                                color: "#fffdf8",
+                              }}
+                            >
+                              {home.storyTitle}
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  ))}
-                </StaggerReveal>
+                  </div>
+                </ScrollReveal>
               </ParallaxSection>
             </div>
           </div>
