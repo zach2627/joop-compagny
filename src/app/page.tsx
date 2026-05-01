@@ -486,133 +486,132 @@ export default async function HomePage() {
 
         <section id="signature" className="py-16 md:py-24">
           <div className="container-xl">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(340px,500px)] lg:items-start">
-              <div className="space-y-5">
-                <ScrollReveal>
-                  <div className="luxe-panel-strong p-7 md:p-10">
-                    <p className="luxe-kicker">{home.storyEyebrow}</p>
-                    <h2
-                      className="mt-5 max-w-[10ch] text-balance"
-                      style={{
-                        fontSize: "clamp(2.7rem, 5vw, 4.7rem)",
-                        lineHeight: 0.94,
-                      }}
-                    >
-                      {home.storyTitle}
-                    </h2>
-                    <p className="mt-6 max-w-[560px] text-base luxe-copy">
-                      {home.storyBody}
-                    </p>
-                    <p
-                      className="mt-6 max-w-[560px] text-sm"
-                      style={{ color: "var(--color-primary-dark)", lineHeight: 1.85 }}
-                    >
-                      {copy.worldsIntro}
-                    </p>
-                  </div>
-                </ScrollReveal>
+            <ParallaxSection offset={18}>
+              <ScrollReveal>
+                <div className="max-w-[1080px]">
+                  <div
+                    className="relative overflow-hidden rounded-[34px]"
+                    style={{
+                      border: "1px solid rgba(212,175,55,0.16)",
+                      boxShadow: "0 28px 68px rgba(0,0,0,0.36)",
+                      background:
+                        "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
+                    }}
+                  >
+                    <div className="absolute inset-0">
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage: `url(${editorialFeatureImage(SIGNATURE_FEATURE_IMAGE)})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center right",
+                        }}
+                      />
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, rgba(10,10,8,0.88) 0%, rgba(10,10,8,0.76) 38%, rgba(10,10,8,0.58) 66%, rgba(10,10,8,0.74) 100%)",
+                        }}
+                      />
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          background:
+                            "linear-gradient(180deg, rgba(10,10,8,0.18) 0%, rgba(10,10,8,0.26) 38%, rgba(10,10,8,0.82) 100%)",
+                        }}
+                      />
+                    </div>
 
-                <ParallaxSection offset={18}>
-                  <StaggerReveal className="grid gap-4 md:grid-cols-3">
-                    {home.highlights.map((item: string, index: number) => (
-                      <div key={item} className="luxe-panel p-5 md:p-6">
-                        <p className="luxe-kicker">0{index + 1}</p>
-                        <p
-                          className="mt-4"
+                    <div className="relative z-10 p-7 md:p-10 lg:p-12">
+                      <div className="max-w-[680px]">
+                        <div
+                          className="inline-flex rounded-full px-4 py-2 text-[10px] uppercase tracking-[0.28em]"
                           style={{
-                            fontFamily: "var(--font-cormorant), serif",
-                            fontSize: "clamp(1.45rem, 2.6vw, 1.9rem)",
-                            lineHeight: 1.08,
-                            color: "var(--color-text)",
+                            color: "#d4af37",
+                            background: "rgba(10,10,8,0.48)",
+                            border: "1px solid rgba(212,175,55,0.18)",
+                            backdropFilter: "blur(12px)",
                           }}
                         >
-                          {item}
+                          {home.storyEyebrow}
+                        </div>
+
+                        <p
+                          className="mt-6 text-[11px] uppercase tracking-[0.3em]"
+                          style={{ color: "rgba(212,175,55,0.92)" }}
+                        >
+                          {copy.signatureLabel}
+                        </p>
+
+                        <h2
+                          className="mt-5 max-w-[10ch] text-balance"
+                          style={{
+                            fontSize: "clamp(2.8rem, 5.1vw, 4.9rem)",
+                            lineHeight: 0.92,
+                            color: "#FFFFFF",
+                          }}
+                        >
+                          {home.storyTitle}
+                        </h2>
+
+                        <p
+                          className="mt-6 max-w-[580px] text-base md:text-lg"
+                          style={{
+                            color: "#FFFFFF",
+                            lineHeight: 1.9,
+                          }}
+                        >
+                          {home.storyBody}
+                        </p>
+
+                        <p
+                          className="mt-6 max-w-[580px] text-sm"
+                          style={{
+                            color: "rgba(255,255,255,0.72)",
+                            lineHeight: 1.9,
+                          }}
+                        >
+                          {copy.worldsIntro}
                         </p>
                       </div>
-                    ))}
-                  </StaggerReveal>
-                </ParallaxSection>
-              </div>
 
-              <ParallaxSection offset={24}>
-                <ScrollReveal delay={140}>
-                  <div className="mx-auto w-full max-w-[500px]">
-                    <div
-                      className="rounded-[34px] p-4 md:p-5"
-                      style={{
-                        background:
-                          "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
-                        border: "1px solid rgba(201,168,76,0.14)",
-                        boxShadow: "0 28px 66px rgba(0,0,0,0.34)",
-                      }}
-                    >
-                      <div
-                        className="relative mx-auto aspect-[4/5] overflow-hidden rounded-[28px]"
-                        style={{
-                          maxHeight: "680px",
-                          background:
-                            "linear-gradient(180deg, rgba(18,16,12,0.92) 0%, rgba(10,10,8,0.98) 100%)",
-                        }}
-                      >
-                        <ProductImageFallback
-                          src={editorialFeatureImage(SIGNATURE_FEATURE_IMAGE)}
-                          alt={home.storyTitle}
-                          label={home.storyTitle}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 500px"
-                          imageClassName="object-cover object-center"
-                          fallbackClassName="absolute inset-0"
-                        />
-                        <div
-                          className="absolute inset-0"
-                          style={{
-                            background:
-                              "linear-gradient(180deg, rgba(10,10,8,0.14) 0%, rgba(10,10,8,0.18) 40%, rgba(10,10,8,0.78) 100%)",
-                          }}
-                        />
-
-                        <div className="absolute left-4 top-4 md:left-5 md:top-5">
+                      <StaggerReveal className="mt-10 grid gap-4 md:grid-cols-3">
+                        {home.highlights.map((item: string, index: number) => (
                           <div
-                            className="rounded-full px-3 py-2 text-[10px] uppercase tracking-[0.28em]"
+                            key={item}
+                            className="rounded-[24px] px-5 py-5 md:px-6 md:py-6"
                             style={{
-                              color: "#C9A84C",
-                              background: "rgba(10,10,8,0.56)",
-                              border: "1px solid rgba(201,168,76,0.18)",
-                              backdropFilter: "blur(12px)",
+                              background: "rgba(10,10,8,0.46)",
+                              border: "1px solid rgba(212,175,55,0.14)",
+                              backdropFilter: "blur(14px)",
                             }}
                           >
-                            {home.storyEyebrow}
-                          </div>
-                        </div>
-
-                        <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
-                          <div
-                            className="max-w-[24rem] rounded-[24px] px-4 py-4 md:px-5 md:py-5"
-                            style={{
-                              background: "rgba(10,10,8,0.62)",
-                              border: "1px solid rgba(201,168,76,0.14)",
-                              backdropFilter: "blur(16px)",
-                            }}
-                          >
-                            <p className="luxe-kicker">{copy.signatureLabel}</p>
-                            <h3
-                              className="mt-3 text-balance"
+                            <p
+                              className="text-[10px] uppercase tracking-[0.28em]"
+                              style={{ color: "rgba(212,175,55,0.88)" }}
+                            >
+                              0{index + 1}
+                            </p>
+                            <p
+                              className="mt-4"
                               style={{
-                                fontSize: "clamp(2rem, 4vw, 3.2rem)",
-                                lineHeight: 0.92,
-                                color: "#fffdf8",
+                                fontFamily: "var(--font-cormorant), serif",
+                                fontSize: "clamp(1.45rem, 2.5vw, 1.9rem)",
+                                lineHeight: 1.08,
+                                color: "#FFFFFF",
                               }}
                             >
-                              {home.storyTitle}
-                            </h3>
+                              {item}
+                            </p>
                           </div>
-                        </div>
-                      </div>
+                        ))}
+                      </StaggerReveal>
                     </div>
                   </div>
-                </ScrollReveal>
-              </ParallaxSection>
-            </div>
+                </div>
+              </ScrollReveal>
+            </ParallaxSection>
           </div>
         </section>
 
