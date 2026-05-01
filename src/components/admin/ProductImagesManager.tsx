@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Upload, Loader2, Trash2, Star, Tag } from "lucide-react";
 import Image from "next/image";
 import { productThumbnailImage } from "@/lib/images/cloudinary";
+import { CloudinaryMediaLibrary } from "./CloudinaryMediaLibrary";
 
 interface ProductImage {
   id: string;
@@ -268,6 +269,12 @@ export function ProductImagesManager({ productId, images, variantColors = [] }: 
             : <><Upload className="w-3.5 h-3.5" /> Ajouter</>
           }
         </button>
+
+        <CloudinaryMediaLibrary
+          productId={productId}
+          pendingColor={pendingColor}
+          onImagesAdded={refresh}
+        />
       </div>
 
       {uploadError && (
