@@ -25,31 +25,12 @@ import {
 } from "@/lib/i18n/product-content";
 import { translateCategory } from "@/lib/i18n/translations";
 
-export const revalidate = 3600; // rebuild the page at most once per hour
+export const revalidate = 60;
 
-async function getSignatureBgImage(): Promise<string | null> {
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  const apiKey = process.env.CLOUDINARY_API_KEY;
-  const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-  if (!cloudName || !apiKey || !apiSecret) return null;
-
-  try {
-    const credentials = Buffer.from(`${apiKey}:${apiSecret}`).toString("base64");
-    const url =
-      `https://api.cloudinary.com/v1_1/${cloudName}/resources/image` +
-      `?prefix=products&type=upload&max_results=1`;
-    const res = await fetch(url, {
-      headers: { Authorization: `Basic ${credentials}` },
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as { resources?: { secure_url: string }[] };
-    return data.resources?.[0]?.secure_url ?? null;
-  } catch {
-    return null;
-  }
-}
+// URL de l'image de fond de la section Signature (parfum fleurs blanches / montre dorée).
+// Remplacer par l'URL Cloudinary exacte depuis la médiathèque (dossier products/).
+const SIGNATURE_BG_IMAGE =
+  process.env.NEXT_PUBLIC_SIGNATURE_BG_IMAGE ?? "";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getRequestLocale();
@@ -206,10 +187,9 @@ function buildWorlds(
 export default async function HomePage() {
   const locale = getRequestLocale();
   const dict = getDictionary(locale);
-  const [featured, categories, signatureBgImage] = await Promise.all([
+  const [featured, categories] = await Promise.all([
     getFeaturedProducts(),
     getCategories(),
-    getSignatureBgImage(),
   ]);
 
   const home = dict.home;
@@ -518,10 +498,10 @@ export default async function HomePage() {
           style={{ minHeight: "100vh" }}
         >
           {/* Mobile: image plein fond + overlay sombre */}
-          {signatureBgImage && (
+          {SIGNATURE_BG_IMAGE && (
             <div className="absolute inset-0 lg:hidden">
               <Image
-                src={signatureBgImage}
+                src={SIGNATURE_BG_IMAGE}
                 alt="JOOP COMPAGNY — parfum signature"
                 fill
                 sizes="100vw"
@@ -604,10 +584,10 @@ export default async function HomePage() {
 
             {/* Colonne droite — 40% — image Cloudinary */}
             <div className="relative hidden lg:block lg:basis-2/5">
-              {signatureBgImage ? (
+              {SIGNATURE_BG_IMAGE ? (
                 <>
                   <Image
-                    src={signatureBgImage}
+                    src={SIGNATURE_BG_IMAGE}
                     alt="JOOP COMPAGNY — parfum signature"
                     fill
                     sizes="40vw"
@@ -639,7 +619,7 @@ export default async function HomePage() {
                     style={{ color: "rgba(255,255,255,0.28)", lineHeight: 1.6 }}
                   >
                     Définir{" "}
-                    <code className="text-[10px]">CLOUDINARY_API_KEY/SECRET</code>{" "}
+                    <code className="text-[10px]">NEXT_PUBLIC_SIGNATURE_BG_IMAGE</code>{" "}
                     avec l&apos;URL Cloudinary
                   </p>
                 </div>
