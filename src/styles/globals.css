@@ -326,6 +326,21 @@
   }
 }
 
+@keyframes toast-slide-in {
+  from {
+    transform: translateX(calc(100% + 1.5rem));
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-slide-in {
+  animation: toast-slide-in 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 @keyframes gold-float {
   0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.55; }
   33% { transform: translateY(-16px) rotate(120deg); opacity: 0.9; }

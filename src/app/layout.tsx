@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site";
 import { seoConfig } from "@/config/seo";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
+import { ToastProvider } from "@/components/ui/Toast";
 import "@/styles/globals.css";
 
 const cormorantGaramond = Cormorant_Garamond({
@@ -169,7 +170,9 @@ export default function RootLayout({
         />
       </head>
       <body className={`${jost.variable} ${cormorantGaramond.variable}`}>
-        {children}
+        <ToastProvider>
+          {children}
+        </ToastProvider>
 
         {GA_ID && (
           <>

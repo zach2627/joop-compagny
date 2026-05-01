@@ -102,6 +102,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const inStock = (defaultVariant?.stock ?? 0) > 0;
   const categoryName = translateCategory(locale, product.category);
 
+  const isNew =
+    Date.now() - new Date(product.createdAt).getTime() < 30 * 24 * 60 * 60 * 1000;
+  const isBestSeller =
+    product.isFeatured || product.tags.includes("best-seller") || product.tags.includes("bestseller");
+
   return (
     <div
       style={{
@@ -134,19 +139,26 @@ export default async function ProductDetailPage({ params }: PageProps) {
         <ScrollReveal>
           <nav
             className="mb-8 flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.24em]"
+            aria-label="Breadcrumb"
             style={{ color: "var(--color-text-tertiary)" }}
           >
             <Link
-              href={localizedPath("/store/products", locale)}
-              className="transition-colors duration-300"
+              href={localizedPath("/", locale)}
+              className="transition-colors duration-200 hover:opacity-80"
               style={{ color: "var(--color-primary-dark)" }}
             >
-              {dict.products.breadcrumbProducts}
+              {locale === "en" ? "Home" : "Accueil"}
             </Link>
-            <span>/</span>
-            <span style={{ color: "var(--color-text-secondary)" }}>{categoryName}</span>
-            <span>/</span>
-            <span style={{ color: "var(--color-text)" }}>{productText.name}</span>
+            <span>›</span>
+            <Link
+              href={localizedPath("/store/products", locale)}
+              className="transition-colors duration-200 hover:opacity-80"
+              style={{ color: "var(--color-primary-dark)" }}
+            >
+              {categoryName}
+            </Link>
+            <span>›</span>
+            <span style={{ color: "var(--color-text-secondary)" }}>{productText.name}</span>
           </nav>
         </ScrollReveal>
 
@@ -199,29 +211,69 @@ export default async function ProductDetailPage({ params }: PageProps) {
             }}
             infoSlot={
               <>
-                <div
-                  className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
-                  style={{
-                    background: "rgba(184,138,84,0.1)",
-                    border: "1px solid rgba(184,138,84,0.2)",
-                    color: "var(--color-primary-dark)",
-                  }}
-                >
-                  {categoryName}
+                <div className="flex flex-wrap items-center gap-2">
+                  <div
+                    className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+                    style={{
+                      background: "rgba(184,138,84,0.1)",
+                      border: "1px solid rgba(184,138,84,0.2)",
+                      color: "var(--color-primary-dark)",
+                    }}
+                  >
+                    {categoryName}
+                  </div>
+                  {isNew && (
+                    <div
+                      className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+                      style={{
+                        background: "rgba(201,168,76,0.14)",
+                        border: "1px solid rgba(201,168,76,0.28)",
+                        color: "#E8C97A",
+                      }}
+                    >
+                      {locale === "en" ? "New" : "Nouveau"}
+                    </div>
+                  )}
+                  {isBestSeller && (
+                    <div
+                      className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest"
+                      style={{
+                        background: "rgba(201,168,76,0.06)",
+                        border: "1px solid rgba(201,168,76,0.2)",
+                        color: "var(--color-primary-dark)",
+                      }}
+                    >
+                      ✦ {locale === "en" ? "Best-seller" : "Best-seller"}
+                    </div>
+                  )}
                 </div>
 
                 <div className="mt-5">
                   <h1
                     className="text-balance"
                     style={{
+                      fontFamily: "var(--font-cormorant), serif",
                       fontSize: "clamp(2.6rem, 4.5vw, 4.8rem)",
                       lineHeight: 0.95,
+                      color: "var(--color-text)",
                     }}
                   >
                     {productText.name}
                   </h1>
                   {productText.shortDescription ? (
-                    <p className="mt-4 text-lg luxe-copy">{productText.shortDescription}</p>
+                    <p
+                      className="mt-4"
+                      style={{
+                        fontFamily: "var(--font-cormorant), serif",
+                        fontStyle: "italic",
+                        fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
+                        color: "#C9A84C",
+                        lineHeight: 1.4,
+                        filter: "drop-shadow(0 0 8px rgba(201,168,76,0.2))",
+                      }}
+                    >
+                      {productText.shortDescription}
+                    </p>
                   ) : null}
                 </div>
 

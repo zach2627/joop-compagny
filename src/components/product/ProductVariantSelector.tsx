@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
+import { Heart } from "lucide-react";
 import { addToCartAction } from "@/features/cart/actions";
 import { formatXOF } from "@/features/payment/paydunya";
+import { useToast } from "@/components/ui/Toast";
 import type { Locale } from "@/lib/i18n/config";
 
 interface Variant {
@@ -61,6 +63,8 @@ export function ProductVariantSelector({
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [wishlisted, setWishlisted] = useState(false);
+  const { showToast } = useToast();
 
   const defaultVariant = variants.find((variant) => variant.isDefault) ?? variants[0];
   const [selectedStorage, setSelectedStorage] = useState(defaultVariant?.storage);
@@ -134,8 +138,18 @@ export function ProductVariantSelector({
       if (result.success) {
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
+        showToast({
+          type: "success",
+          title: labels.added,
+          subtitle: `${selectedVariant.name} — ${formatXOF(selectedVariant.price)}`,
+          action: {
+            label: locale === "en" ? "View" : "Voir",
+            href: "/store/cart",
+          },
+        });
       } else {
         setError(result.error);
+        showToast({ type: "error", title: result.error });
       }
     });
   }
@@ -172,13 +186,14 @@ export function ProductVariantSelector({
                 style={
                   selectedStorage === storage
                     ? {
-                        borderColor: "rgba(184,138,84,0.34)",
-                        background: "rgba(184,138,84,0.12)",
+                        borderColor: "#C9A84C",
+                        background: "rgba(201,168,76,0.05)",
                         color: "var(--color-text)",
                       }
                     : {
-                        borderColor: "rgba(184,138,84,0.12)",
+                        borderColor: "rgba(201,168,76,0.16)",
                         color: "var(--color-text-secondary)",
+                        background: "transparent",
                       }
                 }
               >
@@ -272,19 +287,48 @@ export function ProductVariantSelector({
       ) : null}
 
       <div className="flex flex-col gap-3">
-        <button
-          onClick={handleAddToCart}
-          disabled={isPending || isOutOfStock || !selectedVariant}
-          className="btn-primary w-full py-4 text-base"
-        >
-          {isPending
-            ? labels.adding
-            : success
-              ? labels.added
-              : isOutOfStock
-                ? labels.outOfStock
-                : labels.add}
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handleAddToCart}
+            disabled={isPending || isOutOfStock || !selectedVariant}
+            className="btn-primary flex-1 py-4 text-base"
+            style={{ background: "linear-gradient(135deg, #C9A84C 0%, #E8C97A 50%, #C9A84C 100%)", color: "#0A0A08" }}
+          >
+            {isPending
+              ? labels.adding
+              : success
+                ? labels.added
+                : isOutOfStock
+                  ? labels.outOfStock
+                  : labels.add}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setWishlisted((prev) => !prev);
+              showToast({
+                type: "info",
+                title: wishlisted
+                  ? (locale === "en" ? "Removed from wishlist" : "Retiré des favoris")
+                  : (locale === "en" ? "Added to wishlist" : "Ajouté aux favoris"),
+              });
+            }}
+            aria-label={locale === "en" ? "Add to wishlist" : "Ajouter aux favoris"}
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-all duration-300"
+            style={{
+              border: `1px solid ${wishlisted ? "#C9A84C" : "rgba(201,168,76,0.28)"}`,
+              background: wishlisted ? "rgba(201,168,76,0.08)" : "transparent",
+              color: wishlisted ? "#C9A84C" : "var(--color-text)",
+            }}
+          >
+            <Heart
+              className="h-5 w-5"
+              fill={wishlisted ? "#C9A84C" : "none"}
+              stroke={wishlisted ? "#C9A84C" : "currentColor"}
+            />
+          </button>
+        </div>
 
         {error ? (
           <p className="text-center text-sm" style={{ color: "var(--color-text)" }}>

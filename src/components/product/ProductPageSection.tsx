@@ -90,6 +90,29 @@ export function ProductPageSection({
         </div>
 
         {productImages.length > 1 && (
+          <div className="flex justify-center gap-2 py-1">
+            {productImages.map((image) => (
+              <button
+                key={`dot-${image.id}`}
+                onClick={() => setActiveImageUrl(image.url)}
+                aria-label={image.alt ?? image.color ?? productName}
+                style={{
+                  width: image.url === activeImageUrl ? "20px" : "6px",
+                  height: "6px",
+                  borderRadius: "9999px",
+                  background:
+                    image.url === activeImageUrl
+                      ? "#C9A84C"
+                      : "rgba(201,168,76,0.22)",
+                  transition: "all 0.25s cubic-bezier(0.22,1,0.36,1)",
+                  flexShrink: 0,
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {productImages.length > 1 && (
           <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
             {productImages.map((image) => {
               const isActive = image.url === activeImageUrl;
