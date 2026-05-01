@@ -27,10 +27,8 @@ import { translateCategory } from "@/lib/i18n/translations";
 
 export const revalidate = 60;
 
-// URL de l'image de fond de la section Signature (parfum fleurs blanches / montre dorée).
-// Remplacer par l'URL Cloudinary exacte depuis la médiathèque (dossier products/).
 const SIGNATURE_BG_IMAGE =
-  process.env.NEXT_PUBLIC_SIGNATURE_BG_IMAGE ?? "";
+  "https://res.cloudinary.com/dlfytqzpw/image/upload/v1777605866/ChatGPT_Image_1_mai_2026_05_22_14_qawmlx.png";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getRequestLocale();
@@ -603,27 +601,7 @@ export default async function HomePage() {
                     }}
                   />
                 </>
-              ) : (
-                /* Placeholder quand aucune image n'est configurée */
-                <div
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-4"
-                  style={{
-                    background:
-                      "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
-                    border: "1px dashed rgba(201,168,76,0.18)",
-                  }}
-                >
-                  <span style={{ color: "rgba(201,168,76,0.4)", fontSize: "2rem" }}>✦</span>
-                  <p
-                    className="max-w-[180px] text-center text-xs"
-                    style={{ color: "rgba(255,255,255,0.28)", lineHeight: 1.6 }}
-                  >
-                    Définir{" "}
-                    <code className="text-[10px]">NEXT_PUBLIC_SIGNATURE_BG_IMAGE</code>{" "}
-                    avec l&apos;URL Cloudinary
-                  </p>
-                </div>
-              )}
+              ) : null}
             </div>
           </div>
         </section>
