@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { StoreBanner } from "@/components/layout/StoreBanner";
 import { StoreFooter } from "@/components/layout/StoreFooter";
@@ -25,6 +26,11 @@ import {
 import { translateCategory } from "@/lib/i18n/translations";
 
 export const revalidate = 60;
+
+// URL de l'image de fond de la section Signature (parfum fleurs blanches / montre dorée).
+// Remplacer par l'URL Cloudinary exacte depuis la médiathèque (dossier products/).
+const SIGNATURE_BG_IMAGE =
+  process.env.NEXT_PUBLIC_SIGNATURE_BG_IMAGE ?? "";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getRequestLocale();
@@ -485,53 +491,139 @@ export default async function HomePage() {
           }
         `}</style>
 
-        <section id="signature" className="py-16 md:py-24">
-          <div className="container-xl">
-            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center">
-              <ScrollReveal>
-                <div className="luxe-panel-strong p-7 md:p-10">
+        {/* ── Section Signature ──────────────────────────────────────────── */}
+        <section
+          id="signature"
+          className="relative overflow-hidden"
+          style={{ minHeight: "100vh" }}
+        >
+          {/* Mobile: image plein fond + overlay sombre */}
+          {SIGNATURE_BG_IMAGE && (
+            <div className="absolute inset-0 lg:hidden">
+              <Image
+                src={SIGNATURE_BG_IMAGE}
+                alt="JOOP COMPAGNY — parfum signature"
+                fill
+                sizes="100vw"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+                priority={false}
+              />
+              <div
+                className="absolute inset-0"
+                style={{ background: "rgba(10,10,8,0.76)" }}
+              />
+            </div>
+          )}
+
+          {/* Layout desktop : 60 / 40 */}
+          <div className="relative flex min-h-screen flex-col lg:flex-row">
+            {/* Colonne gauche — 60% — texte */}
+            <div
+              className="relative z-10 flex flex-1 flex-col justify-center py-20 md:py-28 lg:py-0 lg:basis-3/5"
+              style={{ background: "rgba(10,10,8,0.82)" }}
+            >
+              {/* Gradient droite → transparent pour fondre avec l'image */}
+              <div
+                className="pointer-events-none absolute inset-y-0 right-0 hidden w-32 lg:block"
+                style={{
+                  background:
+                    "linear-gradient(90deg, transparent 0%, rgba(10,10,8,0.82) 100%)",
+                  transform: "scaleX(-1)",
+                }}
+              />
+
+              <div className="container-xl lg:max-w-none lg:pl-16 xl:pl-24 lg:pr-20">
+                <ScrollReveal>
                   <p className="luxe-kicker">{home.storyEyebrow}</p>
                   <h2
                     className="mt-5 max-w-[10ch] text-balance"
                     style={{
+                      fontFamily: "var(--font-cormorant), serif",
                       fontSize: "clamp(2.7rem, 5vw, 4.7rem)",
                       lineHeight: 0.94,
                     }}
                   >
                     {home.storyTitle}
                   </h2>
-                  <p className="mt-6 max-w-[560px] text-base luxe-copy">
+                  <p className="mt-6 max-w-[520px] text-base luxe-copy">
                     {home.storyBody}
                   </p>
-                  <p className="mt-6 max-w-[560px] text-sm" style={{ color: "var(--color-primary-dark)", lineHeight: 1.85 }}>
+                  <p
+                    className="mt-6 max-w-[520px] text-sm"
+                    style={{ color: "var(--color-primary-dark)", lineHeight: 1.85 }}
+                  >
                     {copy.worldsIntro}
                   </p>
-                </div>
-              </ScrollReveal>
 
-              <ParallaxSection offset={28}>
-                <StaggerReveal className="grid gap-5 md:grid-cols-2">
-                  {home.highlights.map((item: string, index: number) => (
-                    <div
-                      key={item}
-                      className={`p-6 ${index === 0 ? "md:col-span-2" : ""} luxe-panel`}
-                    >
-                      <p className="luxe-kicker">0{index + 1}</p>
-                      <p
-                        className="mt-4"
-                        style={{
-                          fontFamily: "var(--font-cormorant), serif",
-                          fontSize: index === 0 ? "2rem" : "1.6rem",
-                          lineHeight: 1.08,
-                          color: "var(--color-text)",
-                        }}
-                      >
-                        {item}
-                      </p>
-                    </div>
-                  ))}
-                </StaggerReveal>
-              </ParallaxSection>
+                  <div className="mt-10">
+                    <StaggerReveal className="grid gap-4 sm:grid-cols-2 lg:max-w-[520px]">
+                      {home.highlights.map((item: string, index: number) => (
+                        <div
+                          key={item}
+                          className={`luxe-panel p-5 ${index === 0 ? "sm:col-span-2" : ""}`}
+                        >
+                          <p className="luxe-kicker">0{index + 1}</p>
+                          <p
+                            className="mt-3"
+                            style={{
+                              fontFamily: "var(--font-cormorant), serif",
+                              fontSize: index === 0 ? "1.7rem" : "1.4rem",
+                              lineHeight: 1.1,
+                              color: "var(--color-text)",
+                            }}
+                          >
+                            {item}
+                          </p>
+                        </div>
+                      ))}
+                    </StaggerReveal>
+                  </div>
+                </ScrollReveal>
+              </div>
+            </div>
+
+            {/* Colonne droite — 40% — image Cloudinary */}
+            <div className="relative hidden lg:block lg:basis-2/5">
+              {SIGNATURE_BG_IMAGE ? (
+                <>
+                  <Image
+                    src={SIGNATURE_BG_IMAGE}
+                    alt="JOOP COMPAGNY — parfum signature"
+                    fill
+                    sizes="40vw"
+                    style={{ objectFit: "cover", objectPosition: "center top" }}
+                    priority={false}
+                  />
+                  {/* Dégradé gauche (noir) → transparent : assure la lisibilité du texte */}
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, rgba(10,10,8,0.92) 0%, rgba(10,10,8,0.5) 22%, rgba(10,10,8,0.12) 55%, transparent 100%)",
+                    }}
+                  />
+                </>
+              ) : (
+                /* Placeholder quand aucune image n'est configurée */
+                <div
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-4"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
+                    border: "1px dashed rgba(201,168,76,0.18)",
+                  }}
+                >
+                  <span style={{ color: "rgba(201,168,76,0.4)", fontSize: "2rem" }}>✦</span>
+                  <p
+                    className="max-w-[180px] text-center text-xs"
+                    style={{ color: "rgba(255,255,255,0.28)", lineHeight: 1.6 }}
+                  >
+                    Définir{" "}
+                    <code className="text-[10px]">NEXT_PUBLIC_SIGNATURE_BG_IMAGE</code>{" "}
+                    avec l&apos;URL Cloudinary
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </section>
