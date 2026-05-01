@@ -444,43 +444,73 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div
-            className="overflow-hidden py-4"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(10,10,8,0.96) 0%, rgba(18,18,13,0.96) 100%)",
-              borderTop: "1px solid rgba(201,168,76,0.14)",
-              borderBottom: "1px solid rgba(201,168,76,0.1)",
-            }}
-          >
-            <div className="container-xl overflow-hidden">
-              <div className="joop-home-marquee-track" aria-hidden="true">
-                {[marqueeItems.join("  /  "), marqueeItems.join("  /  ")].map(
-                  (line, index) => (
-                    <span
-                      key={`${line}-${index}`}
-                      className="px-8 text-[10px] font-semibold uppercase tracking-[0.34em]"
-                      style={{ color: "var(--color-primary-dark)" }}
-                    >
-                      {line}
-                    </span>
-                  )
-                )}
+          {/* ── Marquee luxe double rangée ─────────────────────────── */}
+          {(() => {
+            const luxeItems = [
+              "✦ Bijoux artisanaux · ",
+              "✦ Parfums d'orient · ",
+              "✦ Encens précieux · ",
+              "✦ Livraison Dakar · ",
+              "✦ Emballage cadeau · ",
+              "✦ Paiement Wave & Orange Money · ",
+              "✦ Sélection féminine · ",
+              "✦ Maison Danita · ",
+              "✦ Rituel & élégance · ",
+            ];
+            const track = [...luxeItems, ...luxeItems];
+            return (
+              <div
+                style={{
+                  background: "linear-gradient(90deg, #0A0A08, #1A1208, #0A0A08)",
+                  borderTop: "0.5px solid rgba(201,168,76,0.3)",
+                  borderBottom: "0.5px solid rgba(201,168,76,0.3)",
+                  padding: "0.75rem 0",
+                  overflow: "hidden",
+                }}
+              >
+                <div className="joop-marquee-fwd" aria-hidden="true" style={{ marginBottom: "0.45rem" }}>
+                  {track.map((item, i) => (
+                    <span key={i} className="joop-marquee-item">{item}</span>
+                  ))}
+                </div>
+                <div className="joop-marquee-rev" aria-hidden="true">
+                  {track.map((item, i) => (
+                    <span key={i} className="joop-marquee-item">{item}</span>
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
+            );
+          })()}
         </section>
 
         <style>{`
-          @keyframes joop-home-marquee {
+          @keyframes joop-marquee-forward {
             from { transform: translateX(0); }
             to { transform: translateX(-50%); }
           }
-          .joop-home-marquee-track {
+          @keyframes joop-marquee-reverse {
+            from { transform: translateX(-50%); }
+            to { transform: translateX(0); }
+          }
+          .joop-marquee-fwd,
+          .joop-marquee-rev {
             display: flex;
             min-width: max-content;
             white-space: nowrap;
-            animation: joop-home-marquee 24s linear infinite;
+          }
+          .joop-marquee-fwd {
+            animation: joop-marquee-forward 32s linear infinite;
+          }
+          .joop-marquee-rev {
+            animation: joop-marquee-reverse 32s linear infinite;
+          }
+          .joop-marquee-item {
+            font-family: var(--font-cormorant), serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            color: #C9A84C;
+            padding: 0 0.5rem;
           }
         `}</style>
 
