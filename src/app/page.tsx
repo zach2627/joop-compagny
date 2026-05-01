@@ -495,113 +495,79 @@ export default async function HomePage() {
           className="relative overflow-hidden"
           style={{ minHeight: "100vh" }}
         >
-          {/* Mobile: image plein fond + overlay sombre */}
-          {SIGNATURE_BG_IMAGE && (
-            <div className="absolute inset-0 lg:hidden">
-              <Image
-                src={SIGNATURE_BG_IMAGE}
-                alt="JOOP COMPAGNY — parfum signature"
-                fill
-                sizes="100vw"
-                style={{ objectFit: "cover", objectPosition: "center" }}
-                priority={false}
-              />
-              <div
-                className="absolute inset-0"
-                style={{ background: "rgba(10,10,8,0.76)" }}
-              />
-            </div>
-          )}
+          {/* Image plein fond */}
+          <Image
+            src={SIGNATURE_BG_IMAGE}
+            alt="JOOP COMPAGNY — parfum signature"
+            fill
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "center top" }}
+            priority={false}
+          />
 
-          {/* Layout desktop : 60 / 40 */}
-          <div className="relative flex min-h-screen flex-col lg:flex-row">
-            {/* Colonne gauche — 60% — texte */}
-            <div
-              className="relative z-10 flex flex-1 flex-col justify-center py-20 md:py-28 lg:py-0 lg:basis-3/5"
-              style={{ background: "rgba(10,10,8,0.82)" }}
-            >
-              {/* Gradient droite → transparent pour fondre avec l'image */}
-              <div
-                className="pointer-events-none absolute inset-y-0 right-0 hidden w-32 lg:block"
-                style={{
-                  background:
-                    "linear-gradient(90deg, transparent 0%, rgba(10,10,8,0.82) 100%)",
-                  transform: "scaleX(-1)",
-                }}
-              />
+          {/* Dégradé : noir opaque à gauche → transparent à droite */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(90deg, rgba(10,10,8,0.97) 0%, rgba(10,10,8,0.92) 28%, rgba(10,10,8,0.6) 52%, rgba(10,10,8,0.18) 72%, transparent 100%)",
+            }}
+          />
+          {/* Overlay mobile : toute la surface assombrie */}
+          <div
+            className="absolute inset-0 lg:hidden"
+            style={{ background: "rgba(10,10,8,0.72)" }}
+          />
 
-              <div className="container-xl lg:max-w-none lg:pl-16 xl:pl-24 lg:pr-20">
-                <ScrollReveal>
-                  <p className="luxe-kicker">{home.storyEyebrow}</p>
-                  <h2
-                    className="mt-5 max-w-[10ch] text-balance"
-                    style={{
-                      fontFamily: "var(--font-cormorant), serif",
-                      fontSize: "clamp(2.7rem, 5vw, 4.7rem)",
-                      lineHeight: 0.94,
-                    }}
-                  >
-                    {home.storyTitle}
-                  </h2>
-                  <p className="mt-6 max-w-[520px] text-base luxe-copy">
-                    {home.storyBody}
-                  </p>
-                  <p
-                    className="mt-6 max-w-[520px] text-sm"
-                    style={{ color: "var(--color-primary-dark)", lineHeight: 1.85 }}
-                  >
-                    {copy.worldsIntro}
-                  </p>
+          {/* Texte — colonne gauche sur l'image */}
+          <div className="container-xl relative z-10 flex min-h-screen items-center py-20">
+            <div className="max-w-[560px]">
+              <ScrollReveal>
+                <p className="luxe-kicker">{home.storyEyebrow}</p>
+                <h2
+                  className="mt-5 max-w-[10ch] text-balance"
+                  style={{
+                    fontFamily: "var(--font-cormorant), serif",
+                    fontSize: "clamp(2.7rem, 5vw, 4.7rem)",
+                    lineHeight: 0.94,
+                  }}
+                >
+                  {home.storyTitle}
+                </h2>
+                <p className="mt-6 text-base luxe-copy">
+                  {home.storyBody}
+                </p>
+                <p
+                  className="mt-6 text-sm"
+                  style={{ color: "var(--color-primary-dark)", lineHeight: 1.85 }}
+                >
+                  {copy.worldsIntro}
+                </p>
 
-                  <div className="mt-10">
-                    <StaggerReveal className="grid gap-4 sm:grid-cols-2 lg:max-w-[520px]">
-                      {home.highlights.map((item: string, index: number) => (
-                        <div
-                          key={item}
-                          className={`luxe-panel p-5 ${index === 0 ? "sm:col-span-2" : ""}`}
+                <div className="mt-10">
+                  <StaggerReveal className="grid gap-4 sm:grid-cols-2">
+                    {home.highlights.map((item: string, index: number) => (
+                      <div
+                        key={item}
+                        className={`luxe-panel p-5 ${index === 0 ? "sm:col-span-2" : ""}`}
+                      >
+                        <p className="luxe-kicker">0{index + 1}</p>
+                        <p
+                          className="mt-3"
+                          style={{
+                            fontFamily: "var(--font-cormorant), serif",
+                            fontSize: index === 0 ? "1.7rem" : "1.4rem",
+                            lineHeight: 1.1,
+                            color: "var(--color-text)",
+                          }}
                         >
-                          <p className="luxe-kicker">0{index + 1}</p>
-                          <p
-                            className="mt-3"
-                            style={{
-                              fontFamily: "var(--font-cormorant), serif",
-                              fontSize: index === 0 ? "1.7rem" : "1.4rem",
-                              lineHeight: 1.1,
-                              color: "var(--color-text)",
-                            }}
-                          >
-                            {item}
-                          </p>
-                        </div>
-                      ))}
-                    </StaggerReveal>
-                  </div>
-                </ScrollReveal>
-              </div>
-            </div>
-
-            {/* Colonne droite — 40% — image Cloudinary */}
-            <div className="relative hidden lg:block lg:basis-2/5">
-              {SIGNATURE_BG_IMAGE ? (
-                <>
-                  <Image
-                    src={SIGNATURE_BG_IMAGE}
-                    alt="JOOP COMPAGNY — parfum signature"
-                    fill
-                    sizes="40vw"
-                    style={{ objectFit: "cover", objectPosition: "center top" }}
-                    priority={false}
-                  />
-                  {/* Dégradé gauche (noir) → transparent : assure la lisibilité du texte */}
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, rgba(10,10,8,0.92) 0%, rgba(10,10,8,0.5) 22%, rgba(10,10,8,0.12) 55%, transparent 100%)",
-                    }}
-                  />
-                </>
-              ) : null}
+                          {item}
+                        </p>
+                      </div>
+                    ))}
+                  </StaggerReveal>
+                </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
