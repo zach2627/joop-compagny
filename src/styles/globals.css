@@ -249,6 +249,8 @@
 
   .prod-card-inner {
     position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     overflow: hidden;
     border-radius: 28px;
