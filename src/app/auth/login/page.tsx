@@ -174,7 +174,7 @@ export default function LoginPage() {
             fallback={
               <div
                 className="h-48 animate-pulse rounded-apple-md"
-                style={{ background: "rgba(220,193,188,0.24)" }}
+                style={{ background: "rgba(201,168,76,0.06)" }}
               />
             }
           >

@@ -72,7 +72,7 @@ export default async function AdminLayout({
 
         <div className="p-4 border-t border-white/10">
           <div className="flex items-center gap-3 px-3 py-2 mb-2">
-            <div className="w-8 h-8 rounded-full bg-apple-blue flex items-center justify-center text-xs font-bold">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: "rgba(201,168,76,0.18)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}>
               {session.name?.charAt(0).toUpperCase() ?? "A"}
             </div>
             <div className="min-w-0">
