@@ -86,28 +86,61 @@ export function CloudinaryMediaLibrary({
 
   const loadProductAssets = useCallback(async () => {
     const fetchPrefix = async (prefix: string, limit = 80) => {
-      const response = await fetch(
-        `/api/admin/cloudinary/assets?prefix=${encodeURIComponent(prefix)}&limit=${limit}`
-      );
-      if (!response.ok) {
-        const payload = await response.json().catch(() => null);
-        throw new Error(payload?.error ?? "Impossible de charger les images Cloudinary.");
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 8000);
+
+      try {
+        const response = await fetch(
+          `/api/admin/cloudinary/assets?prefix=${encodeURIComponent(prefix)}&limit=${limit}`,
+          {
+            signal: controller.signal,
+            cache: "no-store",
+          }
+        );
+
+        if (!response.ok) {
+          const payload = await response.json().catch(() => null);
+
+          if (response.status === 401) {
+            throw new Error(
+              "La session admin a expire. Recharge la page puis reconnecte-toi si necessaire."
+            );
+          }
+
+          throw new Error(payload?.error ?? "Impossible de charger les images Cloudinary.");
+        }
+
+        const payload = await response.json();
+        return (payload.assets ?? []) as CloudinaryAsset[];
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") {
+          throw new Error(
+            "Le chargement des images prend trop de temps. Clique sur Actualiser pour reessayer."
+          );
+        }
+
+        throw error;
+      } finally {
+        window.clearTimeout(timeoutId);
       }
-      const payload = await response.json();
-      return (payload.assets ?? []) as CloudinaryAsset[];
     };
 
     const specificPrefixes = [primaryPrefix, legacyPrefix].filter(
       (prefix): prefix is string => Boolean(prefix)
     );
-    const specificResults = await Promise.all(specificPrefixes.map((prefix) => fetchPrefix(prefix)));
-    const scopedAssets = dedupeAssets(specificResults);
+    const scopedAssets: CloudinaryAsset[][] = [];
 
-    if (scopedAssets.length > 0) {
-      return scopedAssets;
+    for (const prefix of specificPrefixes) {
+      scopedAssets.push(await fetchPrefix(prefix));
     }
 
-    return fetchPrefix("products/", 100);
+    const dedupedScopedAssets = dedupeAssets(scopedAssets);
+
+    if (dedupedScopedAssets.length > 0) {
+      return dedupedScopedAssets;
+    }
+
+    return fetchPrefix("products/", 40);
   }, [legacyPrefix, primaryPrefix]);
 
   useEffect(() => {

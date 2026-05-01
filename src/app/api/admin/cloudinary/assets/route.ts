@@ -18,6 +18,17 @@ type CloudinaryResource = {
   created_at?: string;
 };
 
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number) {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error(`Cloudinary timeout after ${timeoutMs}ms`));
+      }, timeoutMs);
+    }),
+  ]);
+}
+
 export async function GET(request: Request) {
   const session = await getServerSession();
   if (!session || !["ADMIN", "STAFF"].includes(session.role)) {
@@ -32,12 +43,15 @@ export async function GET(request: Request) {
   );
 
   try {
-    const result = await cloudinary.api.resources({
-      type: "upload",
-      prefix,
-      max_results: maxResults,
-      resource_type: "image",
-    });
+    const result = await withTimeout(
+      cloudinary.api.resources({
+        type: "upload",
+        prefix,
+        max_results: maxResults,
+        resource_type: "image",
+      }),
+      8000
+    );
 
     const assets = ((result.resources as CloudinaryResource[] | undefined) ?? [])
       .filter((resource) => resource.public_id && resource.secure_url)
@@ -57,7 +71,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ assets });
   } catch (error) {
-    console.error("cloudinary assets listing failed:", error);
+    console.error("cloudinary assets listing failed:", { prefix, maxResults, error });
     return NextResponse.json(
       { error: "Impossible de recuperer les assets Cloudinary." },
       { status: 502 }
