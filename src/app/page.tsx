@@ -139,6 +139,7 @@ const HOME_EDITORIAL: Record<
 
 const SIGNATURE_FEATURE_IMAGE =
   "https://res.cloudinary.com/dlfytqzpw/image/upload/v1777630989/ChatGPT_Image_1_mai_2026_12_21_30_kopaje.png";
+const ATELIER_BACKGROUND_IMAGE = "/images/home/atelier-luxe.png";
 
 function getPrimaryImageUrl(product: FeaturedProduct | null | undefined) {
   return product?.images[0]?.url ?? null;
@@ -888,44 +889,108 @@ export default async function HomePage() {
           <div className="container-xl">
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
               <ScrollReveal>
-                <div className="luxe-panel-strong h-full p-7 md:p-10">
-                  <p className="luxe-kicker">{copy.atelierLabel}</p>
-                  <h2
-                    className="mt-5 max-w-[11ch] text-balance"
-                    style={{
-                      fontSize: "clamp(2.6rem, 5vw, 4.4rem)",
-                      lineHeight: 0.95,
-                    }}
-                  >
-                    {copy.atelierTitle}
-                  </h2>
-                  <p className="mt-6 max-w-[620px] text-base luxe-copy">
-                    {copy.atelierBody}
-                  </p>
+                <div
+                  className="relative h-full overflow-hidden rounded-[34px]"
+                  style={{
+                    border: "1px solid rgba(212,175,55,0.16)",
+                    boxShadow: "0 28px 68px rgba(0,0,0,0.36)",
+                    background:
+                      "linear-gradient(180deg, rgba(17,17,9,0.96) 0%, rgba(10,10,8,0.94) 100%)",
+                  }}
+                >
+                  <div className="absolute inset-0">
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        backgroundImage: `url(${ATELIER_BACKGROUND_IMAGE})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center center",
+                      }}
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(90deg, rgba(10,10,8,0.9) 0%, rgba(10,10,8,0.78) 36%, rgba(10,10,8,0.62) 68%, rgba(10,10,8,0.82) 100%)",
+                      }}
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, rgba(10,10,8,0.14) 0%, rgba(10,10,8,0.24) 36%, rgba(10,10,8,0.86) 100%)",
+                      }}
+                    />
+                  </div>
 
-                  <StaggerReveal className="mt-8 grid gap-4 md:grid-cols-3">
-                    {home.reasons.map(
-                      (reason: { title: string; desc: string }, index: number) => (
-                        <div
-                          key={reason.title}
-                          className="rounded-[24px] p-5"
-                          style={{
-                            background:
-                              index === 1
-                                ? "rgba(220,193,188,0.24)"
-                                : "rgba(255,255,255,0.34)",
-                            border: "1px solid rgba(184,138,84,0.1)",
-                          }}
-                        >
-                          <p className="luxe-kicker">0{index + 1}</p>
-                          <h3 className="mt-4 text-2xl text-balance" style={{ lineHeight: 1.02 }}>
-                            {reason.title}
-                          </h3>
-                          <p className="mt-4 text-sm luxe-copy">{reason.desc}</p>
-                        </div>
-                      )
-                    )}
-                  </StaggerReveal>
+                  <div className="relative z-10 p-7 md:p-10 lg:p-12">
+                    <p className="luxe-kicker" style={{ color: "#d4af37" }}>
+                      {copy.atelierLabel}
+                    </p>
+                    <h2
+                      className="mt-5 max-w-[11ch] text-balance"
+                      style={{
+                        fontSize: "clamp(2.6rem, 5vw, 4.4rem)",
+                        lineHeight: 0.95,
+                        color: "#FFFFFF",
+                      }}
+                    >
+                      {copy.atelierTitle}
+                    </h2>
+                    <p
+                      className="mt-6 max-w-[620px] text-base md:text-lg"
+                      style={{
+                        color: "rgba(255,255,255,0.88)",
+                        lineHeight: 1.9,
+                      }}
+                    >
+                      {copy.atelierBody}
+                    </p>
+
+                    <StaggerReveal className="mt-8 grid gap-4 md:grid-cols-3">
+                      {home.reasons.map(
+                        (reason: { title: string; desc: string }, index: number) => (
+                          <div
+                            key={reason.title}
+                            className="rounded-[24px] p-5"
+                            style={{
+                              background:
+                                index === 1
+                                  ? "rgba(70,56,46,0.48)"
+                                  : "rgba(10,10,8,0.48)",
+                              border: "1px solid rgba(212,175,55,0.14)",
+                              backdropFilter: "blur(14px)",
+                            }}
+                          >
+                            <p
+                              className="text-[10px] uppercase tracking-[0.28em]"
+                              style={{ color: "rgba(212,175,55,0.9)" }}
+                            >
+                              0{index + 1}
+                            </p>
+                            <h3
+                              className="mt-4 text-2xl text-balance"
+                              style={{
+                                lineHeight: 1.02,
+                                color: "#FFFFFF",
+                              }}
+                            >
+                              {reason.title}
+                            </h3>
+                            <p
+                              className="mt-4 text-sm"
+                              style={{
+                                color: "rgba(255,255,255,0.78)",
+                                lineHeight: 1.8,
+                              }}
+                            >
+                              {reason.desc}
+                            </p>
+                          </div>
+                        )
+                      )}
+                    </StaggerReveal>
+                  </div>
                 </div>
               </ScrollReveal>
 
