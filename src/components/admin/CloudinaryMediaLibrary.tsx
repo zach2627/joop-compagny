@@ -5,11 +5,13 @@ import { Image as ImageIcon, Loader2 } from "lucide-react";
 
 type MediaLibraryWidget = { show: () => void; hide: () => void };
 
-// Extend window for the Cloudinary Media Library Widget script
 declare global {
   interface Window {
     cloudinary?: {
-      createMediaLibrary: (config: Record<string, unknown>, handlers: Record<string, unknown>) => MediaLibraryWidget;
+      createMediaLibrary: (
+        config: Record<string, unknown>,
+        handlers: Record<string, unknown>
+      ) => MediaLibraryWidget;
     };
   }
 }
@@ -25,6 +27,8 @@ interface Props {
   onImagesAdded?: () => void;
 }
 
+const SCRIPT_URL = "https://media-library.cloudinary.com/global/all.js";
+
 export function CloudinaryMediaLibrary({ productId, pendingColor, onImagesAdded }: Props) {
   const [scriptLoading, setScriptLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -33,6 +37,7 @@ export function CloudinaryMediaLibrary({ productId, pendingColor, onImagesAdded 
 
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
   const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+  const username = process.env.NEXT_PUBLIC_CLOUDINARY_USERNAME;
 
   const buildWidget = (): MediaLibraryWidget | null => {
     if (!window.cloudinary || !cloudName || !apiKey) return null;
@@ -41,6 +46,7 @@ export function CloudinaryMediaLibrary({ productId, pendingColor, onImagesAdded 
       {
         cloud_name: cloudName,
         api_key: apiKey,
+        ...(username ? { username } : {}),
         multiple: true,
         max_files: 5,
         folder: { path: "joop_compagny", resource_type: "image" },
@@ -82,29 +88,39 @@ export function CloudinaryMediaLibrary({ productId, pendingColor, onImagesAdded 
   const handleOpen = () => {
     setError("");
 
+    // Guard: env vars must be present before loading the script
+    if (!cloudName || !apiKey) {
+      setError(
+        "Configuration manquante : NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME et NEXT_PUBLIC_CLOUDINARY_API_KEY sont requis."
+      );
+      return;
+    }
+
     // Widget already initialised — show directly
     if (widgetRef.current) {
       widgetRef.current.show();
       return;
     }
 
-    // Script already in the page — just rebuild widget
+    // Script already in the page — rebuild widget
     if (window.cloudinary) {
       buildWidget()?.show();
       return;
     }
 
-    // First click: load the script lazily
+    // First click: load the widget script lazily
     setScriptLoading(true);
     const script = document.createElement("script");
-    script.src = "https://media-library.cloudinary.com/global/all.js";
+    script.src = SCRIPT_URL;
     script.onload = () => {
       setScriptLoading(false);
       buildWidget()?.show();
     };
     script.onerror = () => {
       setScriptLoading(false);
-      setError("Impossible de charger le widget Cloudinary.");
+      setError(
+        "Échec du chargement du script Cloudinary. Vérifiez votre connexion ou la politique CSP du site."
+      );
     };
     document.head.appendChild(script);
   };
@@ -136,7 +152,7 @@ export function CloudinaryMediaLibrary({ productId, pendingColor, onImagesAdded 
           </>
         )}
       </button>
-      {error ? <p className="max-w-[260px] text-xs text-red-500">{error}</p> : null}
+      {error ? <p className="max-w-[300px] text-xs text-red-500">{error}</p> : null}
     </div>
   );
 }
