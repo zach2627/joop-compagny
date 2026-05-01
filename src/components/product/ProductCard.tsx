@@ -42,10 +42,12 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
     >
       <motion.div whileHover={{ y: -8, scale: 1.01 }} transition={{ duration: 0.35 }} className="prod-card-inner">
         <div
-          className="relative aspect-square overflow-hidden"
+          className="relative overflow-hidden"
           style={{
+            height: "240px",
             background:
               "linear-gradient(180deg, rgba(27,24,18,0.94) 0%, rgba(18,16,12,0.94) 100%)",
+            flexShrink: 0,
           }}
         >
           <ProductImageFallback
@@ -54,7 +56,7 @@ export function ProductCard({ product, locale, labels }: ProductCardProps) {
             label={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            imageClassName="object-contain p-8 transition-transform duration-500 group-hover:scale-105"
+            imageClassName="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
             fallbackClassName="absolute inset-0"
           />
 
