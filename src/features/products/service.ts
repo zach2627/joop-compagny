@@ -182,21 +182,60 @@ export const getFeaturedProducts = unstable_cache(
 
 export const getCategories = unstable_cache(
   async () => {
-    return prisma.category.findMany({
+    const categories = await prisma.category.findMany({
       where: {
         isActive: true,
         parentId: null,
         slug: { in: STORE_CATEGORY_SLUGS },
       },
       include: {
-        _count: { select: { products: true } },
+        _count: {
+          select: {
+            products: {
+              where: {
+                isActive: true,
+              },
+            },
+          },
+        },
+        products: {
+          where: { isActive: true },
+          orderBy: { createdAt: "asc" },
+          take: 1,
+          include: {
+            images: {
+              where: { isPrimary: true },
+              orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
+              take: 1,
+            },
+          },
+        },
         children: {
           where: { isActive: true },
-          include: { _count: { select: { products: true } } },
+          include: {
+            _count: {
+              select: {
+                products: {
+                  where: {
+                    isActive: true,
+                  },
+                },
+              },
+            },
+          },
         },
       },
       orderBy: { sortOrder: "asc" },
     });
+
+    return categories.map((category) => ({
+      ...category,
+      imageUrl: category.products[0]?.images[0]?.url ?? category.imageUrl,
+      products: category.products.map((product) => ({
+        ...product,
+        images: resolveProductImages(product.slug, product.images, category.slug),
+      })),
+    }));
   },
   ["categories"],
   { revalidate: 3600, tags: ["categories"] }

@@ -162,21 +162,13 @@ function getHeroImages(products: FeaturedProduct[]) {
 function buildWorlds(
   locale: Locale,
   categories: StoreCategory[],
-  featured: FeaturedProduct[],
   copy: (typeof HOME_EDITORIAL)[Locale]
 ) {
-  const featuredByCategory = new Map<string, FeaturedProduct>();
-  for (const product of featured) {
-    if (!featuredByCategory.has(product.category.slug)) {
-      featuredByCategory.set(product.category.slug, product);
-    }
-  }
-
   const categoryMap = new Map(categories.map((category) => [category.slug, category]));
 
   return siteConfig.navCategories.map((slug) => {
     const category = categoryMap.get(slug) ?? null;
-    const showcase = featuredByCategory.get(slug) ?? featured[0] ?? null;
+    const showcase = category?.products[0] ?? null;
     const showcaseText = showcase ? translateProductContent(locale, showcase) : null;
 
     return {
@@ -205,7 +197,7 @@ export default async function HomePage() {
   const heroProducts = featured.slice(0, 4);
   const heroImages = getHeroImages(heroProducts);
   const heroFeatured = heroProducts[0] ?? featured[0] ?? null;
-  const worlds = buildWorlds(locale, categories, featured, copy);
+  const worlds = buildWorlds(locale, categories, copy);
   const marqueeItems = [...copy.marquee, ...home.highlights];
   const stats = Object.values(home.stats);
 
@@ -674,6 +666,8 @@ export default async function HomePage() {
                   locale,
                   category ?? { name: slug, slug }
                 );
+                const showcaseImageUrl =
+                  showcase?.images[0]?.url ?? category?.imageUrl ?? null;
 
                 return (
                   <Link
@@ -713,9 +707,30 @@ export default async function HomePage() {
                       <>
                         <div className="absolute inset-0 opacity-80">
                           <ProductImageFallback
-                            src={heroBackgroundImage(getPrimaryImageUrl(showcase))}
+                            src={heroBackgroundImage(showcaseImageUrl)}
                             alt={showcaseText?.name ?? translatedCategory}
                             label={showcaseText?.name ?? translatedCategory}
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                            imageClassName="object-cover transition-transform duration-700 group-hover:scale-105"
+                            fallbackClassName="absolute inset-0"
+                          />
+                        </div>
+                        <div
+                          className="absolute inset-0"
+                          style={{
+                            background:
+                              "linear-gradient(180deg, rgba(10,10,8,0.14) 0%, rgba(10,10,8,0.72) 100%)",
+                          }}
+                        />
+                      </>
+                    ) : category?.imageUrl ? (
+                      <>
+                        <div className="absolute inset-0 opacity-80">
+                          <ProductImageFallback
+                            src={heroBackgroundImage(category.imageUrl)}
+                            alt={translatedCategory}
+                            label={translatedCategory}
                             fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             imageClassName="object-cover transition-transform duration-700 group-hover:scale-105"
