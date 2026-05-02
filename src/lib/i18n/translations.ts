@@ -20,6 +20,7 @@ const fr = {
     language: "Langue",
     products: {
       bijoux: "Bijoux",
+      montres: "Montres",
       parfums: "Parfums",
       encens: "Encens",
       coffrets: "Coffrets",
@@ -301,6 +302,7 @@ const fr = {
   },
   categories: {
     bijoux: "Bijoux",
+    montres: "Montres",
     parfums: "Parfums",
     encens: "Encens",
     coffrets: "Coffrets",
@@ -327,6 +329,7 @@ const en = {
     language: "Language",
     products: {
       bijoux: "Jewelry",
+      montres: "Watches",
       parfums: "Perfumes",
       encens: "Incense",
       coffrets: "Gift sets",
@@ -608,6 +611,7 @@ const en = {
   },
   categories: {
     bijoux: "Jewelry",
+    montres: "Watches",
     parfums: "Perfumes",
     encens: "Incense",
     coffrets: "Gift sets",

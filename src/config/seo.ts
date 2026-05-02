@@ -27,6 +27,14 @@ export const categoryMeta: Record<
     descriptionEn:
       "Explore elegant colorful jewelry in Dakar: necklaces, bracelets and curated sets with premium finishing and gift-ready packaging.",
   },
+  montres: {
+    title: "Montres femme a Dakar - Montres dorees et elegantes | JOOP COMPAGNY",
+    description:
+      "Decouvrez notre selection de montres dorees et bijoux-montres pour femme, pensees pour sublimer le poignet et completer un look signature.",
+    titleEn: "Women's watches in Dakar - Gold watches and elegant timepieces | JOOP COMPAGNY",
+    descriptionEn:
+      "Discover our selection of gold-tone and elegant watches for women, designed to elevate the wrist and complete a signature look.",
+  },
   parfums: {
     title: "Parfums a Dakar - Eaux de parfum et huiles precieuses | JOOP COMPAGNY",
     description:
