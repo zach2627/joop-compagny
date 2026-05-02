@@ -309,10 +309,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
                 </div>
 
                 <div
-                  className="mt-6 space-y-3 rounded-[26px] p-5"
+                  className="mt-6 space-y-3 rounded-[16px] p-5"
                   style={{
-                    background: "rgba(255,255,255,0.4)",
-                    border: "1px solid rgba(184,138,84,0.1)",
+                    background: "rgba(17,17,9,0.86)",
+                    border: "1px solid rgba(201,168,76,0.14)",
                   }}
                 >
                   {[

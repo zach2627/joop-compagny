@@ -198,10 +198,10 @@ export default async function AccountPage() {
               {user.orders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex flex-col gap-4 rounded-[24px] p-4 md:flex-row md:items-center md:justify-between"
+                  className="flex flex-col gap-4 rounded-[12px] p-4 md:flex-row md:items-center md:justify-between"
                   style={{
-                    background: "rgba(255,255,255,0.34)",
-                    border: "1px solid rgba(184,138,84,0.1)",
+                    background: "rgba(17,17,9,0.86)",
+                    border: "1px solid rgba(201,168,76,0.12)",
                   }}
                 >
                   <div className="flex items-center gap-3">

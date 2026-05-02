@@ -141,7 +141,7 @@ export function CloudinaryMediaLibrary({
       return dedupedScopedAssets;
     }
 
-    return fetchPrefix("products/", 40);
+    return fetchPrefix("products", 50);
   }, [legacyPrefix, primaryPrefix]);
 
   useEffect(() => {
