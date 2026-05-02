@@ -7,7 +7,17 @@ import { logger } from "@/lib/middleware/logger";
 const REFRESH_COOKIE = "st_refresh";
 const SESSION_COOKIE = "st_session";
 
+function wantsJsonResponse(request: NextRequest) {
+  const accept = request.headers.get("accept") ?? "";
+
+  return (
+    request.headers.get("x-auth-intent") === "client-refresh" ||
+    accept.includes("application/json")
+  );
+}
+
 export async function GET(request: NextRequest) {
+  const jsonResponse = wantsJsonResponse(request);
   const redirectTo = sanitizeRedirectPath(
     request.nextUrl.searchParams.get("redirect"),
     "/"
@@ -15,6 +25,18 @@ export async function GET(request: NextRequest) {
   const refreshToken = request.cookies.get(REFRESH_COOKIE)?.value;
 
   if (!refreshToken) {
+    if (jsonResponse) {
+      return NextResponse.json(
+        { success: false, error: "Authentification requise" },
+        {
+          status: 401,
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        }
+      );
+    }
+
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
@@ -29,6 +51,18 @@ export async function GET(request: NextRequest) {
     });
 
     if (!storedToken || !storedToken.user.isActive) {
+      if (jsonResponse) {
+        return NextResponse.json(
+          { success: false, error: "Session invalide" },
+          {
+            status: 401,
+            headers: {
+              "Cache-Control": "no-store",
+            },
+          }
+        );
+      }
+
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
@@ -53,7 +87,16 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
-    const response = NextResponse.redirect(new URL(redirectTo, request.url));
+    const response = jsonResponse
+      ? NextResponse.json(
+          { success: true, redirectTo },
+          {
+            headers: {
+              "Cache-Control": "no-store",
+            },
+          }
+        )
+      : NextResponse.redirect(new URL(redirectTo, request.url));
 
     response.cookies.set(SESSION_COOKIE, newAccessToken, {
       httpOnly: true,
@@ -75,6 +118,19 @@ export async function GET(request: NextRequest) {
     return response;
   } catch (error) {
     logger.warn("auth.token.refresh-failed", { error: String(error) });
+
+    if (jsonResponse) {
+      return NextResponse.json(
+        { success: false, error: "Session invalide" },
+        {
+          status: 401,
+          headers: {
+            "Cache-Control": "no-store",
+          },
+        }
+      );
+    }
+
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 }

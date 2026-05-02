@@ -1,10 +1,11 @@
 // src/components/admin/ProductImagesManager.tsx
 "use client";
 
-import { useState, useRef, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { Upload, Loader2, Trash2, Star, Tag } from "lucide-react";
+import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Loader2, Star, Tag, Trash2, Upload } from "lucide-react";
+import { fetchWithAdminRefresh } from "@/lib/auth/admin-client";
 import { productThumbnailImage } from "@/lib/images/cloudinary";
 import { CloudinaryMediaLibrary } from "./CloudinaryMediaLibrary";
 
@@ -26,6 +27,11 @@ interface Props {
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE_MB = 5;
 
+async function readApiError(response: Response, fallback: string) {
+  const payload = await response.json().catch(() => null);
+  return payload?.error ?? fallback;
+}
+
 export function ProductImagesManager({
   productId,
   productSlug,
@@ -37,43 +43,47 @@ export function ProductImagesManager({
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
   const [isPending, startTransition] = useTransition();
-  /** Couleur à associer au prochain upload */
   const [pendingColor, setPendingColor] = useState("");
-  /** id de l'image dont on édite la couleur inline */
   const [editingColorId, setEditingColorId] = useState<string | null>(null);
   const [editingColorVal, setEditingColorVal] = useState("");
   const uploadFolder = `products/${(productSlug?.trim() || productId).trim()}`;
 
-  const refresh = () => startTransition(() => { router.refresh(); });
+  const refresh = () => startTransition(() => router.refresh());
 
-  // ── Upload ────────────────────────────────────────────────────────────────
   const handleFile = async (file: File) => {
     setUploadError("");
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setUploadError("Format non accepté (JPEG, PNG, WebP uniquement).");
+      setUploadError("Format non accepte (JPEG, PNG, WebP uniquement).");
       return;
     }
+
     if (file.size > MAX_SIZE_MB * 1024 * 1024) {
       setUploadError(`Fichier trop volumineux (max ${MAX_SIZE_MB} Mo).`);
       return;
     }
 
     setUploading(true);
+
     try {
       const form = new FormData();
       form.append("file", file);
-      const uploadRes = await fetch(`/api/admin/upload?folder=${encodeURIComponent(uploadFolder)}`, {
-        method: "POST",
-        body: form,
-      });
-      if (!uploadRes.ok) {
-        const { error } = await uploadRes.json();
-        throw new Error(error ?? "Échec upload");
-      }
-      const { url } = await uploadRes.json();
 
-      const dbRes = await fetch("/api/products/images", {
+      const uploadResponse = await fetchWithAdminRefresh(
+        `/api/admin/upload?folder=${encodeURIComponent(uploadFolder)}`,
+        {
+          method: "POST",
+          body: form,
+        }
+      );
+
+      if (!uploadResponse.ok) {
+        throw new Error(await readApiError(uploadResponse, "Echec upload"));
+      }
+
+      const { url } = await uploadResponse.json();
+
+      const saveResponse = await fetchWithAdminRefresh("/api/products/images", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -83,61 +93,92 @@ export function ProductImagesManager({
           color: pendingColor.trim() || null,
         }),
       });
-      if (!dbRes.ok) {
-        const { error } = await dbRes.json();
-        throw new Error(error ?? "Échec sauvegarde image");
+
+      if (!saveResponse.ok) {
+        throw new Error(await readApiError(saveResponse, "Echec sauvegarde image"));
       }
 
       setPendingColor("");
       refresh();
-    } catch (err) {
-      setUploadError(String(err));
+    } catch (error) {
+      setUploadError(
+        error instanceof Error ? error.message : "Operation impossible pour le moment."
+      );
     } finally {
       setUploading(false);
-      if (inputRef.current) inputRef.current.value = "";
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
     }
   };
 
-  // ── Supprimer ─────────────────────────────────────────────────────────────
   const handleDelete = async (imageId: string) => {
-    if (!confirm("Supprimer cette image ?")) return;
-    await fetch("/api/products/images", {
+    if (!confirm("Supprimer cette image ?")) {
+      return;
+    }
+
+    setUploadError("");
+
+    const response = await fetchWithAdminRefresh("/api/products/images", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imageId }),
     });
+
+    if (!response.ok) {
+      setUploadError(await readApiError(response, "Suppression impossible."));
+      return;
+    }
+
     refresh();
   };
 
-  // ── Définir principale ────────────────────────────────────────────────────
   const handleSetPrimary = async (imageId: string) => {
-    await fetch("/api/products/images", {
+    setUploadError("");
+
+    const response = await fetchWithAdminRefresh("/api/products/images", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imageId, productId }),
     });
+
+    if (!response.ok) {
+      setUploadError(await readApiError(response, "Mise a jour impossible."));
+      return;
+    }
+
     refresh();
   };
 
-  // ── Éditer la couleur d'une image existante ───────────────────────────────
   const handleSaveColor = async (imageId: string) => {
-    await fetch("/api/products/images", {
+    setUploadError("");
+
+    const response = await fetchWithAdminRefresh("/api/products/images", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imageId, productId, color: editingColorVal.trim() || null }),
+      body: JSON.stringify({
+        imageId,
+        productId,
+        color: editingColorVal.trim() || null,
+      }),
     });
+
+    if (!response.ok) {
+      setUploadError(await readApiError(response, "Mise a jour impossible."));
+      return;
+    }
+
     setEditingColorId(null);
     refresh();
   };
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Galerie */}
-      {images.length > 0 && (
+      {images.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {images.map((img) => (
-            <div key={img.id} className="flex flex-col gap-1 items-center">
-              <div className="relative group w-16 h-16 rounded-lg overflow-hidden bg-apple-gray-50 border border-apple-gray-200 flex-shrink-0">
+            <div key={img.id} className="flex flex-col items-center gap-1">
+              <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border border-apple-gray-200 bg-apple-gray-50 group">
                 <Image
                   src={productThumbnailImage(img.url)}
                   alt={img.alt ?? "image produit"}
@@ -145,136 +186,164 @@ export function ProductImagesManager({
                   sizes="64px"
                   className="object-contain p-1"
                 />
-                {/* Badge principale */}
-                {img.isPrimary && (
-                  <span className="absolute top-0.5 left-0.5 bg-yellow-400 rounded-full p-0.5">
-                    <Star className="w-2.5 h-2.5 text-yellow-900 fill-yellow-900" />
+
+                {img.isPrimary ? (
+                  <span className="absolute left-0.5 top-0.5 rounded-full bg-yellow-400 p-0.5">
+                    <Star className="h-2.5 w-2.5 fill-yellow-900 text-yellow-900" />
                   </span>
-                )}
-                {/* Badge couleur */}
-                {img.color && !editingColorId && (
-                  <span className="absolute bottom-0 inset-x-0 text-[8px] text-center truncate px-0.5 py-0.5 bg-black/60 text-white">
+                ) : null}
+
+                {img.color && !editingColorId ? (
+                  <span className="absolute inset-x-0 bottom-0 truncate bg-black/60 px-0.5 py-0.5 text-center text-[8px] text-white">
                     {img.color}
                   </span>
-                )}
-                {/* Actions hover */}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
-                  {!img.isPrimary && (
+                ) : null}
+
+                <div className="absolute inset-0 flex items-center justify-center gap-1 bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+                  {!img.isPrimary ? (
                     <button
                       onClick={() => handleSetPrimary(img.id)}
                       disabled={isPending}
-                      title="Définir comme principale"
-                      className="p-1 rounded bg-yellow-400/90 hover:bg-yellow-400 transition-colors"
+                      title="Definir comme principale"
+                      className="rounded bg-yellow-400/90 p-1 transition-colors hover:bg-yellow-400"
                     >
-                      <Star className="w-3 h-3 text-yellow-900" />
+                      <Star className="h-3 w-3 text-yellow-900" />
                     </button>
-                  )}
+                  ) : null}
+
                   <button
                     onClick={() => {
                       setEditingColorId(img.id);
                       setEditingColorVal(img.color ?? "");
                     }}
                     title="Associer une couleur"
-                    className="p-1 rounded bg-blue-500/90 hover:bg-blue-500 transition-colors"
+                    className="rounded bg-blue-500/90 p-1 transition-colors hover:bg-blue-500"
                   >
-                    <Tag className="w-3 h-3 text-white" />
+                    <Tag className="h-3 w-3 text-white" />
                   </button>
+
                   <button
                     onClick={() => handleDelete(img.id)}
                     disabled={isPending}
                     title="Supprimer"
-                    className="p-1 rounded bg-red-500/90 hover:bg-red-500 transition-colors"
+                    className="rounded bg-red-500/90 p-1 transition-colors hover:bg-red-500"
                   >
-                    <Trash2 className="w-3 h-3 text-white" />
+                    <Trash2 className="h-3 w-3 text-white" />
                   </button>
                 </div>
               </div>
 
-              {/* Édition couleur inline */}
-              {editingColorId === img.id && (
-                <div className="flex gap-1 items-center">
+              {editingColorId === img.id ? (
+                <div className="flex items-center gap-1">
                   {variantColors.length > 0 ? (
                     <select
                       autoFocus
                       value={editingColorVal}
-                      onChange={(e) => setEditingColorVal(e.target.value)}
-                      className="text-[10px] px-1.5 py-0.5 border border-apple-gray-300 rounded w-28 focus:outline-none bg-white"
-                      onKeyDown={(e) => { if (e.key === "Escape") setEditingColorId(null); }}
+                      onChange={(event) => setEditingColorVal(event.target.value)}
+                      className="w-28 rounded border border-apple-gray-300 bg-white px-1.5 py-0.5 text-[10px] focus:outline-none"
+                      onKeyDown={(event) => {
+                        if (event.key === "Escape") {
+                          setEditingColorId(null);
+                        }
+                      }}
                     >
-                      <option value="">— Aucune —</option>
-                      {variantColors.map((c) => (
-                        <option key={c} value={c}>{c}</option>
+                      <option value="">- Aucune -</option>
+                      {variantColors.map((color) => (
+                        <option key={color} value={color}>
+                          {color}
+                        </option>
                       ))}
                     </select>
                   ) : (
                     <input
                       autoFocus
                       value={editingColorVal}
-                      onChange={(e) => setEditingColorVal(e.target.value)}
+                      onChange={(event) => setEditingColorVal(event.target.value)}
                       placeholder="ex: Or sable"
-                      className="text-[10px] px-1.5 py-0.5 border border-apple-gray-300 rounded w-24 focus:outline-none"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSaveColor(img.id);
-                        if (e.key === "Escape") setEditingColorId(null);
+                      className="w-24 rounded border border-apple-gray-300 px-1.5 py-0.5 text-[10px] focus:outline-none"
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                          void handleSaveColor(img.id);
+                        }
+
+                        if (event.key === "Escape") {
+                          setEditingColorId(null);
+                        }
                       }}
                     />
                   )}
+
                   <button
                     onClick={() => handleSaveColor(img.id)}
-                    className="text-[10px] px-1.5 py-0.5 bg-apple-blue text-white rounded"
+                    className="rounded bg-apple-blue px-1.5 py-0.5 text-[10px] text-white"
                   >
                     OK
                   </button>
                 </div>
-              )}
+              ) : null}
             </div>
           ))}
         </div>
-      )}
+      ) : null}
 
-      {/* Upload + couleur optionnelle */}
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex flex-wrap items-center gap-2">
         {variantColors.length > 0 ? (
           <select
             value={pendingColor}
-            onChange={(e) => setPendingColor(e.target.value)}
-            className="text-xs px-2 py-1.5 border border-apple-gray-200 rounded-full focus:outline-none focus:border-apple-blue w-40 bg-white"
-            title="Associer une couleur à la prochaine image uploadée"
+            onChange={(event) => setPendingColor(event.target.value)}
+            className="w-40 rounded-full border border-apple-gray-200 bg-white px-2 py-1.5 text-xs focus:border-apple-blue focus:outline-none"
+            title="Associer une couleur a la prochaine image uploadée"
           >
-            <option value="">— Couleur (optionnel) —</option>
-            {variantColors.map((c) => (
-              <option key={c} value={c}>{c}</option>
+            <option value="">- Couleur (optionnel) -</option>
+            {variantColors.map((color) => (
+              <option key={color} value={color}>
+                {color}
+              </option>
             ))}
           </select>
         ) : (
           <input
             value={pendingColor}
-            onChange={(e) => setPendingColor(e.target.value)}
+            onChange={(event) => setPendingColor(event.target.value)}
             placeholder="Couleur (optionnel)"
-            className="text-xs px-2 py-1.5 border border-apple-gray-200 rounded-full focus:outline-none focus:border-apple-blue w-36"
-            title="Associer une couleur à la prochaine image uploadée"
+            className="w-36 rounded-full border border-apple-gray-200 px-2 py-1.5 text-xs focus:border-apple-blue focus:outline-none"
+            title="Associer une couleur a la prochaine image uploadée"
           />
         )}
+
         <input
           ref={inputRef}
           type="file"
           accept="image/*"
           className="hidden"
-          onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+            if (file) {
+              void handleFile(file);
+            }
+          }}
         />
+
         <button
           onClick={() => inputRef.current?.click()}
           disabled={uploading || isPending}
-          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-all"
+          className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-all"
           style={{
             color: uploading ? "rgba(255,255,255,0.6)" : "#C9A84C",
             borderColor: uploading ? "rgba(255,255,255,0.16)" : "rgba(201,168,76,0.4)",
           }}
         >
-          {uploading
-            ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Upload...</>
-            : <><Upload className="w-3.5 h-3.5" /> Ajouter</>
-          }
+          {uploading ? (
+            <>
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              Upload...
+            </>
+          ) : (
+            <>
+              <Upload className="h-3.5 w-3.5" />
+              Ajouter
+            </>
+          )}
         </button>
 
         <CloudinaryMediaLibrary
@@ -285,9 +354,9 @@ export function ProductImagesManager({
         />
       </div>
 
-      {uploadError && (
-        <p className="text-xs text-red-500 max-w-[220px]">{uploadError}</p>
-      )}
+      {uploadError ? (
+        <p className="max-w-[220px] text-xs text-red-500">{uploadError}</p>
+      ) : null}
     </div>
   );
 }

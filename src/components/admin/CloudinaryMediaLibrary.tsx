@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Check, Image as ImageIcon, Loader2, RefreshCcw, Search, X } from "lucide-react";
+import { fetchWithAdminRefresh } from "@/lib/auth/admin-client";
 import { productThumbnailImage } from "@/lib/images/cloudinary";
 
 type CloudinaryAsset = {
@@ -90,7 +91,7 @@ export function CloudinaryMediaLibrary({
       const timeoutId = window.setTimeout(() => controller.abort(), 8000);
 
       try {
-        const response = await fetch(
+        const response = await fetchWithAdminRefresh(
           `/api/admin/cloudinary/assets?prefix=${encodeURIComponent(prefix)}&limit=${limit}`,
           {
             signal: controller.signal,
@@ -206,7 +207,7 @@ export function CloudinaryMediaLibrary({
     try {
       await Promise.all(
         selectedAssets.map((asset) =>
-          fetch("/api/products/images", {
+          fetchWithAdminRefresh("/api/products/images", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
