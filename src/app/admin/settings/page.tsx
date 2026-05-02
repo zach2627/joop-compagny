@@ -10,6 +10,7 @@ import {
   Package,
   ExternalLink,
   Info,
+  KeyRound,
 } from "lucide-react";
 
 export const metadata = { title: "Parametres" };
@@ -133,6 +134,12 @@ export default function SettingsPage() {
             icon={Package}
             label="Produits"
             desc="Ajouter, modifier ou supprimer des produits"
+          />
+          <QuickLink
+            href="/admin/settings/password"
+            icon={KeyRound}
+            label="Securite"
+            desc="Changer le mot de passe de votre compte admin"
           />
           <QuickLink
             href="/admin/analytics"

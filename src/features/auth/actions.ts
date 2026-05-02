@@ -13,8 +13,13 @@ import {
   setAuthCookies,
   clearAuthCookies,
   REFRESH_COOKIE,
+  getServerSession,
 } from "@/lib/auth/jwt";
-import { loginSchema, registerSchema } from "@/lib/validation/schemas";
+import {
+  changePasswordSchema,
+  loginSchema,
+  registerSchema,
+} from "@/lib/validation/schemas";
 import { authLimiter } from "@/lib/middleware/logger";
 import { logger } from "@/lib/middleware/logger";
 
@@ -144,6 +149,106 @@ export async function loginAction(
   logger.info("auth.login.success", { userId: user.id, role: user.role });
 
   return { success: true, data: { userId: user.id, role: user.role } };
+}
+
+export async function changePasswordAction(
+  formData: FormData
+): Promise<ActionResult> {
+  const session = await getServerSession();
+
+  if (!session || !["ADMIN", "STAFF"].includes(session.role)) {
+    return {
+      success: false,
+      error: "Session expiree. Reconnectez-vous pour changer le mot de passe.",
+    };
+  }
+
+  const parsed = changePasswordSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: "Verifie les champs du formulaire.",
+      fieldErrors: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  const { currentPassword, newPassword } = parsed.data;
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.id },
+    select: {
+      id: true,
+      email: true,
+      role: true,
+      isActive: true,
+      passwordHash: true,
+    },
+  });
+
+  if (!user || !user.isActive) {
+    return {
+      success: false,
+      error: "Compte introuvable ou inactif.",
+    };
+  }
+
+  const passwordHash =
+    user.passwordHash ??
+    "$2a$12$invalidhashinvalidhashinvalidhashinvalidha";
+
+  const currentPasswordIsValid = await bcrypt.compare(
+    currentPassword,
+    passwordHash
+  );
+
+  if (!currentPasswordIsValid) {
+    logger.warn("auth.password-change.failed", {
+      userId: user.id,
+      reason: "invalid-current-password",
+    });
+
+    return {
+      success: false,
+      error: "Le mot de passe actuel est incorrect.",
+    };
+  }
+
+  const nextPasswordHash = await bcrypt.hash(newPassword, 12);
+  const [accessToken, refreshToken] = await Promise.all([
+    signAccessToken({ userId: user.id, email: user.email, role: user.role }),
+    signRefreshToken({ userId: user.id, email: user.email, role: user.role }),
+  ]);
+
+  await prisma.$transaction([
+    prisma.user.update({
+      where: { id: user.id },
+      data: { passwordHash: nextPasswordHash },
+    }),
+    prisma.refreshToken.deleteMany({
+      where: { userId: user.id },
+    }),
+    prisma.session.deleteMany({
+      where: { userId: user.id },
+    }),
+    prisma.refreshToken.create({
+      data: {
+        userId: user.id,
+        token: refreshToken,
+        expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+      },
+    }),
+  ]);
+
+  setAuthCookies(accessToken, refreshToken);
+  revalidatePath("/admin/settings");
+  revalidatePath("/admin/settings/password");
+
+  logger.info("auth.password-change.success", {
+    userId: user.id,
+    role: user.role,
+  });
+
+  return { success: true, data: undefined };
 }
 
 // ─── Logout ───────────────────────────────────────────────────────────────────

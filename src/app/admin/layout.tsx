@@ -13,6 +13,7 @@ import {
   Settings,
   ImageIcon,
   Camera,
+  KeyRound,
 } from "lucide-react";
 
 export default async function AdminLayout({
@@ -82,6 +83,13 @@ export default async function AdminLayout({
               <p className="text-xs text-white/50">{session.role}</p>
             </div>
           </div>
+          <Link
+            href="/admin/settings/password"
+            className="mb-2 flex items-center gap-2 w-full px-3 py-2 rounded-apple-md text-sm text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <KeyRound className="w-4 h-4" />
+            Changer le mot de passe
+          </Link>
           <LogoutButton />
         </div>
       </aside>

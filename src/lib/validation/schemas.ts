@@ -26,6 +26,25 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Mot de passe requis"),
 });
 
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Mot de passe actuel requis"),
+    newPassword: z
+      .string()
+      .min(8, "Le mot de passe doit comporter au moins 8 caracteres")
+      .regex(/[A-Z]/, "Doit contenir au moins une majuscule")
+      .regex(/[0-9]/, "Doit contenir au moins un chiffre"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Les mots de passe ne correspondent pas",
+    path: ["confirmPassword"],
+  })
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: "Le nouveau mot de passe doit etre different de l'ancien",
+    path: ["newPassword"],
+  });
+
 // ─── Product ─────────────────────────────────────────────────────────────────
 
 export const productFilterSchema = z.object({
@@ -165,6 +184,7 @@ export const addressSchema = z.object({
 // Type exports
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type ProductFilter = z.infer<typeof productFilterSchema>;
 export type AddToCartInput = z.infer<typeof addToCartSchema>;
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
