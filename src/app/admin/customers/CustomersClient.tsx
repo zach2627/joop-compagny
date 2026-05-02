@@ -70,20 +70,27 @@ export default function CustomersClient({
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-apple-md bg-apple-blue/10 flex items-center justify-center">
-            <Users className="w-5 h-5 text-apple-blue" />
+          <div
+            className="w-10 h-10 rounded-xl flex items-center justify-center"
+            style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.2)" }}
+          >
+            <Users className="w-5 h-5" style={{ color: "#C9A84C" }} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-apple-gray-900">Clients</h1>
-            <p className="text-sm text-apple-gray-500">
+            <h1 className="text-2xl font-bold text-white">Clients</h1>
+            <p className="text-sm" style={{ color: "rgba(255,255,255,0.46)" }}>
               {list.length} client{list.length > 1 ? "s" : ""} au total
             </p>
           </div>
         </div>
         <button
           onClick={handleExport}
-          className="flex items-center gap-2 px-4 py-2 rounded-apple-md bg-apple-gray-100
-                     text-sm font-medium text-apple-gray-700 hover:bg-apple-gray-200 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors"
+          style={{
+            background: "rgba(201,168,76,0.08)",
+            border: "1px solid rgba(201,168,76,0.2)",
+            color: "#C9A84C",
+          }}
         >
           <Download className="w-4 h-4" />
           Exporter CSV
@@ -92,35 +99,47 @@ export default function CustomersClient({
 
       {/* Search */}
       <div className="relative mb-6">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-gray-400" />
+        <Search
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
+          style={{ color: "rgba(255,255,255,0.3)" }}
+        />
         <input
           type="text"
           placeholder="Rechercher par nom, email ou téléphone..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-apple-md border border-apple-gray-200
-                     text-sm bg-white focus:outline-none focus:ring-2 focus:ring-apple-blue/30
-                     focus:border-apple-blue transition-all"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 transition-all"
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(201,168,76,0.18)",
+          }}
         />
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-apple-lg border border-apple-gray-200 overflow-hidden">
+      <div
+        className="overflow-hidden"
+        style={{
+          background: "rgba(17,17,9,0.84)",
+          border: "1px solid rgba(201,168,76,0.14)",
+          borderRadius: "16px",
+        }}
+      >
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-apple-gray-100 bg-apple-gray-50">
-              <th className="text-left px-6 py-3 font-semibold text-apple-gray-600">Client</th>
-              <th className="text-left px-6 py-3 font-semibold text-apple-gray-600">Email</th>
-              <th className="text-left px-6 py-3 font-semibold text-apple-gray-600">Téléphone</th>
-              <th className="text-left px-6 py-3 font-semibold text-apple-gray-600">Commandes</th>
-              <th className="text-left px-6 py-3 font-semibold text-apple-gray-600">Inscrit le</th>
-              <th className="text-right px-6 py-3 font-semibold text-apple-gray-600">Actions</th>
+            <tr style={{ background: "rgba(201,168,76,0.06)", borderBottom: "1px solid rgba(201,168,76,0.1)" }}>
+              <th className="text-left px-6 py-3 font-semibold" style={{ color: "rgba(255,255,255,0.46)" }}>Client</th>
+              <th className="text-left px-6 py-3 font-semibold" style={{ color: "rgba(255,255,255,0.46)" }}>Email</th>
+              <th className="text-left px-6 py-3 font-semibold" style={{ color: "rgba(255,255,255,0.46)" }}>Téléphone</th>
+              <th className="text-left px-6 py-3 font-semibold" style={{ color: "rgba(255,255,255,0.46)" }}>Commandes</th>
+              <th className="text-left px-6 py-3 font-semibold" style={{ color: "rgba(255,255,255,0.46)" }}>Inscrit le</th>
+              <th className="text-right px-6 py-3 font-semibold" style={{ color: "rgba(255,255,255,0.46)" }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-12 text-apple-gray-400">
+                <td colSpan={6} className="text-center py-12" style={{ color: "rgba(255,255,255,0.3)" }}>
                   Aucun client trouvé
                 </td>
               </tr>
@@ -128,35 +147,51 @@ export default function CustomersClient({
               filtered.map((c) => (
                 <tr
                   key={c.id}
-                  className="border-b border-apple-gray-100 last:border-0 hover:bg-apple-gray-50 transition-colors"
+                  className="last:border-0 transition-colors"
+                  style={{ borderBottom: "1px solid rgba(201,168,76,0.06)" }}
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-apple-blue flex items-center justify-center text-white text-xs font-bold shrink-0">
+                      <div
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                        style={{
+                          background: "rgba(201,168,76,0.18)",
+                          border: "1px solid rgba(201,168,76,0.3)",
+                          color: "#C9A84C",
+                        }}
+                      >
                         {c.name?.charAt(0).toUpperCase() ?? c.email.charAt(0).toUpperCase()}
                       </div>
-                      <span className="font-medium text-apple-gray-900">
+                      <span className="font-medium text-white">
                         {c.name ?? "Sans nom"}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-apple-gray-600">{c.email}</td>
-                  <td className="px-6 py-4 text-apple-gray-600">
-                    {c.phone ?? <span className="text-apple-gray-300">—</span>}
+                  <td className="px-6 py-4" style={{ color: "rgba(255,255,255,0.6)" }}>{c.email}</td>
+                  <td className="px-6 py-4" style={{ color: "rgba(255,255,255,0.6)" }}>
+                    {c.phone ?? <span style={{ color: "rgba(255,255,255,0.2)" }}>—</span>}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-apple-blue/10 text-apple-blue">
+                    <span
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      style={{
+                        background: "rgba(201,168,76,0.12)",
+                        color: "#C9A84C",
+                        border: "1px solid rgba(201,168,76,0.2)",
+                      }}
+                    >
                       {c._count.orders} commande{c._count.orders > 1 ? "s" : ""}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-apple-gray-600">
+                  <td className="px-6 py-4" style={{ color: "rgba(255,255,255,0.6)" }}>
                     {new Date(c.createdAt).toLocaleDateString("fr-FR")}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <a
                         href={`/admin/customers/${c.id}`}
-                        className="p-1.5 rounded-apple-sm text-apple-gray-400 hover:text-apple-blue hover:bg-apple-blue/10 transition-colors"
+                        className="p-1.5 rounded-lg transition-colors"
+                        style={{ color: "rgba(255,255,255,0.3)" }}
                         title="Voir le détail"
                       >
                         <Eye className="w-4 h-4" />
@@ -164,7 +199,8 @@ export default function CustomersClient({
                       <button
                         onClick={() => handleDelete(c.id)}
                         disabled={deletingId === c.id}
-                        className="p-1.5 rounded-apple-sm text-apple-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
+                        className="p-1.5 rounded-lg transition-colors disabled:opacity-50"
+                        style={{ color: "rgba(255,255,255,0.3)" }}
                         title="Supprimer"
                       >
                         <Trash2 className="w-4 h-4" />

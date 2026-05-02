@@ -24,6 +24,19 @@ type Banner = {
   isActive: boolean;
 };
 
+const panel: React.CSSProperties = {
+  background: "rgba(17,17,9,0.84)",
+  border: "1px solid rgba(201,168,76,0.14)",
+  borderRadius: "16px",
+};
+
+const inputCls =
+  "w-full px-4 py-2.5 rounded-xl border text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 transition-all";
+const inputStyle: React.CSSProperties = {
+  background: "rgba(255,255,255,0.04)",
+  borderColor: "rgba(201,168,76,0.18)",
+};
+
 export default function BannersPage() {
   const [banners, setBanners] = useState<Banner[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -150,34 +163,47 @@ export default function BannersPage() {
 
   return (
     <div className="p-8">
+      {/* Header */}
       <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-apple-md bg-apple-blue/10 flex items-center justify-center">
-          <ImageIcon className="w-5 h-5 text-apple-blue" />
+        <div
+          className="w-10 h-10 rounded-xl flex items-center justify-center"
+          style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.2)" }}
+        >
+          <ImageIcon className="w-5 h-5" style={{ color: "#C9A84C" }} />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-apple-gray-900">Bannières</h1>
-          <p className="text-sm text-apple-gray-500">
+          <h1 className="text-2xl font-bold text-white">Bannières</h1>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.46)" }}>
             Gérez le carousel de la page d&apos;accueil
           </p>
         </div>
       </div>
 
-      <div className="bg-white rounded-apple-lg border border-apple-gray-200 p-6 mb-8">
-        <h2 className="font-semibold text-apple-gray-900 mb-4 flex items-center gap-2">
-          <Plus className="w-4 h-4" /> Ajouter une bannière
+      {/* Add form */}
+      <div className="p-6 mb-8" style={panel}>
+        <h2
+          className="font-semibold mb-4 flex items-center gap-2"
+          style={{ color: "rgba(255,255,255,0.86)" }}
+        >
+          <Plus className="w-4 h-4" style={{ color: "#C9A84C" }} />
+          Ajouter une bannière
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div
             onClick={() => fileRef.current?.click()}
-            className="border-2 border-dashed border-apple-gray-200 rounded-apple-md p-6 flex flex-col items-center justify-center cursor-pointer hover:border-apple-blue transition-colors relative overflow-hidden"
-            style={{ minHeight: 160 }}
+            className="border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer transition-colors relative overflow-hidden"
+            style={{
+              minHeight: 160,
+              borderColor: "rgba(201,168,76,0.22)",
+              background: "rgba(255,255,255,0.02)",
+            }}
           >
             {form.imageUrl ? (
-              <Image src={heroBackgroundImage(form.imageUrl)} alt="preview" fill className="object-cover rounded-apple-md" />
+              <Image src={heroBackgroundImage(form.imageUrl)} alt="preview" fill className="object-cover rounded-xl" />
             ) : (
               <>
-                <Upload className="w-8 h-8 text-apple-gray-300 mb-2" />
-                <p className="text-sm text-apple-gray-400">
+                <Upload className="w-8 h-8 mb-2" style={{ color: "rgba(255,255,255,0.2)" }} />
+                <p className="text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
                   {uploading ? "Upload en cours..." : "Cliquez pour uploader une image"}
                 </p>
               </>
@@ -197,15 +223,19 @@ export default function BannersPage() {
               placeholder="Eyebrow / petit texte (ex: Nouvelle collection)"
               value={form.eyebrow}
               onChange={(e) => setForm((prev) => ({ ...prev, eyebrow: e.target.value }))}
-              className="px-4 py-2.5 rounded-apple-md border border-apple-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue/30"
+              className={inputCls}
+              style={inputStyle}
             />
-            <label className="flex items-center justify-between gap-4 px-4 py-2.5 rounded-apple-md border border-apple-gray-200 text-sm text-apple-gray-700">
+            <label
+              className="flex items-center justify-between gap-4 px-4 py-2.5 rounded-xl border text-sm"
+              style={{ ...inputStyle, color: "rgba(255,255,255,0.6)" }}
+            >
               <span>Afficher l&apos;eyebrow</span>
               <input
                 type="checkbox"
                 checked={form.showEyebrow}
                 onChange={(e) => setForm((prev) => ({ ...prev, showEyebrow: e.target.checked }))}
-                className="accent-apple-blue"
+                style={{ accentColor: "#C9A84C" }}
               />
             </label>
             <input
@@ -213,84 +243,105 @@ export default function BannersPage() {
               placeholder="Titre *"
               value={form.title}
               onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
-              className="px-4 py-2.5 rounded-apple-md border border-apple-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue/30"
+              className={inputCls}
+              style={inputStyle}
             />
             <input
               type="text"
               placeholder="Sous-titre"
               value={form.subtitle}
               onChange={(e) => setForm((prev) => ({ ...prev, subtitle: e.target.value }))}
-              className="px-4 py-2.5 rounded-apple-md border border-apple-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue/30"
+              className={inputCls}
+              style={inputStyle}
             />
             <input
               type="text"
               placeholder="Texte du bouton"
               value={form.ctaLabel}
               onChange={(e) => setForm((prev) => ({ ...prev, ctaLabel: e.target.value }))}
-              className="px-4 py-2.5 rounded-apple-md border border-apple-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue/30"
+              className={inputCls}
+              style={inputStyle}
             />
             <input
               type="text"
               placeholder="Lien du bouton"
               value={form.ctaHref}
               onChange={(e) => setForm((prev) => ({ ...prev, ctaHref: e.target.value }))}
-              className="px-4 py-2.5 rounded-apple-md border border-apple-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-apple-blue/30"
+              className={inputCls}
+              style={inputStyle}
             />
             <button
               onClick={handleAdd}
               disabled={uploading}
-              className="px-4 py-2.5 bg-apple-blue text-white rounded-apple-md text-sm font-medium hover:bg-apple-blue/90 transition-colors disabled:opacity-50"
+              className="px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50"
+              style={{
+                background: "linear-gradient(135deg, #C9A84C, #E8C97A)",
+                color: "#0A0A08",
+              }}
             >
               Ajouter la bannière
             </button>
-            {error && <p className="text-sm text-red-500">{error}</p>}
+            {error && <p className="text-sm text-red-400">{error}</p>}
           </div>
         </div>
       </div>
 
+      {/* Banner list */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {loading ? (
-          <p className="text-apple-gray-400 text-sm col-span-2 text-center py-12">
+          <p className="text-sm col-span-2 text-center py-12" style={{ color: "rgba(255,255,255,0.3)" }}>
             Chargement des bannières...
           </p>
         ) : banners.length === 0 ? (
-          <p className="text-apple-gray-400 text-sm col-span-2 text-center py-12">
+          <p className="text-sm col-span-2 text-center py-12" style={{ color: "rgba(255,255,255,0.3)" }}>
             Aucune bannière pour l&apos;instant
           </p>
         ) : (
           banners.map((banner) => (
-            <div key={banner.id} className="bg-white rounded-apple-lg border border-apple-gray-200 overflow-hidden">
+            <div key={banner.id} className="overflow-hidden" style={panel}>
               <div className="relative h-40">
                 <Image src={heroBackgroundImage(banner.imageUrl)} alt={banner.title} fill className="object-cover" />
               </div>
               <div className="p-4 flex items-center justify-between gap-4">
                 <div>
                   {banner.showEyebrow && banner.eyebrow ? (
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-apple-gray-400 mb-1">
+                    <p
+                      className="text-[10px] font-semibold uppercase tracking-widest mb-1"
+                      style={{ color: "#C9A84C" }}
+                    >
                       {banner.eyebrow}
                     </p>
                   ) : (
-                    <p className="text-[10px] font-semibold uppercase tracking-widest text-apple-gray-300 mb-1">
+                    <p
+                      className="text-[10px] font-semibold uppercase tracking-widest mb-1"
+                      style={{ color: "rgba(255,255,255,0.2)" }}
+                    >
                       Eyebrow masqué
                     </p>
                   )}
-                  <p className="font-medium text-apple-gray-900">{banner.title}</p>
-                  <p className="text-xs text-apple-gray-500">{banner.subtitle}</p>
+                  <p className="font-medium text-white">{banner.title}</p>
+                  <p className="text-xs" style={{ color: "rgba(255,255,255,0.46)" }}>{banner.subtitle}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/admin/banners/${banner.id}/edit`}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-apple-sm text-xs font-medium text-apple-gray-500 border border-apple-gray-200 hover:text-apple-blue hover:border-apple-blue/50 hover:bg-apple-blue/5 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors"
+                    style={{
+                      color: "#C9A84C",
+                      border: "1px solid rgba(201,168,76,0.3)",
+                      background: "rgba(201,168,76,0.06)",
+                    }}
                   >
                     <Pencil className="w-3.5 h-3.5" />
                     Modifier
                   </Link>
                   <button
                     onClick={() => handleDelete(banner.id)}
-                    className="p-2 rounded-apple-sm text-apple-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="p-2 rounded-lg transition-colors"
+                    style={{ color: "rgba(255,255,255,0.3)" }}
                     aria-label={`Supprimer ${banner.title}`}
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-4 h-4 hover:text-red-400" />
                   </button>
                 </div>
               </div>

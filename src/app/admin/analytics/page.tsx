@@ -48,6 +48,12 @@ async function getMonthlyRevenue() {
   return result;
 }
 
+const panel: React.CSSProperties = {
+  background: "rgba(17,17,9,0.84)",
+  border: "1px solid rgba(201,168,76,0.14)",
+  borderRadius: "16px",
+};
+
 export default async function AnalyticsPage() {
   const [data, monthlyRevenue] = await Promise.all([
     getAnalyticsData(),
@@ -64,7 +70,7 @@ export default async function AnalyticsPage() {
       sub: `Ce mois : ${formatXOF(data.revenue.month)}`,
       change: data.revenue.growth,
       icon: DollarSign,
-      color: "gold",
+      gold: true,
     },
     {
       title: "Commandes totales",
@@ -72,7 +78,7 @@ export default async function AnalyticsPage() {
       sub: `Ce mois : ${data.orders.month}`,
       change: null,
       icon: ShoppingBag,
-      color: "surface",
+      gold: false,
     },
     {
       title: "Clients",
@@ -80,7 +86,7 @@ export default async function AnalyticsPage() {
       sub: `+${data.customers.new} ce mois`,
       change: null,
       icon: Users,
-      color: "surface",
+      gold: false,
     },
     {
       title: "Croissance vs mois dernier",
@@ -88,36 +94,40 @@ export default async function AnalyticsPage() {
       sub: `Mois dernier : ${formatXOF(data.revenue.lastMonth)}`,
       change: data.revenue.growth,
       icon: BarChart3,
-      color: "gold",
+      gold: true,
     },
   ];
-
-  const colorMap: Record<string, { bg: string; text: string }> = {
-    gold: { bg: "bg-amber-50", text: "text-amber-600" },
-    surface: { bg: "bg-white", text: "text-apple-gray-500" },
-  };
 
   return (
     <div className="p-8 space-y-8">
       <div>
-        <h1 className="text-display-sm text-apple-gray-900">Analytiques</h1>
-        <p className="text-apple-gray-500 mt-1">Vue d&apos;ensemble des performances</p>
+        <h1 className="text-2xl font-bold text-white">Analytiques</h1>
+        <p className="mt-1" style={{ color: "rgba(255,255,255,0.46)" }}>
+          Vue d&apos;ensemble des performances
+        </p>
       </div>
 
+      {/* Stat cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        {stats.map(({ title, value, sub, change, icon: Icon, color }) => (
-          <div key={title} className="card p-6">
+        {stats.map(({ title, value, sub, change, icon: Icon, gold }) => (
+          <div key={title} className="p-6" style={panel}>
             <div className="flex items-start justify-between mb-4">
               <div
-                className={`w-10 h-10 rounded-apple-md flex items-center justify-center ${colorMap[color].bg}`}
+                className="w-10 h-10 rounded-xl flex items-center justify-center"
+                style={{
+                  background: gold ? "rgba(201,168,76,0.12)" : "rgba(255,255,255,0.05)",
+                  border: gold ? "1px solid rgba(201,168,76,0.2)" : "1px solid rgba(255,255,255,0.08)",
+                }}
               >
-                <Icon className={`w-5 h-5 ${colorMap[color].text}`} />
+                <Icon
+                  className="w-5 h-5"
+                  style={{ color: gold ? "#C9A84C" : "rgba(255,255,255,0.5)" }}
+                />
               </div>
               {change !== null && (
                 <div
-                  className={`flex items-center gap-1 text-xs font-medium ${
-                    change >= 0 ? "text-apple-blue" : "text-apple-gray-500"
-                  }`}
+                  className="flex items-center gap-1 text-xs font-medium"
+                  style={{ color: change >= 0 ? "#C9A84C" : "rgba(255,255,255,0.4)" }}
                 >
                   {change >= 0 ? (
                     <TrendingUp className="w-3.5 h-3.5" />
@@ -128,16 +138,17 @@ export default async function AnalyticsPage() {
                 </div>
               )}
             </div>
-            <p className="text-2xl font-bold text-apple-gray-900 tabular-nums">{value}</p>
-            <p className="text-xs text-apple-gray-500 mt-1">{title}</p>
-            <p className="text-xs text-apple-gray-400 mt-0.5">{sub}</p>
+            <p className="text-2xl font-bold text-white tabular-nums">{value}</p>
+            <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.5)" }}>{title}</p>
+            <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>{sub}</p>
           </div>
         ))}
       </div>
 
-      <div className="card p-6">
-        <h2 className="text-sm font-semibold text-apple-gray-900 mb-6">
-          Chiffre d&apos;affaires - 6 derniers mois
+      {/* Revenue chart */}
+      <div className="p-6" style={panel}>
+        <h2 className="text-sm font-semibold mb-6" style={{ color: "rgba(255,255,255,0.7)" }}>
+          Chiffre d&apos;affaires — 6 derniers mois
         </h2>
         <div className="flex items-end gap-3 h-40">
           {Object.entries(monthlyRevenue).map(([month, revenue]) => {
@@ -148,17 +159,20 @@ export default async function AnalyticsPage() {
             });
             return (
               <div key={month} className="flex-1 flex flex-col items-center gap-2">
-                <span className="text-[10px] font-medium text-apple-gray-500 tabular-nums">
+                <span className="text-[10px] font-medium tabular-nums" style={{ color: "rgba(255,255,255,0.4)" }}>
                   {revenue > 0 ? formatXOF(revenue).replace("F CFA", "").trim() : "-"}
                 </span>
                 <div className="w-full flex flex-col justify-end" style={{ height: "100px" }}>
                   <div
-                    className="w-full rounded-t-md bg-blue-500 transition-all duration-500"
-                    style={{ height: `${Math.max(barHeight, revenue > 0 ? 4 : 0)}%` }}
+                    className="w-full rounded-t-md transition-all duration-500"
+                    style={{
+                      height: `${Math.max(barHeight, revenue > 0 ? 4 : 0)}%`,
+                      background: "linear-gradient(to top, #C9A84C, #E8C97A)",
+                    }}
                     title={formatXOF(revenue)}
                   />
                 </div>
-                <span className="text-[10px] text-apple-gray-400 capitalize">{label}</span>
+                <span className="text-[10px] capitalize" style={{ color: "rgba(255,255,255,0.3)" }}>{label}</span>
               </div>
             );
           })}
@@ -166,10 +180,13 @@ export default async function AnalyticsPage() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="card p-6">
+        {/* Top products */}
+        <div className="p-6" style={panel}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-apple-gray-900">Top 5 produits</h2>
-            <Package className="w-4 h-4 text-apple-gray-400" />
+            <h2 className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.7)" }}>
+              Top 5 produits
+            </h2>
+            <Package className="w-4 h-4" style={{ color: "rgba(255,255,255,0.3)" }} />
           </div>
           <div className="space-y-4">
             {data.topProducts.map((product, index) => {
@@ -180,38 +197,42 @@ export default async function AnalyticsPage() {
                 <div key={product.productId}>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-xs text-apple-gray-400 w-4 tabular-nums shrink-0">
+                      <span className="text-xs w-4 tabular-nums shrink-0" style={{ color: "#C9A84C" }}>
                         {index + 1}
                       </span>
-                      <span className="text-sm font-medium text-apple-gray-900 truncate">
+                      <span className="text-sm font-medium text-white truncate">
                         {product.productName}
                       </span>
                     </div>
                     <div className="text-right shrink-0 ml-2">
-                      <p className="text-sm font-semibold text-apple-gray-900 tabular-nums">
+                      <p className="text-sm font-semibold text-white tabular-nums">
                         {formatXOF(total)}
                       </p>
-                      <p className="text-[10px] text-apple-gray-400">
+                      <p className="text-[10px]" style={{ color: "rgba(255,255,255,0.35)" }}>
                         {product._sum.quantity} vendu(s)
                       </p>
                     </div>
                   </div>
-                  <div className="h-1.5 bg-apple-gray-100 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-500 rounded-full" style={{ width: `${pct}%` }} />
+                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                    <div
+                      className="h-full rounded-full"
+                      style={{ width: `${pct}%`, background: "linear-gradient(to right, #C9A84C, #E8C97A)" }}
+                    />
                   </div>
                 </div>
               );
             })}
             {data.topProducts.length === 0 && (
-              <p className="text-sm text-apple-gray-400 text-center py-4">
+              <p className="text-sm text-center py-4" style={{ color: "rgba(255,255,255,0.3)" }}>
                 Aucune vente enregistrée
               </p>
             )}
           </div>
         </div>
 
-        <div className="card p-6">
-          <h2 className="text-sm font-semibold text-apple-gray-900 mb-4">
+        {/* Orders by status */}
+        <div className="p-6" style={panel}>
+          <h2 className="text-sm font-semibold mb-4" style={{ color: "rgba(255,255,255,0.7)" }}>
             Commandes par statut
           </h2>
           <div className="space-y-3">
@@ -221,22 +242,25 @@ export default async function AnalyticsPage() {
                   {ORDER_STATUS_LABEL[status] ?? status}
                 </span>
                 <div className="flex items-center gap-3">
-                  <div className="w-24 h-1.5 bg-apple-gray-100 rounded-full overflow-hidden">
+                  <div className="w-24 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
                     <div
-                      className="h-full bg-apple-gray-400 rounded-full"
+                      className="h-full rounded-full"
                       style={{
                         width: `${data.orders.total > 0 ? (_count / data.orders.total) * 100 : 0}%`,
+                        background: "rgba(201,168,76,0.6)",
                       }}
                     />
                   </div>
-                  <span className="text-sm font-semibold text-apple-gray-900 tabular-nums w-6 text-right">
+                  <span className="text-sm font-semibold text-white tabular-nums w-6 text-right">
                     {_count}
                   </span>
                 </div>
               </div>
             ))}
             {data.orders.byStatus.length === 0 && (
-              <p className="text-sm text-apple-gray-400 text-center py-4">Aucune commande</p>
+              <p className="text-sm text-center py-4" style={{ color: "rgba(255,255,255,0.3)" }}>
+                Aucune commande
+              </p>
             )}
           </div>
         </div>

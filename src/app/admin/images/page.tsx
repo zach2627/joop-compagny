@@ -36,10 +36,10 @@ export default async function AdminImagesPage() {
   return (
     <div className="p-8 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-apple-gray-900">Photos produits</h1>
-        <p className="mt-1 text-apple-gray-500">
+        <h1 className="text-2xl font-bold text-white">Photos produits</h1>
+        <p className="mt-1" style={{ color: "rgba(255,255,255,0.46)" }}>
           Sélectionnez un produit et uploadez ses photos vers Cloudinary (preset{" "}
-          <span className="font-mono text-apple-gray-700">joop_compagny</span>).
+          <span className="font-mono" style={{ color: "#C9A84C" }}>joop_compagny</span>).
         </p>
       </div>
       <ImageStation products={products} />
