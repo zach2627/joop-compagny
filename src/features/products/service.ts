@@ -200,7 +200,7 @@ export const getCategories = unstable_cache(
         },
         products: {
           where: { isActive: true },
-          orderBy: [{ isFeatured: "desc" }, { updatedAt: "desc" }],
+          orderBy: [{ createdAt: "asc" }],
           take: 1,
           include: {
             images: { where: { isPrimary: true }, take: 1 },
@@ -229,8 +229,8 @@ export const getCategories = unstable_cache(
       })),
     }));
   },
-  ["categories"],
-  { revalidate: 3600, tags: ["categories"] }
+  ["categories-v2"],
+  { revalidate: 300, tags: ["categories"] }
 );
 
 // ─── Admin product mutations ──────────────────────────────────────────────────
