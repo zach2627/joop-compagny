@@ -17,7 +17,8 @@
     "db:reset-admin-password": "npx tsx scripts/reset-admin-password.ts",
     "generate": "prisma generate",
     "postinstall": "prisma generate",
-    "test:mailer": "npx tsx scripts/test-mailer.ts"
+    "test:mailer": "npx tsx scripts/test-mailer.ts",
+    "admin:reset-password": "npx tsx scripts/reset-admin-password.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

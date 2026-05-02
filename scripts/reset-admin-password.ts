@@ -9,51 +9,44 @@ const prisma = new PrismaClient();
 const ADMIN_EMAIL = "admin@joop-compagny.com";
 
 async function main() {
-  const nextPassword = process.env.NEW_ADMIN_PASSWORD?.trim();
+  const newPassword = process.env.NEW_ADMIN_PASSWORD?.trim();
 
-  if (!nextPassword) {
-    throw new Error("NEW_ADMIN_PASSWORD is missing in .env");
+  if (!newPassword) {
+    console.error("❌ NEW_ADMIN_PASSWORD est vide ou absent du .env");
+    process.exit(1);
+  }
+
+  if (newPassword.length < 8) {
+    console.error("❌ NEW_ADMIN_PASSWORD doit faire au moins 8 caractères");
+    process.exit(1);
   }
 
   const user = await prisma.user.findUnique({
     where: { email: ADMIN_EMAIL },
-    select: {
-      id: true,
-      email: true,
-      role: true,
-      isActive: true,
-    },
+    select: { id: true, email: true, role: true, isActive: true, name: true },
   });
 
   if (!user) {
-    throw new Error(`Admin account not found: ${ADMIN_EMAIL}`);
+    console.error(`❌ Aucun utilisateur trouvé pour ${ADMIN_EMAIL}`);
+    process.exit(1);
   }
 
-  const passwordHash = await bcrypt.hash(nextPassword, 12);
+  console.log(`✓ Utilisateur trouvé : ${user.name ?? user.email} (${user.role})`);
+
+  const passwordHash = await bcrypt.hash(newPassword, 12);
 
   await prisma.user.update({
     where: { id: user.id },
-    data: {
-      passwordHash,
-      isActive: true,
-    },
+    data: { passwordHash, isActive: true },
   });
 
-  console.log("");
-  console.log("Admin password reset complete.");
-  console.log(`Email: ${user.email}`);
-  console.log(`Role: ${user.role}`);
-  console.log(`Active: ${user.isActive ? "yes" : "no"}`);
-  console.log("Password source: NEW_ADMIN_PASSWORD in .env");
-  console.log("");
+  console.log(`✓ Mot de passe mis à jour pour ${ADMIN_EMAIL}`);
+  console.log("  Vous pouvez maintenant vous connecter avec le nouveau mot de passe.");
 }
 
 main()
-  .catch((error) => {
-    console.error("Admin password reset failed.");
-    console.error(error);
-    process.exitCode = 1;
+  .catch((err) => {
+    console.error("❌ Erreur :", err instanceof Error ? err.message : err);
+    process.exit(1);
   })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+  .finally(() => prisma.$disconnect());
