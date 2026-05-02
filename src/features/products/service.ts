@@ -200,14 +200,10 @@ export const getCategories = unstable_cache(
         },
         products: {
           where: { isActive: true },
-          orderBy: { createdAt: "asc" },
+          orderBy: [{ isFeatured: "desc" }, { updatedAt: "desc" }],
           take: 1,
           include: {
-            images: {
-              where: { isPrimary: true },
-              orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
-              take: 1,
-            },
+            images: { where: { isPrimary: true }, take: 1 },
           },
         },
         children: {
@@ -215,11 +211,7 @@ export const getCategories = unstable_cache(
           include: {
             _count: {
               select: {
-                products: {
-                  where: {
-                    isActive: true,
-                  },
-                },
+                products: { where: { isActive: true } },
               },
             },
           },

@@ -170,12 +170,14 @@ function buildWorlds(
     const category = categoryMap.get(slug) ?? null;
     const showcase = category?.products[0] ?? null;
     const showcaseText = showcase ? translateProductContent(locale, showcase) : null;
+    const showcaseImageUrl = showcase?.images[0]?.url ?? null;
 
     return {
       slug,
       category,
       showcase,
       showcaseText,
+      showcaseImageUrl,
       narrative: copy.categoryNarratives[slug],
       subtitle: copy.categorySubtitles[slug],
     };
@@ -661,13 +663,11 @@ export default async function HomePage() {
             </ScrollReveal>
 
             <StaggerReveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4 items-stretch">
-              {worlds.map(({ slug, category, showcase, showcaseText, narrative, subtitle }, index) => {
+              {worlds.map(({ slug, category, showcase, showcaseText, showcaseImageUrl, narrative, subtitle }, index) => {
                 const translatedCategory = translateCategory(
                   locale,
                   category ?? { name: slug, slug }
                 );
-                const showcaseImageUrl =
-                  showcase?.images[0]?.url ?? category?.imageUrl ?? null;
 
                 return (
                   <Link
@@ -703,7 +703,7 @@ export default async function HomePage() {
                     </div>
 
                     {/* Image produit showcase */}
-                    {showcase ? (
+                    {showcaseImageUrl ? (
                       <>
                         <div className="absolute inset-0 opacity-80">
                           <ProductImageFallback
