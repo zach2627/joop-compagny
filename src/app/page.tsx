@@ -17,6 +17,7 @@ import { formatXOF } from "@/features/payment/paydunya";
 import type { Locale } from "@/lib/i18n/config";
 import { localizedPath } from "@/lib/i18n/config";
 import {
+  categoryCardImage,
   editorialFeatureImage,
   heroBackgroundImage,
   productCardImage,
@@ -707,7 +708,7 @@ export default async function HomePage() {
                       <>
                         <div className="absolute inset-0 opacity-80">
                           <ProductImageFallback
-                            src={heroBackgroundImage(showcaseImageUrl)}
+                            src={categoryCardImage(showcaseImageUrl)}
                             alt={showcaseText?.name ?? translatedCategory}
                             label={showcaseText?.name ?? translatedCategory}
                             fill
@@ -728,7 +729,7 @@ export default async function HomePage() {
                       <>
                         <div className="absolute inset-0 opacity-80">
                           <ProductImageFallback
-                            src={heroBackgroundImage(category.imageUrl)}
+                            src={categoryCardImage(category.imageUrl)}
                             alt={translatedCategory}
                             label={translatedCategory}
                             fill

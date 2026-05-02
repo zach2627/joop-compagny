@@ -97,6 +97,14 @@ export const heroBackgroundImage = (url: string | null | undefined) =>
     gravity: "auto:subject",
   });
 
+export const categoryCardImage = (url: string | null | undefined) =>
+  getCloudinaryImageUrl(url, {
+    width: 960,
+    height: 1320,
+    crop: "fill",
+    gravity: "auto:subject",
+  });
+
 export const editorialFeatureImage = (url: string | null | undefined) =>
   getCloudinaryImageUrl(url, {
     width: 1200,
