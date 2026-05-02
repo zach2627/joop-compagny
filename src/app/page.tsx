@@ -93,12 +93,14 @@ const HOME_EDITORIAL: Record<
     discoverLabel: "Decouvrir la piece",
     categoryNarratives: {
       bijoux: "Des lignes lumineuses pour souligner la silhouette et le geste.",
+      montres: "Des montres dorees qui habillent le poignet avec elegance et caractere.",
       parfums: "Des sillages chauds, poudres et memorables pour signer la presence.",
       encens: "Des rituels d'interieur qui installent calme, douceur et profondeur.",
       coffrets: "Des compositions deja pensees comme des cadeaux signature.",
     },
     categorySubtitles: {
       bijoux: "Eclat & preciosite",
+      montres: "Temps & elegance",
       parfums: "Sillage & memoire",
       encens: "Rituel & quietude",
       coffrets: "Offrande & raffinement",
@@ -123,12 +125,14 @@ const HOME_EDITORIAL: Record<
     discoverLabel: "Discover the piece",
     categoryNarratives: {
       bijoux: "Luminous lines designed to refine posture, movement and glow.",
+      montres: "Gold-tone watches that dress the wrist with elegance and character.",
       parfums: "Warm, powdery and memorable trails that define a presence.",
       encens: "Interior rituals that settle calm, softness and depth.",
       coffrets: "Gift compositions already arranged like signature offerings.",
     },
     categorySubtitles: {
       bijoux: "Radiance & preciosity",
+      montres: "Time & elegance",
       parfums: "Trail & memory",
       encens: "Ritual & stillness",
       coffrets: "Offering & refinement",

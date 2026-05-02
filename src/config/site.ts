@@ -11,5 +11,5 @@ export const siteConfig = {
   phone: "+221 77 000 00 00",
   address: "Dakar, Senegal",
   currency: "XOF",
-  navCategories: ["bijoux", "parfums", "encens", "coffrets"] as const,
+  navCategories: ["bijoux", "montres", "parfums", "encens", "coffrets"] as const,
 };

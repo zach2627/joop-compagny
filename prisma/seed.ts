@@ -189,46 +189,56 @@ async function main() {
   const categories = {
     bijoux: await prisma.category.upsert({
       where: { slug: "bijoux" },
-      update: {},
+      update: { sortOrder: 1 },
       create: {
         name: "Bijoux",
         slug: "bijoux",
-        description: "Colliers, bracelets et pieces signatures",
+        description: "Bracelets, colliers, parures, bagues",
         imageUrl: "/images/products/collier-naya-or.svg",
         sortOrder: 1,
       },
     }),
+    montres: await prisma.category.upsert({
+      where: { slug: "montres" },
+      update: { sortOrder: 2 },
+      create: {
+        name: "Montres",
+        slug: "montres",
+        description: "Montres dorees femme",
+        sortOrder: 2,
+      },
+    }),
     parfums: await prisma.category.upsert({
       where: { slug: "parfums" },
-      update: {},
+      update: { sortOrder: 3 },
       create: {
         name: "Parfums",
         slug: "parfums",
-        description: "Eaux de parfum et huiles precieuses",
+        description: "Parfums d'orient",
         imageUrl: "/images/products/parfum-noor.svg",
-        sortOrder: 2,
+        sortOrder: 3,
       },
     }),
     encens: await prisma.category.upsert({
       where: { slug: "encens" },
-      update: {},
+      update: { sortOrder: 4 },
       create: {
         name: "Encens",
         slug: "encens",
-        description: "Batons, cones et rituels parfumes",
+        description: "Thiouraye, encens rares",
         imageUrl: "/images/products/encens-terre-rouge.svg",
-        sortOrder: 3,
+        sortOrder: 4,
       },
     }),
     coffrets: await prisma.category.upsert({
       where: { slug: "coffrets" },
-      update: {},
+      update: { sortOrder: 5 },
       create: {
         name: "Coffrets",
         slug: "coffrets",
-        description: "Cadeaux prets a offrir",
+        description: "Coffrets cadeaux prestige",
         imageUrl: "/images/products/coffret-lumiere.svg",
-        sortOrder: 4,
+        sortOrder: 5,
       },
     }),
   };
