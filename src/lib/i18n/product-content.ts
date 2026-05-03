@@ -64,7 +64,7 @@ const enProductContent: Record<string, ProductContent> = {
     name: "Precious Ritual Gift Set",
     shortDescription: "Layered scent, jewelry detail and gift-ready luxury.",
     description:
-      "A premium gift set that gathers JOOP COMPAGNY essentials into a single polished experience for gifting or personal indulgence.",
+      "A premium gift set that gathers JOOP COMPANY essentials into a single polished experience for gifting or personal indulgence.",
   },
 };
 

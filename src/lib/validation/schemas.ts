@@ -68,7 +68,7 @@ export const productCreateSchema = z.object({
   description: z.string().optional(),
   shortDescription: z.string().max(300).optional(),
   categoryId: z.string().cuid(),
-  brand: z.string().default("JOOP COMPAGNY"),
+  brand: z.string().default("JOOP COMPANY"),
   basePrice: z.number().positive(),
   compareAtPrice: z.number().positive().optional(),
   isFeatured: z.boolean().default(false),

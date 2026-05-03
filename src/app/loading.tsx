@@ -22,7 +22,7 @@ export default function Loading() {
             JOOP
           </span>
           <span className="text-[10px] tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.4)" }}>
-            COMPAGNY
+            COMPANY
           </span>
         </div>
       </div>

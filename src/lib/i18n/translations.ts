@@ -2,14 +2,14 @@ import type { Locale } from "./config";
 
 const fr = {
   meta: {
-    title: "JOOP COMPAGNY - Bijoux, parfums et encens a Dakar",
+    title: "JOOP COMPANY - Bijoux, parfums et encens a Dakar",
     description:
       "Decouvrez une selection luxe et coloree de bijoux, parfums et encens au Senegal. Livraison rapide et paiement via Wave ou Orange Money.",
     locale: "fr_SN",
   },
   nav: {
     aria: "Navigation principale",
-    home: "JOOP COMPAGNY - Accueil",
+    home: "JOOP COMPANY - Accueil",
     search: "Rechercher",
     account: "Mon compte",
     admin: "Dashboard admin",
@@ -49,7 +49,7 @@ const fr = {
     heroTitle: "Des objets precieux pour marquer les moments",
     heroAccent: "Luxe colore, senteurs et cadeaux signatures",
     heroBody:
-      "JOOP COMPAGNY compose une boutique en ligne senegalaise ou bijoux, parfums et encens se repondent dans un univers vibrant, chic et assumé.",
+      "JOOP COMPANY compose une boutique en ligne senegalaise ou bijoux, parfums et encens se repondent dans un univers vibrant, chic et assumé.",
     primaryCta: "Explorer la boutique",
     secondaryCta: "Voir les coffrets",
     stats: {
@@ -89,7 +89,7 @@ const fr = {
     storyEyebrow: "Signature",
     storyTitle: "Le luxe colore rencontre les rituels du quotidien",
     storyBody:
-      "Chaque selection JOOP COMPAGNY melange l'eclat du bijou, la profondeur du parfum et la douceur d'un interieur parfume. Le resultat: une boutique qui ressemble a une collection privee.",
+      "Chaque selection JOOP COMPANY melange l'eclat du bijou, la profondeur du parfum et la douceur d'un interieur parfume. Le resultat: une boutique qui ressemble a une collection privee.",
     highlights: [
       "Bijoux pour illuminer une silhouette",
       "Parfums pour affirmer une presence",
@@ -97,9 +97,9 @@ const fr = {
     ],
   },
   products: {
-    metadataTitle: "JOOP COMPAGNY - Boutique bijoux, parfums et encens",
+    metadataTitle: "JOOP COMPANY - Boutique bijoux, parfums et encens",
     metadataDescription:
-      "Explorez les categories bijoux, parfums, encens et coffrets JOOP COMPAGNY avec paiement mobile au Senegal.",
+      "Explorez les categories bijoux, parfums, encens et coffrets JOOP COMPANY avec paiement mobile au Senegal.",
     catalog: "Catalogue",
     allProducts: "Toute la selection",
     count: (count: number) => `${count} produit${count !== 1 ? "s" : ""}`,
@@ -175,7 +175,7 @@ const fr = {
     remove: "Supprimer",
   },
   checkout: {
-    title: "Finaliser la commande - JOOP COMPAGNY",
+    title: "Finaliser la commande - JOOP COMPANY",
     eyebrow: "Commande",
     heading: "Finaliser la commande",
     addressTitle: "Adresse de livraison",
@@ -207,7 +207,7 @@ const fr = {
     confirm: "Confirmer la commande",
     payWith: (method?: string) => `Payer avec ${method ?? ""}`.trim(),
     freeDakar: "*Le montant de livraison depend de la zone",
-    secure: "Commande securisee - JOOP COMPAGNY",
+    secure: "Commande securisee - JOOP COMPANY",
   },
   auth: {
     email: "Email",
@@ -220,7 +220,7 @@ const fr = {
     noAccount: "Pas encore de compte ?",
     createAccount: "Creer un compte",
     registerTitle: "Creer un compte",
-    registerSubtitle: "Rejoignez JOOP COMPAGNY",
+    registerSubtitle: "Rejoignez JOOP COMPANY",
     registerFormAria: "Formulaire d'inscription",
     fullName: "Nom complet",
     namePlaceholder: "Votre nom",
@@ -254,7 +254,7 @@ const fr = {
   },
   account: {
     orders: "Mes commandes",
-    trackOrders: "Suivez vos commandes JOOP COMPAGNY",
+    trackOrders: "Suivez vos commandes JOOP COMPANY",
     personalSpace: "Espace personnel",
     account: "Mon compte",
     ordersCount: (count: number) => `${count} commande${count !== 1 ? "s" : ""}`,
@@ -311,14 +311,14 @@ const fr = {
 
 const en = {
   meta: {
-    title: "JOOP COMPAGNY - Jewelry, perfumes and incense in Dakar",
+    title: "JOOP COMPANY - Jewelry, perfumes and incense in Dakar",
     description:
       "Discover a bold luxury selection of jewelry, perfumes and incense in Senegal with Wave and Orange Money payments.",
     locale: "en_US",
   },
   nav: {
     aria: "Main navigation",
-    home: "JOOP COMPAGNY - Home",
+    home: "JOOP COMPANY - Home",
     search: "Search",
     account: "My account",
     admin: "Admin dashboard",
@@ -358,7 +358,7 @@ const en = {
     heroTitle: "Precious objects made to mark a moment",
     heroAccent: "Colorful luxury, scents and signature gifts",
     heroBody:
-      "JOOP COMPAGNY is a Senegalese online boutique where jewelry, perfume and incense meet inside a vibrant, chic and memorable world.",
+      "JOOP COMPANY is a Senegalese online boutique where jewelry, perfume and incense meet inside a vibrant, chic and memorable world.",
     primaryCta: "Explore the store",
     secondaryCta: "View gift sets",
     stats: {
@@ -398,7 +398,7 @@ const en = {
     storyEyebrow: "Signature",
     storyTitle: "Colorful luxury meets everyday rituals",
     storyBody:
-      "Each JOOP COMPAGNY selection blends the shine of jewelry, the depth of perfume and the calm of scented interiors. The result feels like a private collection made public.",
+      "Each JOOP COMPANY selection blends the shine of jewelry, the depth of perfume and the calm of scented interiors. The result feels like a private collection made public.",
     highlights: [
       "Jewelry that lights up a silhouette",
       "Perfumes that define a presence",
@@ -406,9 +406,9 @@ const en = {
     ],
   },
   products: {
-    metadataTitle: "JOOP COMPAGNY - Jewelry, perfumes and incense",
+    metadataTitle: "JOOP COMPANY - Jewelry, perfumes and incense",
     metadataDescription:
-      "Browse JOOP COMPAGNY jewelry, perfumes, incense and curated gift sets with mobile payments in Senegal.",
+      "Browse JOOP COMPANY jewelry, perfumes, incense and curated gift sets with mobile payments in Senegal.",
     catalog: "Catalog",
     allProducts: "Full selection",
     count: (count: number) => `${count} product${count !== 1 ? "s" : ""}`,
@@ -484,7 +484,7 @@ const en = {
     remove: "Remove",
   },
   checkout: {
-    title: "Checkout - JOOP COMPAGNY",
+    title: "Checkout - JOOP COMPANY",
     eyebrow: "Order",
     heading: "Checkout",
     addressTitle: "Delivery address",
@@ -516,7 +516,7 @@ const en = {
     confirm: "Confirm order",
     payWith: (method?: string) => `Pay with ${method ?? ""}`.trim(),
     freeDakar: "*Delivery amount depends on the zone",
-    secure: "Secure checkout - JOOP COMPAGNY",
+    secure: "Secure checkout - JOOP COMPANY",
   },
   auth: {
     email: "Email",
@@ -529,7 +529,7 @@ const en = {
     noAccount: "No account yet?",
     createAccount: "Create an account",
     registerTitle: "Create an account",
-    registerSubtitle: "Join JOOP COMPAGNY",
+    registerSubtitle: "Join JOOP COMPANY",
     registerFormAria: "Registration form",
     fullName: "Full name",
     namePlaceholder: "Your name",
@@ -563,7 +563,7 @@ const en = {
   },
   account: {
     orders: "My orders",
-    trackOrders: "Track your JOOP COMPAGNY orders",
+    trackOrders: "Track your JOOP COMPANY orders",
     personalSpace: "Personal space",
     account: "My account",
     ordersCount: (count: number) => `${count} order${count !== 1 ? "s" : ""}`,

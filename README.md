@@ -1,4 +1,4 @@
-# JOOP COMPAGNY
+# JOOP COMPANY
 
 Boutique e-commerce Next.js 14 pour bijoux, parfums et encens au Senegal.
 
@@ -8,7 +8,7 @@ Boutique e-commerce Next.js 14 pour bijoux, parfums et encens au Senegal.
 - un back-office admin pour produits, commandes, clients et analytics
 - Prisma + PostgreSQL pour la base de donnees
 - PayDunya pour Wave, Orange Money et paiement a la livraison
-- un catalogue de demonstration JOOP COMPAGNY
+- un catalogue de demonstration JOOP COMPANY
 
 ## Lancer le projet
 
@@ -53,7 +53,7 @@ SEED_ADMIN_PASSWORD="ChangeMeNow123!" npm run db:seed
 - un projet Vercel dedie a `joop-compagny/`
 - une base PostgreSQL dediee
 - un domaine dedie
-- des variables d'environnement propres a JOOP COMPAGNY
+- des variables d'environnement propres a JOOP COMPANY
 
 ## Note d'isolation
 

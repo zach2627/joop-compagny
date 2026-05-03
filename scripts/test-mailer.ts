@@ -1,5 +1,5 @@
 /**
- * Test Nodemailer SMTP - JOOP COMPAGNY
+ * Test Nodemailer SMTP - JOOP COMPANY
  * Usage: npm run test:mailer
  */
 import { readFileSync } from "fs";
@@ -34,7 +34,7 @@ const SENDER = process.env.SMTP_FROM || "contact@joop-compagny.com";
 const TEST_LINK = "http://localhost:3000/auth/reset-password?token=test-token-abc123xyz";
 
 async function main() {
-  console.log("\nSMTP test - JOOP COMPAGNY\n");
+  console.log("\nSMTP test - JOOP COMPANY\n");
   console.log(`.env loaded: ${envLoaded ? "yes" : "no"}\n`);
 
   const smtpPass = process.env.SMTP_PASS;
@@ -56,7 +56,7 @@ async function main() {
 
   process.stdout.write(`2/2 Send test email to ${SENDER}... `);
   const info = await transporter.sendMail({
-    from: `"JOOP COMPAGNY" <${SENDER}>`,
+    from: `"JOOP COMPANY" <${SENDER}>`,
     to: SENDER,
     subject: "[TEST] Password reset",
     html: `<p style="font-family:sans-serif">Test OK. Link: <a href="${TEST_LINK}">${TEST_LINK}</a></p>`,

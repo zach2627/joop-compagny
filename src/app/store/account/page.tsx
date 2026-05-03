@@ -3,7 +3,7 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
-  title: "Mon compte | JOOP COMPAGNY",
+  title: "Mon compte | JOOP COMPANY",
   robots: { index: false, follow: false },
 };
 import { redirect } from "next/navigation";

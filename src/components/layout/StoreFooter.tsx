@@ -42,7 +42,7 @@ export function StoreFooter() {
                 letterSpacing: "0.28em",
               }}
             >
-              Compagny
+              Company
             </p>
             <p className="mt-6 text-sm leading-8" style={{ color: "var(--color-text-secondary)" }}>
               {dict.footer.description}

@@ -198,7 +198,7 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <Link href={localizedPath("/", locale)} className="mb-4 inline-block">
-            <Image src="/icon.svg" alt="JOOP COMPAGNY" width={48} height={48} />
+            <Image src="/icon.svg" alt="JOOP COMPANY" width={48} height={48} />
           </Link>
           <h1
             style={{

@@ -49,7 +49,7 @@ const orderMessages = {
       `Variante introuvable pour: ${name} - ${variant}`,
     historyCreated: "Commande créée",
     invoiceDescription: (orderNumber: string) =>
-      `Commande ${orderNumber} - JOOP COMPAGNY`,
+      `Commande ${orderNumber} - JOOP COMPANY`,
     paymentInitFailed:
       "Impossible de lancer le paiement pour le moment. Votre panier n'a pas ete vide.",
   },
@@ -62,7 +62,7 @@ const orderMessages = {
       `Variant not found for: ${name} - ${variant}`,
     historyCreated: "Order created",
     invoiceDescription: (orderNumber: string) =>
-      `Order ${orderNumber} - JOOP COMPAGNY`,
+      `Order ${orderNumber} - JOOP COMPANY`,
     paymentInitFailed:
       "We could not start payment right now. Your cart has not been cleared.",
   },
