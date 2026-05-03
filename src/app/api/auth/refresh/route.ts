@@ -16,12 +16,69 @@ function wantsJsonResponse(request: NextRequest) {
   );
 }
 
-export async function GET(request: NextRequest) {
+function isAllowedOrigin(request: NextRequest) {
+  const requestOrigin = request.nextUrl.origin;
+  const originHeader = request.headers.get("origin");
+
+  if (originHeader) {
+    return originHeader === requestOrigin;
+  }
+
+  const refererHeader = request.headers.get("referer");
+  if (!refererHeader) {
+    return false;
+  }
+
+  try {
+    return new URL(refererHeader).origin === requestOrigin;
+  } catch {
+    return false;
+  }
+}
+
+function methodNotAllowedResponse() {
+  return NextResponse.json(
+    { success: false, error: "Method not allowed" },
+    {
+      status: 405,
+      headers: {
+        Allow: "POST",
+        "Cache-Control": "no-store",
+      },
+    }
+  );
+}
+
+export async function GET() {
+  return methodNotAllowedResponse();
+}
+
+export async function POST(request: NextRequest) {
   const jsonResponse = wantsJsonResponse(request);
   const redirectTo = sanitizeRedirectPath(
     request.nextUrl.searchParams.get("redirect"),
     "/"
   );
+
+  if (!isAllowedOrigin(request)) {
+    logger.warn("auth.token.refresh-blocked", {
+      reason: "origin-mismatch",
+      origin: request.headers.get("origin"),
+      referer: request.headers.get("referer"),
+    });
+
+    return NextResponse.json(
+      { success: false, error: "Requete non autorisee" },
+      {
+        status: 403,
+        headers: {
+          Allow: "POST",
+          "Cache-Control": "no-store",
+        },
+      }
+    );
+  }
+
   const refreshToken = request.cookies.get(REFRESH_COOKIE)?.value;
 
   if (!refreshToken) {
@@ -31,6 +88,7 @@ export async function GET(request: NextRequest) {
         {
           status: 401,
           headers: {
+            Allow: "POST",
             "Cache-Control": "no-store",
           },
         }
@@ -57,6 +115,7 @@ export async function GET(request: NextRequest) {
           {
             status: 401,
             headers: {
+              Allow: "POST",
               "Cache-Control": "no-store",
             },
           }
@@ -92,6 +151,7 @@ export async function GET(request: NextRequest) {
           { success: true, redirectTo },
           {
             headers: {
+              Allow: "POST",
               "Cache-Control": "no-store",
             },
           }
@@ -125,6 +185,7 @@ export async function GET(request: NextRequest) {
         {
           status: 401,
           headers: {
+            Allow: "POST",
             "Cache-Control": "no-store",
           },
         }

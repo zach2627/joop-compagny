@@ -1,6 +1,6 @@
 async function refreshAdminSession() {
   const response = await fetch("/api/auth/refresh", {
-    method: "GET",
+    method: "POST",
     credentials: "include",
     cache: "no-store",
     headers: {

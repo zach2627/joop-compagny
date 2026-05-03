@@ -95,16 +95,6 @@ export async function middleware(request: NextRequest) {
       `/auth/login?redirect=${encodeURIComponent(localizedRedirectPath())}`
     );
 
-  const redirectToRefresh = () =>
-    withBaseHeaders(
-      NextResponse.redirect(
-        new URL(
-          `/api/auth/refresh?redirect=${encodeURIComponent(localizedRedirectPath())}`,
-          request.url
-        )
-      )
-    );
-
   const unauthorized = (status: 401 | 403, error: string) =>
     withBaseHeaders(NextResponse.json({ error }, { status }));
 
@@ -182,12 +172,7 @@ export async function middleware(request: NextRequest) {
     try {
       await verifyAccessToken(token);
     } catch {
-      const refreshToken = request.cookies.get("st_refresh")?.value;
-      if (!refreshToken) {
-        return redirectToLogin();
-      }
-
-      return redirectToRefresh();
+      return redirectToLogin();
     }
   }
 
