@@ -5,7 +5,13 @@ import { ProductPageSection } from "@/components/product/ProductPageSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { ProductStructuredData } from "@/components/seo/ProductStructuredData";
 import { seoConfig } from "@/config/seo";
-import { siteConfig } from "@/config/site";
+import {
+  hasPublicPhone,
+  hasWhatsApp,
+  publicPhoneHref,
+  siteConfig,
+  whatsAppUrl,
+} from "@/config/site";
 import { getProductBySlug } from "@/features/products/service";
 import { formatXOF } from "@/features/payment/paydunya";
 import { localizedPath } from "@/lib/i18n/config";
@@ -101,6 +107,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
   const currentPrice = Number(defaultVariant?.price ?? product.basePrice);
   const inStock = (defaultVariant?.stock ?? 0) > 0;
   const categoryName = translateCategory(locale, product.category);
+  const supportSubject =
+    locale === "en"
+      ? `Advice for ${productText.name}`
+      : `Conseil pour ${productText.name}`;
+  const supportMailto = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
+    supportSubject
+  )}`;
   const isNew =
     Date.now() - new Date(product.createdAt).getTime() < 30 * 24 * 60 * 60 * 1000;
   const isBestSeller =
@@ -150,7 +163,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             >
               {locale === "en" ? "Home" : "Accueil"}
             </Link>
-            <span>›</span>
+            <span>{">"}</span>
             <Link
               href={localizedPath("/store/products", locale)}
               className="transition-colors duration-200 hover:opacity-80"
@@ -158,7 +171,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             >
               {categoryName}
             </Link>
-            <span>›</span>
+            <span>{">"}</span>
             <span style={{ color: "var(--color-text)" }}>{productText.name}</span>
           </nav>
         </ScrollReveal>
@@ -244,7 +257,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
                         color: "var(--color-primary-dark)",
                       }}
                     >
-                      ✦ {locale === "en" ? "Best-seller" : "Best-seller"}
+                      * {locale === "en" ? "Best-seller" : "Best-seller"}
                     </div>
                   ) : null}
                 </div>
@@ -344,6 +357,46 @@ export default async function ProductDetailPage({ params }: PageProps) {
                     </p>
                   </div>
                 ) : null}
+
+                <div
+                  className="mt-6 rounded-[16px] p-5"
+                  style={{
+                    background: "rgba(17,17,9,0.86)",
+                    border: "1px solid rgba(201,168,76,0.14)",
+                  }}
+                >
+                  <p
+                    className="text-xs font-semibold uppercase tracking-[0.24em]"
+                    style={{ color: "var(--color-primary-dark)" }}
+                  >
+                    {locale === "en"
+                      ? "Need help ordering?"
+                      : "Besoin d'aide pour commander ?"}
+                  </p>
+                  <p
+                    className="mt-3 text-sm"
+                    style={{ color: "var(--color-text-secondary)", lineHeight: 1.8 }}
+                  >
+                    {locale === "en"
+                      ? "Contact Maison Danita for guidance on gifts, payment by Wave or Orange Money, and delivery in Dakar."
+                      : "Contactez Maison Danita pour un conseil cadeau, un paiement Wave ou Orange Money, et une livraison a Dakar."}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    {hasWhatsApp && whatsAppUrl ? (
+                      <a href={whatsAppUrl} className="btn-primary">
+                        WhatsApp
+                      </a>
+                    ) : null}
+                    <a href={supportMailto} className="btn-secondary">
+                      {locale === "en" ? "Email support" : "Nous ecrire"}
+                    </a>
+                    {hasPublicPhone && publicPhoneHref ? (
+                      <a href={publicPhoneHref} className="btn-secondary">
+                        {locale === "en" ? "Call us" : "Nous appeler"}
+                      </a>
+                    ) : null}
+                  </div>
+                </div>
               </>
             }
           />

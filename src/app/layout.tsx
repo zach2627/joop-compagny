@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Jost } from "next/font/google";
 import Script from "next/script";
 import { ToastProvider } from "@/components/ui/Toast";
-import { siteConfig } from "@/config/site";
+import { hasPublicPhone, siteConfig } from "@/config/site";
 import { seoConfig } from "@/config/seo";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
@@ -44,20 +44,28 @@ export function generateMetadata(): Metadata {
     keywords:
       locale === "en"
         ? [
+            "jewelry Senegal",
             "jewelry Dakar",
+            "perfume Dakar",
             "perfume Senegal",
-            "incense Dakar",
-            "gift set Senegal",
+            "women's watches Senegal",
+            "gift sets Dakar",
+            "incense Senegal",
             "luxury boutique Dakar",
+            "Maison Danita",
             "Wave payment Senegal",
             "Orange Money",
           ]
         : [
+            "bijoux Senegal",
             "bijoux Dakar",
+            "parfums Dakar",
             "parfum Senegal",
-            "encens Dakar",
-            "coffret cadeau Senegal",
+            "montres femme Senegal",
+            "coffrets cadeaux Dakar",
+            "encens Senegal",
             "boutique luxe Dakar",
+            "Maison Danita",
             "Wave paiement",
             "Orange Money",
           ],
@@ -125,6 +133,40 @@ export default function RootLayout({
 }) {
   const locale = getRequestLocale();
   const searchPath = localizedPath("/store/products", locale);
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: seoConfig.siteName,
+    url: seoConfig.siteUrl,
+    logo: `${seoConfig.siteUrl}/icon.svg`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      email: siteConfig.email,
+      ...(hasPublicPhone ? { telephone: siteConfig.phone } : {}),
+      availableLanguage: ["French", "English"],
+    },
+    sameAs: [],
+  };
+  const storeSchema = {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    name: seoConfig.siteName,
+    url: seoConfig.siteUrl,
+    image: `${seoConfig.siteUrl}/og?locale=${locale}`,
+    description: siteConfig.description,
+    email: siteConfig.email,
+    ...(hasPublicPhone ? { telephone: siteConfig.phone } : {}),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Dakar",
+      addressCountry: "SN",
+    },
+    areaServed: ["Dakar", "Senegal"],
+    paymentAccepted: ["Wave", "Orange Money", "Cash on delivery"],
+    currenciesAccepted: siteConfig.currency,
+    priceRange: "5 000 XOF - 149 000 XOF",
+  };
 
   return (
     <html lang={locale}>
@@ -132,21 +174,13 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: seoConfig.siteName,
-              url: seoConfig.siteUrl,
-              logo: `${seoConfig.siteUrl}/icon.svg`,
-              contactPoint: {
-                "@type": "ContactPoint",
-                contactType: "customer service",
-                email: siteConfig.email,
-                telephone: siteConfig.phone,
-                availableLanguage: ["French", "English"],
-              },
-              sameAs: [],
-            }),
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(storeSchema),
           }}
         />
         <script

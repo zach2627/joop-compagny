@@ -4,15 +4,15 @@ import { z } from "zod";
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
 export const registerSchema = z.object({
-  name: z.string().min(2, "Le nom doit comporter au moins 2 caractères"),
+  name: z.string().min(2, "Le nom doit comporter au moins 2 caracteres"),
   email: z.string().email("Email invalide"),
   phone: z
     .string()
-    .regex(/^\+?[0-9]{8,15}$/, "Numéro de téléphone invalide")
+    .regex(/^\+?[0-9]{8,15}$/, "Numero de telephone invalide")
     .optional(),
   password: z
     .string()
-    .min(8, "Le mot de passe doit comporter au moins 8 caractères")
+    .min(8, "Le mot de passe doit comporter au moins 8 caracteres")
     .regex(/[A-Z]/, "Doit contenir au moins une majuscule")
     .regex(/[0-9]/, "Doit contenir au moins un chiffre"),
   confirmPassword: z.string(),
@@ -103,23 +103,23 @@ export const updateCartItemSchema = z.object({
 
 // ─── Checkout ────────────────────────────────────────────────────────────────
 
-// Accepte tous les formats sénégalais :
+// Accepte tous les formats senegalais :
 // +221771234567, +221 77 123 4567, 771234567, 0771234567
 export const senegalPhoneRegex = /^\+?221\s?[0-9]{2}\s?[0-9]{3}\s?[0-9]{4}$|^[0-9]{9}$|^0[0-9]{9}$/;
 
 export const checkoutAddressSchema = z.object({
-  firstName: z.string().min(2, "Prénom requis"),
+  firstName: z.string().min(2, "Prenom requis"),
   lastName: z.string().min(2, "Nom requis"),
   phone: z
     .string()
-    .regex(senegalPhoneRegex, "Numéro sénégalais invalide (ex: +221 77 XXX XXXX)"),
+    .regex(senegalPhoneRegex, "Numero senegalais invalide (ex: +221 77 XXX XXXX)"),
   email: z.string().email("Email invalide").optional().or(z.literal("")),
   streetLine1: z.string().min(5, "Adresse requise"),
   streetLine2: z.string().optional(),
   city: z.string().min(2, "Ville requise"),
   region: z.enum([
     "Dakar",
-    "Thiès",
+    "Thies",
     "Diourbel",
     "Fatick",
     "Kaolack",
@@ -127,11 +127,11 @@ export const checkoutAddressSchema = z.object({
     "Louga",
     "Matam",
     "Saint-Louis",
-    "Sédhiou",
+    "Sedhiou",
     "Tambacounda",
     "Ziguinchor",
     "Kaffrine",
-    "Kédougou",
+    "Kedougou",
   ]),
   saveAddress: z.boolean().default(false),
 });
@@ -140,7 +140,7 @@ export const checkoutPaymentSchema = z.object({
   method: z.enum(["WAVE", "ORANGE_MONEY", "CASH_ON_DELIVERY", "CARD"]),
   phone: z
     .string()
-    .regex(senegalPhoneRegex, "Numéro de paiement invalide")
+    .regex(senegalPhoneRegex, "Numero de paiement invalide")
     .optional()
     .or(z.literal("")),
   notes: z.string().max(500).optional(),
@@ -173,7 +173,7 @@ export const addressSchema = z.object({
   label: z.string().min(1).max(50).default("Home"),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
-  phone: z.string().regex(senegalPhoneRegex, "Numéro invalide"),
+  phone: z.string().regex(senegalPhoneRegex, "Numero invalide"),
   streetLine1: z.string().min(5),
   streetLine2: z.string().optional(),
   city: z.string().min(2),

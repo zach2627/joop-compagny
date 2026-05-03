@@ -141,7 +141,7 @@ export function ProductVariantSelector({
         showToast({
           type: "success",
           title: labels.added,
-          subtitle: `${selectedVariant.name} — ${formatXOF(selectedVariant.price)}`,
+          subtitle: `${selectedVariant.name} - ${formatXOF(selectedVariant.price)}`,
           action: {
             label: locale === "en" ? "View" : "Voir",
             href: "/store/cart",

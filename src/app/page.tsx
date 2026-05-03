@@ -10,7 +10,12 @@ import { ParallaxSection } from "@/components/ui/ParallaxSection";
 import { ProductImageFallback } from "@/components/ui/ProductImageFallback";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { StaggerReveal } from "@/components/ui/StaggerReveal";
-import { siteConfig } from "@/config/site";
+import {
+  hasPublicPhone,
+  hasWhatsApp,
+  siteConfig,
+  whatsAppUrl,
+} from "@/config/site";
 import { seoConfig } from "@/config/seo";
 import { getFeaturedProducts, getCategories } from "@/features/products/service";
 import { formatXOF } from "@/features/payment/paydunya";
@@ -197,6 +202,11 @@ export default async function HomePage() {
   const copy = HOME_EDITORIAL[locale];
   const productListingHref = localizedPath("/store/products", locale);
   const giftHref = localizedPath("/store/products?category=coffrets", locale);
+  const supportMailto = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
+    locale === "en"
+      ? "Advice before ordering"
+      : "Conseil avant commande"
+  )}`;
   const heroProducts = featured.slice(0, 4);
   const heroImages = getHeroImages(heroProducts);
   const heroFeatured = heroProducts[0] ?? featured[0] ?? null;
@@ -1072,7 +1082,24 @@ export default async function HomePage() {
                       <Link href={giftHref} className="btn-secondary">
                         {home.secondaryCta}
                       </Link>
+                      {hasWhatsApp && whatsAppUrl ? (
+                        <a href={whatsAppUrl} className="btn-secondary">
+                          WhatsApp
+                        </a>
+                      ) : null}
+                      <a href={supportMailto} className="btn-secondary">
+                        {locale === "en" ? "Email support" : "Nous ecrire"}
+                      </a>
                     </div>
+
+                    <p
+                      className="mt-4 text-xs uppercase tracking-[0.24em]"
+                      style={{ color: "rgba(255,255,255,0.46)" }}
+                    >
+                      {hasPublicPhone
+                        ? `${siteConfig.phone} / ${siteConfig.email}`
+                        : siteConfig.email}
+                    </p>
                   </div>
                 </ScrollReveal>
               </ParallaxSection>

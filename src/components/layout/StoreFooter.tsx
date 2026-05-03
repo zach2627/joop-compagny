@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { siteConfig } from "@/config/site";
+import {
+  hasPublicPhone,
+  hasWhatsApp,
+  publicPhoneHref,
+  siteConfig,
+  whatsAppUrl,
+} from "@/config/site";
 import { localizedPath } from "@/lib/i18n/config";
 import { getDictionary, getRequestLocale } from "@/lib/i18n/server";
 
@@ -11,6 +17,11 @@ export function StoreFooter() {
     href: localizedPath(`/store/products?category=${slug}`, locale),
     label: categoryLabels[slug],
   }));
+  const supportMailto = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
+    locale === "en"
+      ? "Advice before ordering"
+      : "Conseil avant commande"
+  )}`;
 
   return (
     <footer
@@ -72,13 +83,28 @@ export function StoreFooter() {
               <a href={`mailto:${siteConfig.email}`} className="block transition-colors duration-300">
                 {siteConfig.email}
               </a>
-              <a
-                href={`tel:${siteConfig.phone.replace(/\s+/g, "")}`}
-                className="block transition-colors duration-300"
-              >
-                {siteConfig.phone}
-              </a>
+              {hasPublicPhone && publicPhoneHref ? (
+                <a href={publicPhoneHref} className="block transition-colors duration-300">
+                  {siteConfig.phone}
+                </a>
+              ) : (
+                <p>
+                  {locale === "en"
+                    ? "Advice available by email before ordering."
+                    : "Conseil disponible par email avant commande."}
+                </p>
+              )}
               <p>{dict.footer.delivery}</p>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
+              {hasWhatsApp && whatsAppUrl ? (
+                <a href={whatsAppUrl} className="btn-primary">
+                  WhatsApp
+                </a>
+              ) : null}
+              <a href={supportMailto} className="btn-secondary">
+                {locale === "en" ? "Email support" : "Nous ecrire"}
+              </a>
             </div>
           </div>
         </div>

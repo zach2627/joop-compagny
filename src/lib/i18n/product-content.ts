@@ -118,13 +118,27 @@ export function translateVariantName(
   return enVariantNames[productSlug]?.[variantName] ?? variantName;
 }
 
+function isGeneratedImageAlt(value: string | null | undefined) {
+  const normalized = (value ?? "").trim();
+  if (!normalized) return true;
+
+  return (
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      normalized
+    ) ||
+    /^img[_ -]?\d+$/i.test(normalized) ||
+    /^[a-z0-9_-]+\.(png|jpe?g|webp|avif)$/i.test(normalized) ||
+    (/^[A-Z0-9_-]{16,}$/.test(normalized) && !/\s/.test(normalized))
+  );
+}
+
 export function translateProductImageAlt(
   locale: Locale,
   productSlug: string,
   alt: string | null | undefined,
   fallback: string
 ) {
-  const value = alt || fallback;
+  const value = isGeneratedImageAlt(alt) ? fallback : alt || fallback;
   if (locale !== "en") return value;
 
   return value

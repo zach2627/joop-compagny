@@ -56,7 +56,9 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
   const canonicalUrl = `${seoConfig.siteUrl}${canonicalPath}`;
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
     alternates: {
       canonical: canonicalUrl,
