@@ -24,7 +24,7 @@ export const whatsAppUrl = hasWhatsApp
   : null;
 
 export const siteConfig = {
-  name: "JOOP COMPAGNY",
+  name: "JOOP COMPANY",
   shortName: "JOOP",
   description:
     "Maison senegalaise de bijoux, parfums et encens avec une direction artistique luxe et coloree.",

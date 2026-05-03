@@ -108,7 +108,7 @@ async function upsertSeedUser({
 }
 
 async function main() {
-  console.log("Seeding JOOP COMPAGNY...");
+  console.log("Seeding JOOP COMPANY...");
   await cleanupLegacyTechCatalog();
 
   const adminEmail =
@@ -255,7 +255,7 @@ async function main() {
         "Une chaine lumineuse pensee pour attirer la lumiere sans alourdir la silhouette. Son volume discret et sa finition miroir en font une piece facile a offrir et a porter.",
       shortDescription: "Chaine signature. Eclat chaud. Pret a offrir.",
       categoryId: categories.bijoux.id,
-      brand: "JOOP COMPAGNY",
+      brand: "JOOP COMPANY",
       basePrice: 32000,
       compareAtPrice: 39000,
       isFeatured: true,
@@ -317,7 +317,7 @@ async function main() {
         "Un bracelet graphique au volume sculpte, imagine pour superposer textures et reflets. Sa presence subtile habille instantanement un poignet.",
       shortDescription: "Manchette texturee. Contraste chic. Brillance facile.",
       categoryId: categories.bijoux.id,
-      brand: "JOOP COMPAGNY",
+      brand: "JOOP COMPANY",
       basePrice: 28000,
       compareAtPrice: 33000,
       isFeatured: true,
@@ -379,7 +379,7 @@ async function main() {
         "Noor s'ouvre sur des epices lumineuses, glisse vers un coeur floral ambré puis s'installe sur un fond boise, doux et tenace.",
       shortDescription: "Rose ambree. Safran chaud. Sillage durable.",
       categoryId: categories.parfums.id,
-      brand: "JOOP COMPAGNY",
+      brand: "JOOP COMPANY",
       basePrice: 46000,
       compareAtPrice: 52000,
       isFeatured: true,
@@ -434,7 +434,7 @@ async function main() {
         "Une huile parfumee a la texture soyeuse, enrichie d'accords floraux, ambrés et musques pour un luxe plus intime et enveloppant.",
       shortDescription: "Huile parfumee. Floral ambre. Pres de la peau.",
       categoryId: categories.parfums.id,
-      brand: "JOOP COMPAGNY",
+      brand: "JOOP COMPANY",
       basePrice: 24000,
       compareAtPrice: 28000,
       isFeatured: false,
@@ -489,7 +489,7 @@ async function main() {
         "Un melange chaleureux de bois, resines et epices qui installe une ambiance enveloppante des les premieres minutes.",
       shortDescription: "Boise epice. Atmosphere chaude. Rituel quotidien.",
       categoryId: categories.encens.id,
-      brand: "JOOP COMPAGNY",
+      brand: "JOOP COMPANY",
       basePrice: 12000,
       compareAtPrice: 15000,
       isFeatured: true,
@@ -544,7 +544,7 @@ async function main() {
         "Des notes florales veloutees habillees d'un voile fumé pour un rituel du soir plus doux, plus intime et plus enveloppant.",
       shortDescription: "Fleurs velours. Fumee douce. Rituel du soir.",
       categoryId: categories.encens.id,
-      brand: "JOOP COMPAGNY",
+      brand: "JOOP COMPANY",
       basePrice: 14500,
       compareAtPrice: 18000,
       isFeatured: false,
@@ -599,7 +599,7 @@ async function main() {
         "Un coffret compose pour offrir la boutique en un geste: un bijou signature, un parfum et un encens selectionne dans une presentation chaleureuse.",
       shortDescription: "Bijou, parfum, encens. Edition vibrante.",
       categoryId: categories.coffrets.id,
-      brand: "JOOP COMPAGNY",
+      brand: "JOOP COMPANY",
       basePrice: 78000,
       compareAtPrice: 92000,
       isFeatured: true,
@@ -654,7 +654,7 @@ async function main() {
         "Une composition premium qui superpose detail bijou, parfum enveloppant et encens d'ambiance pour un cadeau plus dense et plus ceremoniel.",
       shortDescription: "Superposition de gestes. Edition premium.",
       categoryId: categories.coffrets.id,
-      brand: "JOOP COMPAGNY",
+      brand: "JOOP COMPANY",
       basePrice: 125000,
       compareAtPrice: 149000,
       isFeatured: true,

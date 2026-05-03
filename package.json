@@ -16,6 +16,7 @@
     "db:list-legacy-cloudinary": "npx tsx scripts/list-legacy-cloudinary-urls.ts",
     "db:reset-admin-password": "npx tsx scripts/reset-admin-password.ts",
     "db:fix-category-homepage": "npx tsx scripts/fix-category-homepage-data.ts",
+    "db:rename-company-branding": "npx tsx scripts/rename-company-branding.ts",
     "generate": "prisma generate",
     "postinstall": "prisma generate",
     "test:mailer": "npx tsx scripts/test-mailer.ts",

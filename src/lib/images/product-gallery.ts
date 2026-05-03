@@ -153,33 +153,33 @@ const CATEGORY_FALLBACKS: Record<string, GallerySeedImage[]> = {
   bijoux: [
     {
       url: JOOP_CLOUDINARY_IMAGES.img8508,
-      alt: "Piece bijoux JOOP COMPAGNY",
+      alt: "Piece bijoux JOOP COMPANY",
       color: null,
     },
     {
       url: JOOP_CLOUDINARY_IMAGES.img8509,
-      alt: "Selection bijoux JOOP COMPAGNY",
+      alt: "Selection bijoux JOOP COMPANY",
       color: null,
     },
   ],
   parfums: [
     {
       url: JOOP_CLOUDINARY_IMAGES.img8505,
-      alt: "Parfum JOOP COMPAGNY",
+      alt: "Parfum JOOP COMPANY",
       color: null,
     },
   ],
   encens: [
     {
       url: JOOP_CLOUDINARY_IMAGES.img8501,
-      alt: "Encens JOOP COMPAGNY",
+      alt: "Encens JOOP COMPANY",
       color: null,
     },
   ],
   coffrets: [
     {
       url: JOOP_CLOUDINARY_IMAGES.img8504,
-      alt: "Coffret JOOP COMPAGNY",
+      alt: "Coffret JOOP COMPANY",
       color: null,
     },
   ],

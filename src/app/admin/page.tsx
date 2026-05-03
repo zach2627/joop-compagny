@@ -98,7 +98,7 @@ export default async function AdminDashboard() {
           Tableau de bord
         </h1>
         <p className="mt-1 text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>
-          Bienvenue sur l&apos;espace admin JOOP COMPAGNY
+          Bienvenue sur l&apos;espace admin JOOP COMPANY
         </p>
       </div>
 

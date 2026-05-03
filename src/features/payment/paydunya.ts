@@ -13,7 +13,7 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
   process.env.NEXT_PUBLIC_APP_URL ??
   "https://joop-compagny.com";
-const STORE_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "JOOP COMPAGNY";
+const STORE_NAME = process.env.NEXT_PUBLIC_APP_NAME ?? "JOOP COMPANY";
 
 interface PayDunyaHeaders extends Record<string, string> {
   "PAYDUNYA-MASTER-KEY": string;
